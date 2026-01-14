@@ -30,6 +30,7 @@ import ProcessOptimization from './process/ProcessOptimization';
 import ProcessValidation from './process/ProcessValidation';
 import ProcessChangeControl from './process/ProcessChangeControl';
 import ProcessMasterData from './process/ProcessMasterData';
+import { processData } from '../data/mockData';
 
 const SimpleProcess = () => {
   const [activeTab, setActiveTab] = useState('overview');

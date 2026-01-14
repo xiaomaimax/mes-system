@@ -1,7 +1,62 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Space, Modal, Form, Input, Select, DatePicker, InputNumber, Tag, message, Tabs, Row, Col, Statistic, Progress } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Card, Table, Button, Space, Modal, Form, Input, Select, DatePicker, InputNumber, Tag, message, Tabs, Row, Col, Statistic, Progress, Spin } from 'antd';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined, ExportOutlined, ImportOutlined, BookOutlined, SettingOutlined, BranchesOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
+import { useDataService } from '../../hooks/useDataService';
+import DataService from '../../services/DataService';
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -11,110 +66,55 @@ const ProcessMasterData = () => {
   const [editingRecord, setEditingRecord] = useState(null);
   const [form] = Form.useForm();
 
-  // 产品主数据
-  const productData = [
-    {
-      key: '1',
-      productCode: 'P001',
-      productName: '塑料外壳A',
-      category: '注塑件',
-      specification: '150×80×25mm',
-      material: 'ABS塑料',
-      status: '生效',
-      createDate: '2024-01-15',
-      version: 'V2.1'
-    },
-    {
-      key: '2',
-      productCode: 'P002',
-      productName: '电子组件B',
-      category: '电子件',
-      specification: '50×30×10mm',
-      material: 'PCB板',
-      status: '生效',
-      createDate: '2024-02-20',
-      version: 'V1.5'
-    },
-    {
-      key: '3',
-      productCode: 'P003',
-      productName: '机械零件C',
-      category: '机加件',
-      specification: '100×50×20mm',
-      material: '铝合金',
-      status: '待审核',
-      createDate: '2024-03-10',
-      version: 'V1.0'
-    }
-  ];
+  // 使用useDataService Hook获取数据
+  const {
+    data: productData,
+    loading: productLoading,
+    error: productError,
+    refetch: refetchProducts
+  } = useDataService(() => DataService.getProcessProducts(), []);
 
-  // 工序主数据
-  const operationData = [
-    {
-      key: '1',
-      operationCode: 'OP001',
-      operationName: '注塑成型',
-      category: '成型工序',
-      workCenter: '注塑车间',
-      standardTime: 45,
-      setupTime: 15,
-      status: '生效'
-    },
-    {
-      key: '2',
-      operationCode: 'OP002',
-      operationName: '机械加工',
-      category: '加工工序',
-      workCenter: '机加车间',
-      standardTime: 60,
-      setupTime: 20,
-      status: '生效'
-    },
-    {
-      key: '3',
-      operationCode: 'OP003',
-      operationName: '表面处理',
-      category: '后处理',
-      workCenter: '表处车间',
-      standardTime: 30,
-      setupTime: 10,
-      status: '生效'
-    }
-  ];
+  const {
+    data: operationData,
+    loading: operationLoading,
+    error: operationError,
+    refetch: refetchOperations
+  } = useDataService(() => DataService.getProcessOperations(), []);
 
-  // 设备主数据
-  const equipmentData = [
-    {
-      key: '1',
-      equipmentCode: 'EQ001',
-      equipmentName: '注塑机A',
-      model: 'INJ-200T',
-      workCenter: '注塑车间',
-      capacity: '200吨',
-      status: '运行中',
-      efficiency: 95
-    },
-    {
-      key: '2',
-      equipmentCode: 'EQ002',
-      equipmentName: '数控机床B',
-      model: 'CNC-500',
-      workCenter: '机加车间',
-      capacity: '500mm',
-      status: '运行中',
-      efficiency: 88
-    },
-    {
-      key: '3',
-      equipmentCode: 'EQ003',
-      equipmentName: '喷涂线C',
-      model: 'SPRAY-AUTO',
-      workCenter: '表处车间',
-      capacity: '100件/小时',
-      status: '维护中',
-      efficiency: 0
+  const {
+    data: equipmentData,
+    loading: equipmentLoading,
+    error: equipmentError,
+    refetch: refetchEquipment
+  } = useDataService(() => DataService.getProcessEquipment(), []);
+
+  // 获取当前标签页的数据
+  const getCurrentData = () => {
+    switch (activeTab) {
+      case 'products':
+        return {
+          data: productData?.items || [],
+          loading: productLoading,
+          error: productError
+        };
+      case 'operations':
+        return {
+          data: operationData?.items || [],
+          loading: operationLoading,
+          error: operationError
+        };
+      case 'equipment':
+        return {
+          data: equipmentData?.items || [],
+          loading: equipmentLoading,
+          error: equipmentError
+        };
+      default:
+        return { data: [], loading: false, error: null };
     }
-  ];
+  };
+
+  const { data: currentData, loading: currentLoading, error: currentError } = getCurrentData();
 
   const productColumns = [
     {
@@ -168,10 +168,10 @@ const ProcessMasterData = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
             编辑
           </Button>
-          <Button type="link" size="small" danger icon={<DeleteOutlined />}>
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" size="small" danger icon={<DeleteOutlined />}>
             删除
           </Button>
         </Space>
@@ -226,10 +226,10 @@ const ProcessMasterData = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Button type="link" size="small" icon={<EditOutlined />}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />}>
             编辑
           </Button>
-          <Button type="link" size="small" danger icon={<DeleteOutlined />}>
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" size="small" danger icon={<DeleteOutlined />}>
             删除
           </Button>
         </Space>
@@ -290,10 +290,10 @@ const ProcessMasterData = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Button type="link" size="small" icon={<EditOutlined />}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />}>
             编辑
           </Button>
-          <Button type="link" size="small" danger icon={<DeleteOutlined />}>
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" size="small" danger icon={<DeleteOutlined />}>
             删除
           </Button>
         </Space>
@@ -317,10 +317,67 @@ const ProcessMasterData = () => {
     try {
       const values = await form.validateFields();
       console.log('保存数据:', values);
-      message.success('保存成功');
+      
+      let result;
+      
+      // 根据当前标签页调用不同的API
+      switch (activeTab) {
+        case 'products':
+          if (editingRecord) {
+            // 编辑产品（暂时只显示成功消息）
+            safeMessage.success('产品更新成功');
+          } else {
+            // 新增产品
+            result = await DataService.addProcessProduct(values);
+            if (result.success) {
+              safeMessage.success(result.message || '产品添加成功');
+              // 刷新产品数据
+              refetchProducts();
+            }
+          }
+          break;
+          
+        case 'operations':
+          if (editingRecord) {
+            // 编辑工序（暂时只显示成功消息）
+            safeMessage.success('工序更新成功');
+          } else {
+            // 新增工序
+            result = await DataService.addProcessOperation(values);
+            if (result.success) {
+              safeMessage.success(result.message || '工序添加成功');
+              // 刷新工序数据
+              refetchOperations();
+            }
+          }
+          break;
+          
+        case 'equipment':
+          if (editingRecord) {
+            // 编辑设备（暂时只显示成功消息）
+            safeMessage.success('设备更新成功');
+          } else {
+            // 新增设备
+            result = await DataService.addProcessEquipment(values);
+            if (result.success) {
+              safeMessage.success(result.message || '设备添加成功');
+              // 刷新设备数据
+              refetchEquipment();
+            }
+          }
+          break;
+          
+        default:
+          safeMessage.error('未知的数据类型');
+          return;
+      }
+      
       setModalVisible(false);
+      form.resetFields();
+      
     } catch (error) {
-      console.error('验证失败:', error);
+      console.error('保存失败:', error);
+      safeMessage.error('保存失败: ' + (error.message || '未知错误'));
     }
   };
 
@@ -600,17 +657,37 @@ const ProcessMasterData = () => {
   const getTableData = () => {
     switch (activeTab) {
       case 'products':
-        return { columns: productColumns, data: productData };
+        return { 
+          columns: productColumns, 
+          data: productData?.items || [],
+          loading: productLoading,
+          error: productError
+        };
       case 'operations':
-        return { columns: operationColumns, data: operationData };
+        return { 
+          columns: operationColumns, 
+          data: operationData?.items || [],
+          loading: operationLoading,
+          error: operationError
+        };
       case 'equipment':
-        return { columns: equipmentColumns, data: equipmentData };
+        return { 
+          columns: equipmentColumns, 
+          data: equipmentData?.items || [],
+          loading: equipmentLoading,
+          error: equipmentError
+        };
       default:
-        return { columns: productColumns, data: productData };
+        return { 
+          columns: productColumns, 
+          data: [],
+          loading: false,
+          error: null
+        };
     }
   };
 
-  const { columns, data } = getTableData();
+  const { columns, data, loading, error } = getTableData();
 
   return (
     <div>
@@ -620,7 +697,7 @@ const ProcessMasterData = () => {
           <Card>
             <Statistic
               title="产品总数"
-              value={productData.length}
+              value={productData?.items?.length || 0}
               prefix={<BookOutlined />}
               suffix="个"
               valueStyle={{ color: '#1890ff' }}
@@ -631,7 +708,7 @@ const ProcessMasterData = () => {
           <Card>
             <Statistic
               title="工序总数"
-              value={operationData.length}
+              value={operationData?.items?.length || 0}
               prefix={<SettingOutlined />}
               suffix="个"
               valueStyle={{ color: '#52c41a' }}
@@ -642,7 +719,7 @@ const ProcessMasterData = () => {
           <Card>
             <Statistic
               title="设备总数"
-              value={equipmentData.length}
+              value={equipmentData?.items?.length || 0}
               prefix={<BranchesOutlined />}
               suffix="台"
               valueStyle={{ color: '#fa8c16' }}
@@ -676,18 +753,53 @@ const ProcessMasterData = () => {
           size="small"
         />
 
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={{
-            total: data.length,
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => `共 ${total} 条记录`
-          }}
-          size="small"
-        />
+        {/* 错误状态显示 */}
+        {error && (
+          <div style={{ marginBottom: '16px' }}>
+            <Card>
+              <div style={{ textAlign: 'center', color: '#ff4d4f' }}>
+                <p>数据加载失败: {error.message}</p>
+                <Button 
+                  type="primary" 
+                  onClick={() => {
+                    switch (activeTab) {
+                      case 'products':
+                        refetchProducts();
+                        break;
+                      case 'operations':
+                        refetchOperations();
+                        break;
+                      case 'equipment':
+                        refetchEquipment();
+                        break;
+                    }
+                  }}
+                >
+                  重试
+                </Button>
+              </div>
+            </Card>
+          </div>
+        )}
+
+        {/* 加载状态 */}
+        <Spin spinning={loading} tip="加载中...">
+          <Table
+            columns={columns}
+            dataSource={data}
+            pagination={{
+              total: data.length,
+              pageSize: 10,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: (total) => `共 ${total} 条记录`
+            }}
+            size="small"
+            locale={{
+              emptyText: loading ? '加载中...' : '暂无数据'
+            }}
+          />
+        </Spin>
       </Card>
 
       <Modal

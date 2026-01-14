@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Layout, Menu } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -11,7 +12,8 @@ import {
   NodeIndexOutlined,
   UserOutlined,
   LinkOutlined,
-  SettingOutlined
+  SettingOutlined,
+  CalendarOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -38,27 +40,53 @@ const Sidebar = () => {
 
   // 定义角色权限配置
   const rolePermissions = {
-    '超级管理员': {
+    'admin': {
       // 系统管理员可以访问所有模块
       allowedMenus: [
-        '/dashboard', '/process', '/production', '/equipment', 
+        '/dashboard', '/process', '/production', '/scheduling', '/equipment', 
         '/quality', '/inventory', '/personnel', '/integration', 
         '/reports', '/settings'
       ]
     },
-    '部门管理员': {
+    '超级管理员': {
+      // 系统管理员可以访问所有模块
+      allowedMenus: [
+        '/dashboard', '/process', '/production', '/scheduling', '/equipment', 
+        '/quality', '/inventory', '/personnel', '/integration', 
+        '/reports', '/settings'
+      ]
+    },
+    'manager': {
       // 部门管理员根据部门不同有不同权限
-      生产部: ['/dashboard', '/production', '/equipment', '/inventory', '/reports'],
+      生产部: ['/dashboard', '/production', '/scheduling', '/equipment', '/inventory', '/reports'],
       质量部: ['/dashboard', '/quality', '/process', '/reports'],
       技术部: ['/dashboard', '/process', '/equipment', '/integration', '/reports'],
       信息部: ['/dashboard', '/integration', '/settings', '/reports']
     },
-    '普通用户': {
+    '部门管理员': {
+      // 部门管理员根据部门不同有不同权限
+      生产部: ['/dashboard', '/production', '/scheduling', '/equipment', '/inventory', '/reports'],
+      质量部: ['/dashboard', '/quality', '/process', '/reports'],
+      技术部: ['/dashboard', '/process', '/equipment', '/integration', '/reports'],
+      信息部: ['/dashboard', '/integration', '/settings', '/reports']
+    },
+    'operator': {
       // 普通用户权限最小，只能访问本部门相关模块
-      生产部: ['/dashboard', '/production', '/reports'],
+      生产部: ['/dashboard', '/production', '/scheduling', '/reports'],
       质量部: ['/dashboard', '/quality', '/reports'],
       技术部: ['/dashboard', '/process', '/reports'],
       信息部: ['/dashboard', '/reports']
+    },
+    '普通用户': {
+      // 普通用户权限最小，只能访问本部门相关模块
+      生产部: ['/dashboard', '/production', '/scheduling', '/reports'],
+      质量部: ['/dashboard', '/quality', '/reports'],
+      技术部: ['/dashboard', '/process', '/reports'],
+      信息部: ['/dashboard', '/reports']
+    },
+    'quality_inspector': {
+      // 质量检验员有质量相关的权限
+      allowedMenus: ['/dashboard', '/quality', '/process', '/reports']
     },
     '技术管理员': {
       // 技术管理员有技术相关的全部权限
@@ -70,20 +98,24 @@ const Sidebar = () => {
   const getUserAllowedMenus = () => {
     const { role, department } = currentUser;
     
-    if (role === '超级管理员') {
-      return rolePermissions['超级管理员'].allowedMenus;
+    // 检查是否是管理员角色
+    if (role === 'admin' || role === '超级管理员') {
+      return rolePermissions['admin'].allowedMenus;
     }
     
-    if (role === '技术管理员') {
-      return rolePermissions['技术管理员'].allowedMenus;
+    // 检查是否是质量检验员
+    if (role === 'quality_inspector') {
+      return rolePermissions['quality_inspector'].allowedMenus;
     }
     
-    if (role === '部门管理员' && rolePermissions['部门管理员'][department]) {
-      return rolePermissions['部门管理员'][department];
+    // 检查是否是部门管理员
+    if ((role === 'manager' || role === '部门管理员') && rolePermissions['manager'][department]) {
+      return rolePermissions['manager'][department];
     }
     
-    if (role === '普通用户' && rolePermissions['普通用户'][department]) {
-      return rolePermissions['普通用户'][department];
+    // 检查是否是普通用户
+    if ((role === 'operator' || role === '普通用户') && rolePermissions['operator'][department]) {
+      return rolePermissions['operator'][department];
     }
     
     // 默认只能访问首页和报表
@@ -101,6 +133,11 @@ const Sidebar = () => {
       key: '/process',
       icon: <NodeIndexOutlined />,
       label: '工艺管理'
+    },
+    {
+      key: '/scheduling',
+      icon: <CalendarOutlined />,
+      label: '辅助排程'
     },
     {
       key: '/production',
@@ -161,6 +198,9 @@ const Sidebar = () => {
     if (pathname.startsWith('/production')) {
       return ['/production'];
     }
+    if (pathname.startsWith('/scheduling')) {
+      return ['/scheduling'];
+    }
     if (pathname.startsWith('/equipment')) {
       return ['/equipment'];
     }
@@ -189,9 +229,14 @@ const Sidebar = () => {
       onCollapse={setCollapsed}
       theme="dark"
       width={220}
+      collapsedWidth={80}
       style={{
         boxShadow: '2px 0 8px rgba(0,0,0,0.15)',
-        zIndex: 100
+        zIndex: 100,
+        position: 'relative',
+        height: '100vh',
+        overflow: 'auto',
+        flexShrink: 0
       }}
     >
       {/* Logo区域 */}
@@ -305,6 +350,13 @@ const Sidebar = () => {
       `}</style>
     </Sider>
   );
+};
+
+Sidebar.propTypes = {
+  // Sidebar是独立组件，不接收props
+};
+
+Sidebar.defaultProps = {
 };
 
 export default Sidebar;

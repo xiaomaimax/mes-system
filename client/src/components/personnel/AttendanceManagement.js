@@ -12,10 +12,12 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const AttendanceManagement = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [viewMode, setViewMode] = useState('list'); // list, calendar
 

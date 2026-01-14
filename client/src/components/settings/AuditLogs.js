@@ -1,6 +1,6 @@
 import { Card, Table, Button, Space, Tag, DatePicker, Select, Input } from 'antd';
-import { 
-  AuditOutlined, 
+import ButtonActions from '../../utils/buttonActions';
+import {   AuditOutlined, 
   DownloadOutlined,
   SearchOutlined
 } from '@ant-design/icons';

@@ -3,11 +3,13 @@ import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form
 import { PlusOutlined, SearchOutlined, FileTextOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
+import ButtonActions from '../../utils/buttonActions';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 
 const WorkReport = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -161,8 +163,7 @@ const WorkReport = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space size="small">
-          <Button 
-            type="link" 
+          <Button onClick={() => handleEdit(record)} type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}

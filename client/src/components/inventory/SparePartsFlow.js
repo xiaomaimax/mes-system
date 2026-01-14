@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Statistic, Row, Col } from 'antd';
 import { SearchOutlined, TransactionOutlined, DownloadOutlined, FileTextOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 const SparePartsFlow = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // 模拟数据

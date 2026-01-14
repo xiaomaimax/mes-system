@@ -1,3 +1,6 @@
+// MIGRATION STATUS: Partially migrated - mockData imports removed, DataService imported
+// TODO: Replace mockData usage with actual DataService calls
+
 import React, { useState } from 'react';
 import { Card, Row, Col, Button, Space, Statistic, Progress, Tabs, Badge, List, Avatar, Alert, Timeline, Divider } from 'antd';
 import { InboxOutlined, AlertOutlined, ShopOutlined, TransactionOutlined, DatabaseOutlined, BarChartOutlined, SettingOutlined, CheckCircleOutlined, ExclamationCircleOutlined, WarningOutlined, ClockCircleOutlined, UserOutlined, TruckOutlined, SafetyOutlined } from '@ant-design/icons';
@@ -13,6 +16,8 @@ import InventoryCount from './inventory/InventoryCount';
 import InventoryReports from './inventory/InventoryReports';
 import InventorySettings from './inventory/InventorySettings';
 
+import { DataService } from '../services/DataService';
+import { useDataService } from '../hooks/useDataService';
 const SimpleInventory = () => {
   const [activeTab, setActiveTab] = useState('overview');
 

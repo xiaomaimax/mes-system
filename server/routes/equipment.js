@@ -22,14 +22,18 @@ router.get('/', authenticateToken, async (req, res) => {
     });
 
     res.json({
-      equipment: rows,
-      total: count,
-      page: parseInt(page),
-      totalPages: Math.ceil(count / limit)
+      success: true,
+      data: rows,
+      pagination: {
+        total: count,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        pages: Math.ceil(count / limit)
+      }
     });
   } catch (error) {
     console.error('获取设备列表错误:', error);
-    res.status(500).json({ message: '服务器错误' });
+    res.status(500).json({ success: false, message: '服务器错误' });
   }
 });
 

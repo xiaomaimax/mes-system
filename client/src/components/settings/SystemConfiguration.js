@@ -1,6 +1,58 @@
 import { Card, Form, Input, Select, Switch, Button, Row, Col, message } from 'antd';
-import { 
-  DatabaseOutlined, 
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import ButtonActions from '../../utils/buttonActions';
+import {   DatabaseOutlined, 
   SaveOutlined
 } from '@ant-design/icons';
 
@@ -14,7 +66,7 @@ const SystemConfiguration = () => {
     try {
       const values = await form.validateFields();
       console.log('保存系统配置:', values);
-      message.success('系统配置保存成功');
+      safeMessage.success('系统配置保存成功');
     } catch (error) {
       console.error('验证失败:', error);
     }

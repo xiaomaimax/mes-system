@@ -1,7 +1,59 @@
 import { useState } from 'react';
+import ButtonActions from '../../utils/buttonActions';
 import { Card, Form, Input, Button, Switch, Row, Col, message, Tabs, Space, Alert, Divider, Tag, Modal } from 'antd';
-import { 
-  MessageOutlined, 
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import {   MessageOutlined, 
   WechatOutlined, 
   MailOutlined, 
   ExperimentOutlined,
@@ -16,6 +68,7 @@ const { TabPane } = Tabs;
 
 const MessagePushSettings = () => {
   const [form] = Form.useForm();
+  const [editingRecord, setEditingRecord] = useState(null);
   const [testModalVisible, setTestModalVisible] = useState(false);
   const [testType, setTestType] = useState('');
   const [testLoading, setTestLoading] = useState(false);
@@ -58,14 +111,14 @@ const MessagePushSettings = () => {
       const success = Math.random() > 0.3;
       if (success) {
         setConnectionStatus(prev => ({ ...prev, wechat: 'success' }));
-        message.success('企业微信连接测试成功！');
+        safeMessage.success('企业微信连接测试成功！');
       } else {
         setConnectionStatus(prev => ({ ...prev, wechat: 'error' }));
-        message.error('企业微信连接测试失败，请检查配置参数');
+        safeMessage.error('企业微信连接测试失败，请检查配置参数');
       }
     } catch (error) {
       setConnectionStatus(prev => ({ ...prev, wechat: 'error' }));
-      message.error('测试过程中发生错误');
+      safeMessage.error('测试过程中发生错误');
     } finally {
       setTestLoading(false);
     }
@@ -82,14 +135,14 @@ const MessagePushSettings = () => {
       const success = Math.random() > 0.3;
       if (success) {
         setConnectionStatus(prev => ({ ...prev, email: 'success' }));
-        message.success('邮件服务连接测试成功！');
+        safeMessage.success('邮件服务连接测试成功！');
       } else {
         setConnectionStatus(prev => ({ ...prev, email: 'error' }));
-        message.error('邮件服务连接测试失败，请检查SMTP配置');
+        safeMessage.error('邮件服务连接测试失败，请检查SMTP配置');
       }
     } catch (error) {
       setConnectionStatus(prev => ({ ...prev, email: 'error' }));
-      message.error('测试过程中发生错误');
+      safeMessage.error('测试过程中发生错误');
     } finally {
       setTestLoading(false);
     }
@@ -103,13 +156,13 @@ const MessagePushSettings = () => {
       
       const success = Math.random() > 0.2;
       if (success) {
-        message.success(`${testType === 'wechat' ? '企业微信' : '邮件'}测试消息发送成功！`);
+        safeMessage.success(`${testType === 'wechat' ? '企业微信' : '邮件'}测试消息发送成功！`);
         setTestModalVisible(false);
       } else {
-        message.error('测试消息发送失败，请检查配置');
+        safeMessage.error('测试消息发送失败，请检查配置');
       }
     } catch (error) {
-      message.error('发送测试消息时发生错误');
+      safeMessage.error('发送测试消息时发生错误');
     } finally {
       setTestLoading(false);
     }
@@ -121,9 +174,9 @@ const MessagePushSettings = () => {
       const values = await form.validateFields();
       // 模拟保存API调用
       await new Promise(resolve => setTimeout(resolve, 1000));
-      message.success('消息推送配置保存成功！');
+      safeMessage.success('消息推送配置保存成功！');
     } catch (error) {
-      message.error('保存配置失败');
+      safeMessage.error('保存配置失败');
     }
   };
 

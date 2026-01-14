@@ -27,11 +27,14 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
+import ButtonActions from '../../utils/buttonActions';
+import { productionData } from '../../data/mockData';
 const { Option } = Select;
 const { TextArea } = Input;
 const { Title } = Typography;
 
 const ProductionTaskManagement = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -190,16 +193,14 @@ const ProductionTaskManagement = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space size="small">
-          <Button 
-            type="link" 
+          <Button onClick={() => handleEdit(record)} type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
           >
             编辑
           </Button>
-          <Button 
-            type="link" 
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" 
             size="small" 
             icon={<DeleteOutlined />} 
             danger
@@ -232,13 +233,13 @@ const ProductionTaskManagement = () => {
       };
       
       console.log('提交生产任务数据:', submitData);
-      message.success('生产任务保存成功！');
+      safeMessage.success('生产任务保存成功！');
       setModalVisible(false);
       form.resetFields();
       setFileList([]);
     } catch (error) {
       console.error('提交失败:', error);
-      message.error('保存失败，请重试！');
+      safeMessage.error('保存失败，请重试！');
     } finally {
       setLoading(false);
     }

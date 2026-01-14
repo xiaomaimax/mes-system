@@ -12,26 +12,41 @@ import {
   NodeIndexOutlined,
   UserOutlined,
   LinkOutlined,
-  SettingOutlined
+  SettingOutlined,
+  CalendarOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer
-} from 'recharts';
+import { useEffect } from 'react';
+import { baseData, productionData, qualityData, equipmentData, inventoryData } from '../data/mockData';
+import OnboardingGuide from '../utils/OnboardingGuide';
+import HelpPanel from './HelpPanel';
 
 const { Title, Paragraph, Text } = Typography;
 
 const HomePage = () => {
   const navigate = useNavigate();
+
+  // 初始化新手引导
+  useEffect(() => {
+    console.log('[HomePage] useEffect 执行，初始化新手引导');
+    
+    // 检查是否已经有实例在运行
+    if (window.__onboardingGuideInstance) {
+      console.log('[HomePage] 已存在引导实例，跳过初始化');
+      return;
+    }
+    
+    // 初始化引导
+    const guide = OnboardingGuide.initialize();
+    console.log('[HomePage] 引导实例已创建');
+    
+    // 清理函数 - 不销毁实例，只是记录日志
+    return () => {
+      console.log('[HomePage] useEffect 清理函数执行');
+      // 注意：不调用 destroy()，让实例保持活跃
+      // 这样即使组件重新挂载，也不会创建新实例
+    };
+  }, []);
 
   // 获取当前用户信息
   const getCurrentUser = () => {
@@ -50,24 +65,46 @@ const HomePage = () => {
 
   // 定义角色权限配置（与Sidebar保持一致）
   const rolePermissions = {
-    '超级管理员': {
+    'admin': {
       allowedMenus: [
-        '/dashboard', '/process', '/production', '/equipment', 
+        '/dashboard', '/process', '/production', '/scheduling', '/equipment', 
         '/quality', '/inventory', '/personnel', '/integration', 
         '/reports', '/settings'
       ]
     },
-    '部门管理员': {
-      生产部: ['/dashboard', '/production', '/equipment', '/inventory', '/reports'],
+    '超级管理员': {
+      allowedMenus: [
+        '/dashboard', '/process', '/production', '/scheduling', '/equipment', 
+        '/quality', '/inventory', '/personnel', '/integration', 
+        '/reports', '/settings'
+      ]
+    },
+    'manager': {
+      生产部: ['/dashboard', '/production', '/scheduling', '/equipment', '/inventory', '/reports'],
       质量部: ['/dashboard', '/quality', '/process', '/reports'],
       技术部: ['/dashboard', '/process', '/equipment', '/integration', '/reports'],
       信息部: ['/dashboard', '/integration', '/settings', '/reports']
     },
-    '普通用户': {
-      生产部: ['/dashboard', '/production', '/reports'],
+    '部门管理员': {
+      生产部: ['/dashboard', '/production', '/scheduling', '/equipment', '/inventory', '/reports'],
+      质量部: ['/dashboard', '/quality', '/process', '/reports'],
+      技术部: ['/dashboard', '/process', '/equipment', '/integration', '/reports'],
+      信息部: ['/dashboard', '/integration', '/settings', '/reports']
+    },
+    'operator': {
+      生产部: ['/dashboard', '/production', '/scheduling', '/reports'],
       质量部: ['/dashboard', '/quality', '/reports'],
       技术部: ['/dashboard', '/process', '/reports'],
       信息部: ['/dashboard', '/reports']
+    },
+    '普通用户': {
+      生产部: ['/dashboard', '/production', '/scheduling', '/reports'],
+      质量部: ['/dashboard', '/quality', '/reports'],
+      技术部: ['/dashboard', '/process', '/reports'],
+      信息部: ['/dashboard', '/reports']
+    },
+    'quality_inspector': {
+      allowedMenus: ['/dashboard', '/quality', '/process', '/reports']
     },
     '技术管理员': {
       allowedMenus: ['/dashboard', '/process', '/equipment', '/integration', '/reports']
@@ -78,22 +115,47 @@ const HomePage = () => {
   const getUserAllowedMenus = () => {
     const { role, department } = currentUser;
     
-    if (role === '超级管理员') {
+    // 检查 'admin' 角色
+    if (role === 'admin' && rolePermissions['admin']) {
+      return rolePermissions['admin'].allowedMenus;
+    }
+    
+    // 检查 '超级管理员' 角色
+    if (role === '超级管理员' && rolePermissions['超级管理员']) {
       return rolePermissions['超级管理员'].allowedMenus;
     }
     
-    if (role === '技术管理员') {
+    // 检查 '技术管理员' 角色
+    if (role === '技术管理员' && rolePermissions['技术管理员']) {
       return rolePermissions['技术管理员'].allowedMenus;
     }
     
-    if (role === '部门管理员' && rolePermissions['部门管理员'][department]) {
+    // 检查 'quality_inspector' 角色
+    if (role === 'quality_inspector' && rolePermissions['quality_inspector']) {
+      return rolePermissions['quality_inspector'].allowedMenus;
+    }
+    
+    // 检查 'manager' 角色
+    if (role === 'manager' && rolePermissions['manager'] && rolePermissions['manager'][department]) {
+      return rolePermissions['manager'][department];
+    }
+    
+    // 检查 '部门管理员' 角色
+    if (role === '部门管理员' && rolePermissions['部门管理员'] && rolePermissions['部门管理员'][department]) {
       return rolePermissions['部门管理员'][department];
     }
     
-    if (role === '普通用户' && rolePermissions['普通用户'][department]) {
+    // 检查 'operator' 角色
+    if (role === 'operator' && rolePermissions['operator'] && rolePermissions['operator'][department]) {
+      return rolePermissions['operator'][department];
+    }
+    
+    // 检查 '普通用户' 角色
+    if (role === '普通用户' && rolePermissions['普通用户'] && rolePermissions['普通用户'][department]) {
       return rolePermissions['普通用户'][department];
     }
     
+    // 默认返回仪表板和报表
     return ['/dashboard', '/reports'];
   };
 
@@ -141,6 +203,21 @@ const HomePage = () => {
       benefits: '生产标准化率提升95%，工艺一致性提高30%，新员工培训时间缩短50%',
       path: '/process',
       color: '#e6fffb'
+    },
+    {
+      key: 'scheduling',
+      title: '排程管理',
+      icon: <CalendarOutlined style={{ fontSize: '36px', color: '#faad14' }} />,
+      description: '智能排程系统，优化生产计划和资源配置，提高生产效率',
+      features: [
+        '计划排程：基于约束条件的智能排程算法',
+        '资源优化：设备、人员、物料的最优配置',
+        '冲突处理：自动识别和解决排程冲突',
+        '动态调整：支持实时调整和应急排程'
+      ],
+      benefits: '排程效率提升40%，设备利用率提高25%，交付准时率达98%',
+      path: '/scheduling',
+      color: '#fffbe6'
     },
     {
       key: 'production',
@@ -276,14 +353,34 @@ const HomePage = () => {
         padding: '20px 24px',
         borderRadius: '6px',
         marginBottom: '16px',
-        color: 'white'
+        color: 'white',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
       }}>
-        <Title level={3} style={{ color: 'white', marginBottom: '6px' }}>
-          MES 制造执行系统 - {currentUser.name}
-        </Title>
-        <Paragraph style={{ fontSize: '14px', color: 'white', marginBottom: 0, opacity: 0.9 }}>
-          Manufacturing Execution System - {currentUser.department} {currentUser.role}
-        </Paragraph>
+        <div>
+          <Title level={3} style={{ color: 'white', marginBottom: '6px' }}>
+            MES 制造执行系统 - {currentUser.name}
+          </Title>
+          <Paragraph style={{ fontSize: '14px', color: 'white', marginBottom: 0, opacity: 0.9 }}>
+            Manufacturing Execution System - {currentUser.department} {currentUser.role}
+          </Paragraph>
+        </div>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <HelpPanel moduleKey="dashboard" />
+          <Button 
+            type="primary" 
+            ghost 
+            size="small"
+            onClick={() => {
+              localStorage.removeItem('mes_onboarding_completed');
+              const guide = OnboardingGuide.initialize();
+              guide.start();
+            }}
+          >
+            重新开始引导
+          </Button>
+        </div>
       </div>
 
       {/* 系统特点 - 极简版 */}
@@ -427,30 +524,24 @@ const HomePage = () => {
         <Row gutter={16}>
           <Col span={12}>
             <Card title="本周生产趋势" size="small">
-              <ResponsiveContainer width="100%" height={200}>
-                <LineChart data={productionTrendData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="产量" stroke="#8884d8" strokeWidth={2} />
-                  <Line type="monotone" dataKey="目标" stroke="#82ca9d" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
+              <div style={{ padding: '20px', textAlign: 'center', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5', borderRadius: '4px' }}>
+                <div>
+                  <LineChartOutlined style={{ fontSize: '48px', color: '#1890ff', marginBottom: '12px' }} />
+                  <div style={{ color: '#666' }}>生产趋势图表</div>
+                  <div style={{ fontSize: '12px', color: '#999', marginTop: '4px' }}>数据可视化展示</div>
+                </div>
+              </div>
             </Card>
           </Col>
           <Col span={12}>
             <Card title="部门绩效对比" size="small">
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={departmentData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="绩效" fill="#8884d8" />
-                </BarChart>
-              </ResponsiveContainer>
+              <div style={{ padding: '20px', textAlign: 'center', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5', borderRadius: '4px' }}>
+                <div>
+                  <BarChartOutlined style={{ fontSize: '48px', color: '#52c41a', marginBottom: '12px' }} />
+                  <div style={{ color: '#666' }}>部门绩效图表</div>
+                  <div style={{ fontSize: '12px', color: '#999', marginTop: '4px' }}>数据可视化展示</div>
+                </div>
+              </div>
             </Card>
           </Col>
         </Row>

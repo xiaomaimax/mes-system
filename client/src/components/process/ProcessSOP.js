@@ -1,7 +1,60 @@
 import React, { useState } from 'react';
 import { Card, Table, Button, Space, Modal, Form, Input, Select, Steps, Tag, message, Row, Col, Descriptions, Divider, List, Avatar } from 'antd';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, BookOutlined, PlayCircleOutlined, CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 const { TextArea } = Input;
 const { Step } = Steps;
@@ -110,10 +163,10 @@ const ProcessSOP = () => {
           <Button type="link" size="small" icon={<EyeOutlined />} onClick={() => handleViewDetail(record)}>
             查看
           </Button>
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
             编辑
           </Button>
-          <Button type="link" size="small" danger icon={<DeleteOutlined />}>
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" size="small" danger icon={<DeleteOutlined />}>
             删除
           </Button>
         </Space>
@@ -142,7 +195,7 @@ const ProcessSOP = () => {
     try {
       const values = await form.validateFields();
       console.log('保存SOP:', values);
-      message.success('保存成功');
+      safeMessage.success('保存成功');
       setModalVisible(false);
     } catch (error) {
       console.error('验证失败:', error);
@@ -295,7 +348,7 @@ const ProcessSOP = () => {
           <Button key="close" onClick={() => setDetailModalVisible(false)}>
             关闭
           </Button>,
-          <Button key="edit" type="primary" icon={<EditOutlined />}>
+          <Button onClick={() => handleEdit(record)} key="edit" type="primary" icon={<EditOutlined />}>
             编辑
           </Button>
         ]}

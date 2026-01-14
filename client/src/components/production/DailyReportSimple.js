@@ -19,7 +19,9 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
+import ButtonActions from '../../utils/buttonActions';
 const DailyReportSimple = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [reportDate, setReportDate] = useState(dayjs());
 
   // 简化的日报数据

@@ -1,7 +1,59 @@
 import { useState } from 'react';
+import ButtonActions from '../../utils/buttonActions';
 import { Card, Row, Col, Button, Space, Table, Form, Select, Modal, Tag, Tree, Switch, message, Alert, Descriptions, Input } from 'antd';
-import { 
-  TeamOutlined, 
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import {   TeamOutlined, 
   EditOutlined, 
   EyeOutlined, 
   PlusOutlined,
@@ -285,7 +337,7 @@ const DepartmentAccess = () => {
           <Button type="link" size="small" icon={<EyeOutlined />} onClick={() => handleView(record)}>
             查看
           </Button>
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
             编辑
           </Button>
           <Button type="link" size="small" icon={<SettingOutlined />}>
@@ -320,7 +372,7 @@ const DepartmentAccess = () => {
     try {
       const values = await form.validateFields();
       console.log('保存部门权限配置:', values);
-      message.success(editingRecord ? '更新成功' : '添加成功');
+      safeMessage.success(editingRecord ? '更新成功' : '添加成功');
       setModalVisible(false);
     } catch (error) {
       console.error('验证失败:', error);

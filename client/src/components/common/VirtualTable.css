@@ -1,0 +1,144 @@
+/**
+ * VirtualTable 样式文件
+ * Requirements: 10.2
+ */
+
+.virtual-table-container {
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.virtual-table-header {
+  display: flex;
+  background: #fafafa;
+  border-bottom: 1px solid #d9d9d9;
+  height: 54px;
+  align-items: center;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.virtual-table-header-cell {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+}
+
+.virtual-table-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.virtual-table-row:hover {
+  background-color: #fafafa;
+}
+
+.virtual-table-row:last-child {
+  border-bottom: none;
+}
+
+.virtual-table-cell {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  min-height: 54px;
+  word-break: break-word;
+  overflow: hidden;
+}
+
+.virtual-table-selection {
+  width: 60px;
+  flex: none;
+  justify-content: center;
+}
+
+.virtual-table-body {
+  border: none;
+  border-radius: 0;
+}
+
+.virtual-table-body .virtual-scroll-item {
+  border-bottom: none;
+  padding: 0;
+  height: auto !important;
+}
+
+.virtual-table-pagination {
+  padding: 16px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .virtual-table-cell {
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+  
+  .virtual-table-selection {
+    width: 50px;
+  }
+  
+  .virtual-table-header {
+    height: 48px;
+  }
+  
+  .virtual-table-cell {
+    min-height: 48px;
+  }
+}
+
+/* 紧凑模式 */
+.virtual-table-container.compact .virtual-table-header {
+  height: 40px;
+}
+
+.virtual-table-container.compact .virtual-table-cell {
+  padding: 8px 12px;
+  min-height: 40px;
+}
+
+.virtual-table-container.compact .virtual-table-selection {
+  width: 50px;
+}
+
+/* 加载状态 */
+.virtual-table-container .virtual-scroll-loading {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* 空状态 */
+.virtual-table-container .virtual-scroll-empty {
+  background: #fafafa;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .virtual-table-container {
+    border-color: #000;
+  }
+  
+  .virtual-table-header {
+    border-bottom-color: #000;
+  }
+  
+  .virtual-table-row {
+    border-bottom-color: #000;
+  }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  .virtual-table-row {
+    transition: none;
+  }
+}

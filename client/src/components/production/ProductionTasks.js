@@ -1,128 +1,258 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Space, Tag, Progress, Select, Input, DatePicker } from 'antd';
-import { PlusOutlined, SearchOutlined, ProjectOutlined, PlayCircleOutlined, PauseCircleOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Card, Table, Button, Space, Tag, Select, Input, message, Spin, Alert, Modal } from 'antd';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import { PlusOutlined, SearchOutlined, ProjectOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useDataService } from '../../hooks/useDataService';
+import DataService from '../../services/DataService';
 
 const { Option } = Select;
 
 const ProductionTasks = () => {
-  const [loading, setLoading] = useState(false);
+  const [taskData, setTaskData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [selectedWorkshop, setSelectedWorkshop] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedPriority, setSelectedPriority] = useState(null);
 
-  // 模拟数据
-  const taskData = [
-    {
-      key: '1',
-      taskId: 'PT-2024-001',
-      taskName: '产品A生产任务',
-      orderNumber: 'PO-2024-001',
-      productCode: 'PROD-A001',
-      productName: '产品A',
-      planQuantity: 1000,
-      completedQuantity: 750,
-      qualifiedQuantity: 740,
-      defectiveQuantity: 10,
-      workshopName: '车间A',
-      productionLine: '生产线1',
-      assignedWorker: '张三',
-      startTime: '2024-01-15 08:00',
-      endTime: '2024-01-15 18:00',
-      status: 'in_progress',
-      priority: 'high'
-    },
-    {
-      key: '2',
-      taskId: 'PT-2024-002',
-      taskName: '产品B生产任务',
-      orderNumber: 'PO-2024-002',
-      productCode: 'PROD-B001',
-      productName: '产品B',
-      planQuantity: 500,
-      completedQuantity: 0,
-      qualifiedQuantity: 0,
-      defectiveQuantity: 0,
-      workshopName: '车间B',
-      productionLine: '生产线2',
-      assignedWorker: '李四',
-      startTime: '2024-01-16 08:00',
-      endTime: '2024-01-16 16:00',
-      status: 'pending',
-      priority: 'normal'
+  // 使用 DataService 获取生产任务数据
+  // Requirements: 2.2, 2.5
+  const { 
+    data: tasksData, 
+    loading, 
+    error, 
+    refetch 
+  } = useDataService(
+    () => DataService.getProductionTasks(),
+    [],
+    { useCache: true, cacheKey: 'production_tasks' }
+  );
+
+  // 处理数据转换
+  useEffect(() => {
+    if (tasksData && Array.isArray(tasksData)) {
+      // 转换排程任务数据为生产任务格式（与任务单管理字段保持一致）
+      const convertedTasks = tasksData.map((task, index) => {
+        const material = task.ProductionPlan?.Material || {};
+        const device = task.Device || {};
+        const mold = task.Mold || {};
+
+        // 根据超期字段判定优先级
+        let priority = 'normal';
+        if (task.is_overdue) {
+          priority = 'high';
+        }
+
+        return {
+          key: task.id || index,
+          taskNumber: task.task_number || `PT-${task.id}`, // 任务单号
+          planNumber: task.ProductionPlan?.plan_number || '-', // 计划单号
+          productInfo: `${material.material_name || '未知产品'} (${material.material_code || 'N/A'})`, // 产品信息&物料
+          device: device.device_name || '-', // 设备
+          mold: mold.mold_name || '-', // 模具
+          quantity: task.task_quantity || task.ProductionPlan?.planned_quantity || 0, // 数量
+          isOverdue: task.is_overdue || false, // 超期
+          plannedStartTime: task.planned_start_time || '-',
+          plannedEndTime: task.planned_end_time || '-',
+          status: task.status || 'pending',
+          priority: priority,
+          // 保存原始数据用于后续操作
+          _originalTask: task
+        };
+      });
+
+      setTaskData(convertedTasks);
+      setFilteredData(convertedTasks);
     }
-  ];
+  }, [tasksData]);
+
+  // 删除任务
+  const handleDelete = (record) => {
+    Modal.confirm({
+      title: '确认删除',
+      content: `确定要删除任务单"${record.taskNumber}"吗？此操作不可恢复。`,
+      okText: '确定',
+      cancelText: '取消',
+      okType: 'danger',
+      onOk: async () => {
+        try {
+          const result = await DataService.deleteProductionTask(record.key);
+          if (result.success) {
+            safeMessage.success('删除成功');
+            refetch();
+          } else {
+            safeMessage.error(result.message || '删除失败');
+          }
+        } catch (error) {
+          console.error('删除失败:', error);
+          safeMessage.error('删除失败: ' + (error.message || '未知错误'));
+        }
+      }
+    });
+  };
+
+  // 编辑任务
+  const handleEdit = (record) => {
+    try {
+      // 这里可以添加编辑逻辑
+      message.info('编辑功能开发中');
+    } catch (error) {
+      console.error('编辑失败:', error);
+      safeMessage.error('编辑失败: ' + (error.message || '未知错误'));
+    }
+  };
+
+  // 新建任务
+  const handleAdd = () => {
+    try {
+      // 这里可以添加新建逻辑
+      message.info('新建功能开发中');
+    } catch (error) {
+      console.error('新建失败:', error);
+      safeMessage.error('新建失败: ' + (error.message || '未知错误'));
+    }
+  };
+
+  // 搜索和过滤
+  const handleSearch = () => {
+    let filtered = taskData;
+
+    if (searchText) {
+      filtered = filtered.filter(task =>
+        task.taskNumber.includes(searchText) ||
+        task.planNumber.includes(searchText) ||
+        task.productInfo.includes(searchText)
+      );
+    }
+
+    if (selectedWorkshop) {
+      filtered = filtered.filter(task => task.device === selectedWorkshop);
+    }
+
+    if (selectedStatus) {
+      filtered = filtered.filter(task => task.status === selectedStatus);
+    }
+
+    if (selectedPriority) {
+      filtered = filtered.filter(task => task.priority === selectedPriority);
+    }
+
+    setFilteredData(filtered);
+  };
+
+  const handleReset = () => {
+    setSearchText('');
+    setSelectedWorkshop(null);
+    setSelectedStatus(null);
+    setSelectedPriority(null);
+    setFilteredData(taskData);
+  };
+
+  // 监听过滤条件变化
+  useEffect(() => {
+    handleSearch();
+  }, [searchText, selectedWorkshop, selectedStatus, selectedPriority, taskData]);
 
   const columns = [
     {
-      title: '任务编号',
-      dataIndex: 'taskId',
-      key: 'taskId',
+      title: '任务单号',
+      dataIndex: 'taskNumber',
+      key: 'taskNumber',
       width: 120,
       fixed: 'left'
     },
     {
-      title: '任务名称',
-      dataIndex: 'taskName',
-      key: 'taskName',
-      width: 150,
-    },
-    {
-      title: '订单号',
-      dataIndex: 'orderNumber',
-      key: 'orderNumber',
+      title: '计划单号',
+      dataIndex: 'planNumber',
+      key: 'planNumber',
       width: 120,
     },
     {
-      title: '产品信息',
-      key: 'product',
-      width: 150,
-      render: (_, record) => (
-        <div>
-          <div>{record.productName}</div>
-          <div style={{ fontSize: '12px', color: '#666' }}>{record.productCode}</div>
-        </div>
-      )
+      title: '产品信息&物料',
+      dataIndex: 'productInfo',
+      key: 'productInfo',
+      width: 180,
     },
     {
-      title: '生产进度',
-      key: 'progress',
-      width: 200,
-      render: (_, record) => {
-        const progress = Math.round((record.completedQuantity / record.planQuantity) * 100);
-        return (
-          <div>
-            <Progress percent={progress} size="small" />
-            <div style={{ fontSize: '12px', marginTop: '4px' }}>
-              {record.completedQuantity}/{record.planQuantity}
-            </div>
-          </div>
-        );
-      }
-    },
-    {
-      title: '质量统计',
-      key: 'quality',
+      title: '设备',
+      dataIndex: 'device',
+      key: 'device',
       width: 120,
-      render: (_, record) => (
-        <div>
-          <div style={{ color: '#52c41a' }}>合格: {record.qualifiedQuantity}</div>
-          <div style={{ color: '#ff4d4f' }}>不良: {record.defectiveQuantity}</div>
-        </div>
-      )
     },
     {
-      title: '车间/产线',
-      key: 'workshop',
+      title: '模具',
+      dataIndex: 'mold',
+      key: 'mold',
       width: 120,
-      render: (_, record) => (
-        <div>
-          <div>{record.workshopName}</div>
-          <div style={{ fontSize: '12px', color: '#666' }}>{record.productionLine}</div>
-        </div>
-      )
     },
     {
-      title: '负责人',
-      dataIndex: 'assignedWorker',
-      key: 'assignedWorker',
+      title: '数量',
+      dataIndex: 'quantity',
+      key: 'quantity',
+      width: 100,
+      render: (quantity) => `${quantity} 件`
+    },
+    {
+      title: '超期',
+      dataIndex: 'isOverdue',
+      key: 'isOverdue',
       width: 80,
+      render: (isOverdue) => (
+        <Tag color={isOverdue ? 'red' : 'green'}>
+          {isOverdue ? '是' : '否'}
+        </Tag>
+      )
     },
     {
       title: '优先级',
@@ -154,9 +284,11 @@ const ProductionTasks = () => {
           in_progress: { color: 'blue', text: '进行中' },
           paused: { color: 'yellow', text: '已暂停' },
           completed: { color: 'green', text: '已完成' },
-          cancelled: { color: 'red', text: '已取消' }
+          cancelled: { color: 'red', text: '已取消' },
+          unscheduled: { color: 'default', text: '未排产' },
+          scheduled: { color: 'cyan', text: '已排产' }
         };
-        const { color, text } = statusMap[status];
+        const { color, text } = statusMap[status] || { color: 'default', text: status };
         return <Tag color={color}>{text}</Tag>;
       }
     },
@@ -167,18 +299,24 @@ const ProductionTasks = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space size="small">
-          {record.status === 'pending' && (
-            <Button type="link" size="small" icon={<PlayCircleOutlined />}>
-              开始
-            </Button>
-          )}
-          {record.status === 'in_progress' && (
-            <Button type="link" size="small" icon={<PauseCircleOutlined />}>
-              暂停
-            </Button>
-          )}
-          <Button type="link" size="small">编辑</Button>
+          <Button 
+            type="link" 
+            size="small" 
+            icon={<EditOutlined />}
+            onClick={() => handleEdit(record)}
+          >
+            编辑
+          </Button>
           <Button type="link" size="small">详情</Button>
+          <Button 
+            type="link" 
+            size="small" 
+            danger 
+            icon={<DeleteOutlined />}
+            onClick={() => handleDelete(record)}
+          >
+            删除
+          </Button>
         </Space>
       ),
     },
@@ -194,57 +332,108 @@ const ProductionTasks = () => {
           </Space>
         }
         extra={
-          <Button type="primary" icon={<PlusOutlined />}>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
             新建任务
           </Button>
         }
       >
+        {/* 错误提示 */}
+        {error && (
+          <Alert
+            message="数据加载失败"
+            description={error.message || '获取生产任务数据失败，请稍后重试'}
+            type="error"
+            showIcon
+            closable
+            style={{ marginBottom: 16 }}
+            action={
+              <Button size="small" onClick={refetch}>
+                重试
+              </Button>
+            }
+          />
+        )}
+
         {/* 搜索区域 */}
         <div style={{ marginBottom: 16 }}>
           <Space wrap>
             <Input
-              placeholder="搜索任务编号"
+              placeholder="搜索任务单号/计划单号"
               prefix={<SearchOutlined />}
               style={{ width: 200 }}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
             />
-            <Select placeholder="选择车间" style={{ width: 150 }}>
-              <Option value="workshop_a">车间A</Option>
-              <Option value="workshop_b">车间B</Option>
-              <Option value="workshop_c">车间C</Option>
+            <Select 
+              placeholder="选择设备" 
+              style={{ width: 150 }}
+              value={selectedWorkshop}
+              onChange={setSelectedWorkshop}
+              allowClear
+            >
+              <Option value="注塑机1号">注塑机1号</Option>
+              <Option value="注塑机2号">注塑机2号</Option>
+              <Option value="注塑机4号">注塑机4号</Option>
+              <Option value="注塑机5号">注塑机5号</Option>
             </Select>
-            <Select placeholder="选择状态" style={{ width: 120 }}>
+            <Select 
+              placeholder="选择状态" 
+              style={{ width: 120 }}
+              value={selectedStatus}
+              onChange={setSelectedStatus}
+              allowClear
+            >
               <Option value="pending">待开始</Option>
               <Option value="in_progress">进行中</Option>
               <Option value="paused">已暂停</Option>
               <Option value="completed">已完成</Option>
               <Option value="cancelled">已取消</Option>
+              <Option value="scheduled">已排产</Option>
+              <Option value="unscheduled">未排产</Option>
             </Select>
-            <Select placeholder="优先级" style={{ width: 100 }}>
+            <Select 
+              placeholder="优先级" 
+              style={{ width: 100 }}
+              value={selectedPriority}
+              onChange={setSelectedPriority}
+              allowClear
+            >
               <Option value="high">高</Option>
               <Option value="normal">中</Option>
               <Option value="low">低</Option>
             </Select>
-            <Button type="primary" icon={<SearchOutlined />}>
+            <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch}>
               搜索
             </Button>
-            <Button>重置</Button>
+            <Button onClick={handleReset}>重置</Button>
           </Space>
         </div>
 
         {/* 表格 */}
-        <Table
-          columns={columns}
-          dataSource={taskData}
-          loading={loading}
-          pagination={{
-            total: taskData.length,
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => `共 ${total} 条记录`,
-          }}
-          scroll={{ x: 1400 }}
-        />
+        <Spin spinning={loading}>
+          {filteredData.length === 0 && !loading ? (
+            <Alert
+              message="暂无数据"
+              description="当前没有生产任务数据"
+              type="info"
+              showIcon
+            />
+          ) : (
+            <Table
+              columns={columns}
+              dataSource={filteredData}
+              loading={loading}
+              pagination={{
+                total: filteredData.length,
+                pageSize: 10,
+                showSizeChanger: true,
+                showQuickJumper: true,
+                showTotal: (total) => `共 ${total} 条记录`,
+              }}
+              scroll={{ x: 1400 }}
+            />
+          )}
+        </Spin>
       </Card>
     </div>
   );

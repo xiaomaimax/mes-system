@@ -41,10 +41,12 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const DailyReportManagement = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
@@ -332,7 +334,7 @@ const DailyReportManagement = () => {
   };
 
   const handleGenerateReport = () => {
-    message.success('生产日报生成成功！');
+    safeMessage.success('生产日报生成成功！');
   };
 
   const renderSummaryCards = () => (

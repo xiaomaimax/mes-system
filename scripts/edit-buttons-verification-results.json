@@ -1,0 +1,794 @@
+[
+  {
+    "name": "EquipmentInspection",
+    "path": "client/src/components/equipment/EquipmentInspection.js",
+    "score": 100,
+    "passed": 9,
+    "total": 9,
+    "checks": [
+      "✅ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ProductionTaskManagement",
+    "path": "client/src/components/production/ProductionTaskManagement.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "WorkReportManagement",
+    "path": "client/src/components/production/WorkReportManagement.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ShiftScheduleManagement",
+    "path": "client/src/components/production/ShiftScheduleManagement.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "EquipmentResponsibilityManagement",
+    "path": "client/src/components/production/EquipmentResponsibilityManagement.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "LineMaterialsManagement",
+    "path": "client/src/components/production/LineMaterialsManagement.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ProductionMasterDataManagement",
+    "path": "client/src/components/production/ProductionMasterDataManagement.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "EquipmentMaintenance",
+    "path": "client/src/components/equipment/EquipmentMaintenance.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "EquipmentRepair",
+    "path": "client/src/components/equipment/EquipmentRepair.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "IQCInspection",
+    "path": "client/src/components/quality/IQCInspection.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "PQCInspection",
+    "path": "client/src/components/quality/PQCInspection.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "InventoryTransfer",
+    "path": "client/src/components/inventory/InventoryTransfer.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "InventoryCount",
+    "path": "client/src/components/inventory/InventoryCount.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ExternalSpareParts",
+    "path": "client/src/components/inventory/ExternalSpareParts.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "TrainingManagement",
+    "path": "client/src/components/personnel/TrainingManagement.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "UserManagement",
+    "path": "client/src/components/settings/UserManagement.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "✅ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "RoleManagement",
+    "path": "client/src/components/settings/RoleManagement.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "✅ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "InterfaceManagement",
+    "path": "client/src/components/integration/InterfaceManagement.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "✅ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "DataMapping",
+    "path": "client/src/components/integration/DataMapping.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "SecuritySettings",
+    "path": "client/src/components/integration/SecuritySettings.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "SyncScheduler",
+    "path": "client/src/components/integration/SyncScheduler.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "DataTransformEngine",
+    "path": "client/src/components/integration/DataTransformEngine.js",
+    "score": 89,
+    "passed": 8,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "InventoryMasterData",
+    "path": "client/src/components/inventory/InventoryMasterData.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "❌ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ProcessRouting",
+    "path": "client/src/components/process/ProcessRouting.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ProcessParameters",
+    "path": "client/src/components/process/ProcessParameters.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ProcessDocuments",
+    "path": "client/src/components/process/ProcessDocuments.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ProcessSOP",
+    "path": "client/src/components/process/ProcessSOP.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ProcessOptimization",
+    "path": "client/src/components/process/ProcessOptimization.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ProcessValidation",
+    "path": "client/src/components/process/ProcessValidation.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ProcessChangeControl",
+    "path": "client/src/components/process/ProcessChangeControl.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "ProcessMasterData",
+    "path": "client/src/components/process/ProcessMasterData.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "EmployeeManagement",
+    "path": "client/src/components/personnel/EmployeeManagement.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "DepartmentManagement",
+    "path": "client/src/components/personnel/DepartmentManagement.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "PerformanceManagement",
+    "path": "client/src/components/personnel/PerformanceManagement.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "SkillCertification",
+    "path": "client/src/components/personnel/SkillCertification.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "WorkSchedule",
+    "path": "client/src/components/personnel/WorkSchedule.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "DepartmentAccess",
+    "path": "client/src/components/settings/DepartmentAccess.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "SystemConfiguration",
+    "path": "client/src/components/integration/SystemConfiguration.js",
+    "score": 78,
+    "passed": 7,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "✅ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "✅ 编辑按钮绑定",
+      "❌ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "EquipmentMasterData",
+    "path": "client/src/components/equipment/EquipmentMasterData.js",
+    "score": 67,
+    "passed": 6,
+    "total": 9,
+    "checks": [
+      "✅ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "❌ 编辑按钮绑定",
+      "❌ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "DefectReasons",
+    "path": "client/src/components/quality/DefectReasons.js",
+    "score": 67,
+    "passed": 6,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "❌ 编辑按钮绑定",
+      "✅ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "InspectionStandards",
+    "path": "client/src/components/quality/InspectionStandards.js",
+    "score": 56,
+    "passed": 5,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "✅ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "✅ 表单填充",
+      "✅ 模态框控制",
+      "❌ 编辑按钮绑定",
+      "❌ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "EquipmentArchives",
+    "path": "client/src/components/equipment/EquipmentArchives.js",
+    "score": 33,
+    "passed": 3,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "❌ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "❌ 表单填充",
+      "✅ 模态框控制",
+      "❌ 编辑按钮绑定",
+      "❌ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "FQCInspection",
+    "path": "client/src/components/quality/FQCInspection.js",
+    "score": 33,
+    "passed": 3,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "❌ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "❌ 表单填充",
+      "✅ 模态框控制",
+      "❌ 编辑按钮绑定",
+      "❌ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  },
+  {
+    "name": "OQCInspection",
+    "path": "client/src/components/quality/OQCInspection.js",
+    "score": 33,
+    "passed": 3,
+    "total": 9,
+    "checks": [
+      "❌ 状态管理",
+      "✅ 编辑状态跟踪",
+      "❌ handleEdit函数",
+      "❌ 数据更新逻辑",
+      "❌ 表单填充",
+      "✅ 模态框控制",
+      "❌ 编辑按钮绑定",
+      "❌ 动态模态框标题",
+      "✅ 语法检查"
+    ]
+  }
+]

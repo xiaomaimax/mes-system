@@ -1,7 +1,59 @@
-import { useState } from 'react';
-import { Card, Row, Col, Button, Space, Table, Form, Input, Select, Modal, Tag, Avatar, Descriptions, Upload, DatePicker, message } from 'antd';
-import { 
-  UserOutlined, 
+import { useState, useEffect } from 'react';
+import ButtonActions from '../../utils/buttonActions';
+import { Card, Row, Col, Button, Space, Table, Form, Input, Select, Modal, Tag, Avatar, Descriptions, Upload, DatePicker, message, Spin, Alert, Drawer } from 'antd';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import {   UserOutlined, 
   EditOutlined, 
   DeleteOutlined, 
   PlusOutlined,
@@ -10,8 +62,20 @@ import {
   PhoneOutlined,
   MailOutlined,
   HomeOutlined,
-  IdcardOutlined
+  IdcardOutlined,
+  ReloadOutlined,
+  BarChartOutlined,
+  SettingOutlined
 } from '@ant-design/icons';
+import moment from 'moment';
+
+import DataService from '../../services/DataService';
+import { useDataService } from '../../hooks/useDataService';
+import useUIFeedback, { OPERATION_TYPES } from '../../hooks/useUIFeedback';
+import DataSourceIndicator from '../common/DataSourceIndicator';
+import ProgressIndicator, { FloatingProgress, PROGRESS_STATUS } from '../common/ProgressIndicator';
+import StorageStatsDisplay, { StorageStatusIndicator } from '../common/StorageStatsDisplay';
+import EnhancedLoading, { DataLoadingWrapper } from '../common/EnhancedLoading';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -21,91 +85,63 @@ const EmployeeManagement = () => {
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [editingRecord, setEditingRecord] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [showStorageStats, setShowStorageStats] = useState(false);
   const [form] = Form.useForm();
 
-  // 员工数据
-  const employeeData = [
-    {
-      key: '1',
-      employeeId: 'EMP001',
-      name: '张三',
-      gender: '男',
-      age: 28,
-      department: '生产部',
-      position: '生产主管',
-      phone: '13800138001',
-      email: 'zhangsan@company.com',
-      status: '在职',
-      joinDate: '2022-03-15',
-      education: '本科',
-      skillLevel: '高级',
-      emergencyContact: '李女士 13900139001'
-    },
-    {
-      key: '2',
-      employeeId: 'EMP002',
-      name: '李四',
-      gender: '女',
-      age: 25,
-      department: '质量部',
-      position: '质检员',
-      phone: '13800138002',
-      email: 'lisi@company.com',
-      status: '在职',
-      joinDate: '2023-01-20',
-      education: '大专',
-      skillLevel: '中级',
-      emergencyContact: '王先生 13900139002'
-    },
-    {
-      key: '3',
-      employeeId: 'EMP003',
-      name: '王五',
-      gender: '男',
-      age: 32,
-      department: '设备部',
-      position: '维修工程师',
-      phone: '13800138003',
-      email: 'wangwu@company.com',
-      status: '请假',
-      joinDate: '2021-08-10',
-      education: '本科',
-      skillLevel: '高级',
-      emergencyContact: '赵女士 13900139003'
-    },
-    {
-      key: '4',
-      employeeId: 'EMP004',
-      name: '赵六',
-      gender: '男',
-      age: 35,
-      department: '技术部',
-      position: '工艺工程师',
-      phone: '13800138004',
-      email: 'zhaoliu@company.com',
-      status: '在职',
-      joinDate: '2020-05-12',
-      education: '硕士',
-      skillLevel: '专家',
-      emergencyContact: '孙女士 13900139004'
-    },
-    {
-      key: '5',
-      employeeId: 'EMP005',
-      name: '孙七',
-      gender: '女',
-      age: 26,
-      department: '生产部',
-      position: '操作员',
-      phone: '13800138005',
-      email: 'sunqi@company.com',
-      status: '在职',
-      joinDate: '2023-06-01',
-      education: '高中',
-      skillLevel: '初级',
-      emergencyContact: '周先生 13900139005'
+  // UI反馈状态管理
+  const uiFeedback = useUIFeedback({
+    autoHideSuccess: true,
+    autoHideError: false,
+    showMessages: true,
+    trackProgress: true,
+    trackDataSource: true
+  });
+
+  // 使用 DataService 获取员工数据
+  const { data: employeesData, loading, error, refetch } = useDataService(
+    () => DataService.getEmployees(),
+    [],
+    { useCache: true, cacheTTL: 5 * 60 * 1000 }
+  );
+
+  // 监听数据变化以更新数据源状态
+  useEffect(() => {
+    if (employeesData && !loading && !error) {
+      // 检测数据来源
+      const dataSource = employeesData.fromMock ? 'memory' : 'local';
+      uiFeedback.setSuccess('数据加载成功', dataSource);
+    } else if (error) {
+      uiFeedback.setError(error, '数据加载失败');
     }
-  ];
+  }, [employeesData, loading, error]);
+
+  // 格式化员工数据用于表格显示
+  const formatEmployeeData = (employees) => {
+    if (!employees || !Array.isArray(employees)) return [];
+    
+    return employees.map((item, index) => ({
+      key: item.id || index,
+      id: item.id,
+      employeeId: item.employeeId || `EMP${String(item.id).padStart(3, '0')}`,
+      name: item.name || '未知员工',
+      gender: item.gender || '未设置', // 使用实际数据，无默认值
+      age: item.age || '未设置', // 使用实际数据，无默认值
+      department: item.department || '未设置',
+      position: item.position || '未设置',
+      phone: item.phone || '未设置', // 使用实际数据，无默认值
+      email: item.email || '未设置',
+      status: item.status || '未设置',
+      joinDate: item.joinDate || '未设置', // 使用实际数据，无默认值
+      education: item.education || '未设置', // 使用实际数据，无默认值
+      skillLevel: item.skillLevel || '未设置', // 使用实际数据，无默认值
+      emergencyContact: item.emergencyContact || '未设置', // 使用实际数据，无默认值
+      shift: item.shift || '未设置',
+      address: item.address || '未设置',
+      remark: item.remark || ''
+    }));
+  };
+
+  const employeeData = formatEmployeeData(employeesData?.items || []);
 
   const columns = [
     {
@@ -196,13 +232,29 @@ const EmployeeManagement = () => {
       width: 200,
       render: (_, record) => (
         <Space size="small">
-          <Button type="link" size="small" icon={<EyeOutlined />} onClick={() => handleView(record)}>
+          <Button 
+            type="link" 
+            size="small" 
+            icon={<EyeOutlined />} 
+            onClick={() => handleView(record)}
+          >
             查看
           </Button>
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+          <Button 
+            type="link" 
+            size="small" 
+            icon={<EditOutlined />} 
+            onClick={() => handleEdit(record)}
+          >
             编辑
           </Button>
-          <Button type="link" size="small" danger icon={<DeleteOutlined />} onClick={() => handleDelete(record)}>
+          <Button 
+            type="link" 
+            size="small" 
+            danger 
+            icon={<DeleteOutlined />} 
+            onClick={() => handleDelete(record)}
+          >
             删除
           </Button>
         </Space>
@@ -211,42 +263,179 @@ const EmployeeManagement = () => {
   ];
 
   const handleAdd = () => {
-    setEditingRecord(null);
-    form.resetFields();
-    setModalVisible(true);
+    try {
+      setEditingRecord(null);
+      form.resetFields();
+      setModalVisible(true);
+    } catch (error) {
+      console.error('新增操作失败:', error);
+      safeMessage.error('新增操作失败: ' + (error.message || '未知错误'));
+    }
   };
 
   const handleEdit = (record) => {
-    setEditingRecord(record);
-    form.setFieldsValue(record);
-    setModalVisible(true);
+    try {
+      setEditingRecord(record);
+      form.setFieldsValue({
+        ...record,
+        joinDate: record.joinDate ? moment(record.joinDate) : null
+      });
+      setModalVisible(true);
+    } catch (error) {
+      console.error('编辑操作失败:', error);
+      safeMessage.error('编辑操作失败: ' + (error.message || '未知错误'));
+    }
   };
 
   const handleView = (record) => {
-    setSelectedEmployee(record);
-    setDetailModalVisible(true);
+    try {
+      setSelectedEmployee(record);
+      setDetailModalVisible(true);
+    } catch (error) {
+      console.error('查看操作失败:', error);
+      safeMessage.error('查看操作失败: ' + (error.message || '未知错误'));
+    }
   };
 
   const handleDelete = (record) => {
     Modal.confirm({
       title: '确认删除',
       content: `确定要删除员工 ${record.name} 吗？`,
-      onOk() {
-        message.success('删除成功');
+      okText: '确定',
+      cancelText: '取消',
+      onOk: async () => {
+        try {
+          // 使用UI反馈包装器执行删除操作
+          await uiFeedback.executeAsync(
+            async () => {
+              const result = await DataService.deleteEmployee(record.id);
+              
+              if (result.success) {
+                // 清除DataService的缓存
+                DataService.clearCache('production');
+                
+                // 刷新useDataService的数据
+                await refetch();
+                
+                return result;
+              } else {
+                throw new Error(result.message || '删除失败');
+              }
+            },
+            OPERATION_TYPES.DELETE,
+            '正在删除员工...',
+            '员工删除成功',
+            '员工删除失败'
+          );
+        } catch (error) {
+          console.error('删除失败:', error);
+          // 错误已经在executeAsync中处理
+        }
       }
     });
   };
 
   const handleSave = async () => {
     try {
+      console.log('开始保存员工信息...');
+      
+      // 设置保存状态
+      uiFeedback.setSaving('正在保存员工信息...');
+      
       const values = await form.validateFields();
-      console.log('保存员工信息:', values);
-      message.success(editingRecord ? '更新成功' : '添加成功');
-      setModalVisible(false);
+      console.log('表单验证通过，表单数据:', values);
+      
+      const employeeData = {
+        employeeId: values.employeeId,
+        name: values.name,
+        department: values.department,
+        position: values.position,
+        phone: values.phone,
+        email: values.email,
+        gender: values.gender,
+        age: values.age,
+        education: values.education,
+        skillLevel: values.skillLevel,
+        joinDate: values.joinDate?.format?.('YYYY-MM-DD') || values.joinDate,
+        emergencyContact: values.emergencyContact,
+        address: values.address,
+        remark: values.remark
+      };
+
+      console.log('准备发送的员工数据:', employeeData);
+
+      // 模拟保存进度
+      uiFeedback.simulateProgress(1500);
+
+      let result;
+      if (editingRecord) {
+        console.log('执行更新员工操作, ID:', editingRecord.id);
+        uiFeedback.updateProgress(30, '更新员工信息...');
+        result = await DataService.updateEmployee(editingRecord.id, employeeData);
+      } else {
+        console.log('执行添加新员工操作');
+        uiFeedback.updateProgress(30, '添加新员工...');
+        result = await DataService.addEmployee(employeeData);
+      }
+
+      console.log('API调用结果:', result);
+
+      if (result && result.success) {
+        uiFeedback.updateProgress(70, '清除缓存...');
+        
+        // 清除DataService的缓存
+        console.log('清除DataService缓存...');
+        DataService.clearCache('production');
+        
+        uiFeedback.updateProgress(90, '刷新数据...');
+        
+        // 刷新useDataService的数据（这会清除useDataService的缓存并重新加载）
+        console.log('开始刷新数据...');
+        await refetch();
+        console.log('数据刷新完成');
+        
+        // 设置成功状态
+        const successMsg = editingRecord ? '员工信息更新成功' : '员工添加成功';
+        const dataSource = result.warning ? 'memory' : 'local';
+        uiFeedback.setSuccess(successMsg, dataSource);
+        
+        setModalVisible(false);
+        
+        // 如果有警告，显示额外提示
+        if (result.warning) {
+          safeMessage.warning(result.message, 5);
+        }
+      } else {
+        console.error('API返回失败结果:', result);
+        uiFeedback.setError(new Error(result?.message || '操作失败'), '保存失败');
+      }
     } catch (error) {
-      console.error('验证失败:', error);
+      console.error('保存过程中发生错误:', error);
+      console.error('错误堆栈:', error.stack);
+      uiFeedback.setError(error, '保存失败');
     }
   };
+
+  // 处理加载和错误状态
+  if (error) {
+    return (
+      <div>
+        <Card>
+          <Alert
+            message="数据加载失败"
+            description={error.message || '无法加载员工数据，请检查后端服务'}
+            type="error"
+            showIcon
+            action={
+              <Button size="small" onClick={refetch}>
+                重试
+              </Button>
+            }
+          />
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -256,7 +445,15 @@ const EmployeeManagement = () => {
             <Input.Search
               placeholder="搜索员工姓名、编号..."
               style={{ width: 300 }}
-              onSearch={(value) => console.log('搜索:', value)}
+              onSearch={(value) => {
+                try {
+                  console.log('搜索:', value);
+                  // 这里应该实现实际的搜索功能
+                } catch (error) {
+                  console.error('搜索失败:', error);
+                  safeMessage.error('搜索失败: ' + (error.message || '未知错误'));
+                }
+              }}
             />
             <Select placeholder="部门" style={{ width: 120 }} allowClear>
               <Option value="生产部">生产部</Option>
@@ -271,26 +468,123 @@ const EmployeeManagement = () => {
             </Select>
           </Space>
           <Space>
+            {/* 数据来源指示器 */}
+            <DataSourceIndicator 
+              source={employeesData?.fromMock ? 'memory' : 'local'}
+              syncStatus={uiFeedback.syncStatus}
+              lastUpdate={uiFeedback.message}
+              count={employeeData.length}
+              showLabel={true}
+              showTooltip={true}
+              showCount={true}
+              size="small"
+            />
+            
+            {/* 存储统计指示器 */}
+            <StorageStatusIndicator 
+              showLabel={false}
+              showStats={true}
+              onClick={() => setShowStorageStats(true)}
+            />
+            
+            <Button 
+              icon={<ReloadOutlined />}
+              onClick={async () => {
+                try {
+                  await uiFeedback.executeAsync(
+                    async () => {
+                      // 清除DataService的缓存
+                      DataService.clearCache('production');
+                      // 刷新useDataService的数据
+                      await refetch();
+                    },
+                    OPERATION_TYPES.LOAD,
+                    '正在刷新数据...',
+                    '数据刷新成功',
+                    '数据刷新失败'
+                  );
+                } catch (error) {
+                  console.error('刷新失败:', error);
+                }
+              }}
+              loading={uiFeedback.isLoading}
+            >
+              刷新
+            </Button>
             <Button icon={<UploadOutlined />}>批量导入</Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
               新增员工
             </Button>
+            <Button 
+              icon={<BarChartOutlined />}
+              onClick={() => setShowStorageStats(true)}
+            >
+              统计
+            </Button>
           </Space>
         </div>
 
-        <Table
-          columns={columns}
-          dataSource={employeeData}
-          pagination={{
-            total: employeeData.length,
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => `共 ${total} 条记录`
+        {/* 数据加载包装器 */}
+        <DataLoadingWrapper
+          loading={loading}
+          error={error}
+          empty={!loading && employeeData.length === 0}
+          emptyText="暂无员工数据"
+          dataSource={employeesData?.fromMock ? 'memory' : 'local'}
+          showDataSource={true}
+          loadingProps={{
+            type: 'skeleton',
+            showSkeleton: true,
+            skeletonRows: 5,
+            message: '正在加载员工数据...',
+            dataSource: 'local'
           }}
-          size="small"
-        />
+        >
+          <Table
+            columns={columns}
+            dataSource={employeeData}
+            pagination={{
+              total: employeeData.length,
+              pageSize: 10,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: (total) => `共 ${total} 条记录`
+            }}
+            size="small"
+            locale={{ emptyText: '暂无员工数据' }}
+          />
+        </DataLoadingWrapper>
       </Card>
+
+      {/* 浮动进度提示 */}
+      <FloatingProgress
+        visible={uiFeedback.isSaving || uiFeedback.isLoading || uiFeedback.isSuccess || uiFeedback.isError}
+        operation={uiFeedback.operation}
+        progress={uiFeedback.progress}
+        status={uiFeedback.isError ? PROGRESS_STATUS.ERROR : 
+                uiFeedback.isSuccess ? PROGRESS_STATUS.SUCCESS :
+                PROGRESS_STATUS.RUNNING}
+        message={uiFeedback.message}
+        position="topRight"
+        autoHide={true}
+        hideDelay={2000}
+      />
+
+      {/* 存储统计抽屉 */}
+      <Drawer
+        title="存储统计信息"
+        placement="right"
+        width={500}
+        open={showStorageStats}
+        onClose={() => setShowStorageStats(false)}
+      >
+        <StorageStatsDisplay
+          refreshInterval={10000}
+          showActions={true}
+          showDetails={true}
+          compact={false}
+        />
+      </Drawer>
 
       {/* 新增/编辑员工模态框 */}
       <Modal
@@ -300,7 +594,28 @@ const EmployeeManagement = () => {
         onCancel={() => setModalVisible(false)}
         width={800}
         destroyOnClose
+        confirmLoading={uiFeedback.isSaving}
+        okText={uiFeedback.isSaving ? '保存中...' : '保存'}
       >
+        {/* 保存进度指示器 */}
+        {uiFeedback.isSaving && (
+          <div style={{ marginBottom: '16px' }}>
+            <ProgressIndicator
+              visible={true}
+              operation="save"
+              progress={uiFeedback.progress}
+              status={PROGRESS_STATUS.RUNNING}
+              message={uiFeedback.message}
+              detail={uiFeedback.detail}
+              showPercentage={true}
+              showIcon={true}
+              showMessage={true}
+              showDetail={true}
+              size="small"
+            />
+          </div>
+        )}
+        
         <Form form={form} layout="vertical">
           <Row gutter={16}>
             <Col span={12}>

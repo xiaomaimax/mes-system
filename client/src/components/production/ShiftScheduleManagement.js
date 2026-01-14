@@ -42,10 +42,12 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const ShiftScheduleManagement = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
@@ -242,8 +244,7 @@ const ShiftScheduleManagement = () => {
           >
             详情
           </Button>
-          <Button 
-            type="link" 
+          <Button onClick={() => handleEdit(record)} type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
@@ -257,8 +258,7 @@ const ShiftScheduleManagement = () => {
           >
             调班
           </Button>
-          <Button 
-            type="link" 
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" 
             size="small" 
             icon={<DeleteOutlined />} 
             danger
@@ -282,12 +282,12 @@ const ShiftScheduleManagement = () => {
     try {
       setLoading(true);
       console.log('提交排班数据:', values);
-      message.success('排班记录保存成功！');
+      safeMessage.success('排班记录保存成功！');
       setModalVisible(false);
       form.resetFields();
     } catch (error) {
       console.error('提交失败:', error);
-      message.error('保存失败，请重试！');
+      safeMessage.error('保存失败，请重试！');
     } finally {
       setLoading(false);
     }

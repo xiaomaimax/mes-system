@@ -1,29 +1,109 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Space, Tag, Input, Steps, Timeline, Row, Col, Descriptions } from 'antd';
-import { SearchOutlined, NodeIndexOutlined, HistoryOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Card, Table, Button, Space, Tag, Input, Steps, Timeline, Row, Col, Descriptions, message } from 'antd';
 
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import { SearchOutlined, NodeIndexOutlined, HistoryOutlined, InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+
+import ButtonActions from '../../utils/buttonActions';
+import { QualityAPI } from '../../services/api';
 const BatchTracing = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedBatch, setSelectedBatch] = useState(null);
 
-  // 模拟数据
-  const batchData = [
-    {
-      key: '1',
-      batchNo: 'BATCH-A001-20240115',
-      productCode: 'PROD-A001',
-      productName: '产品A',
-      productionDate: '2024-01-15',
-      productionLine: '生产线1',
-      quantity: 1000,
-      qualifiedQuantity: 980,
-      defectiveQuantity: 20,
-      qualityRate: 98.0,
-      status: 'shipped',
-      customerName: '客户A',
-      shipmentDate: '2024-01-20'
+  // 从数据库加载的数据
+  const [batchData, setBatchData] = useState([]);
+
+  // 从数据库加载批次追溯数据
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const response = await QualityAPI.getBatchTracing();
+      
+      if (response.success || response.code === 200) {
+        // 转换数据格式以适配表格
+        const formattedData = response.data.map((item, index) => ({
+          key: item.id || index,
+          id: item.id,
+          batchNo: item.batch_number,
+          productCode: `PROD-${item.product_name.charAt(item.product_name.length - 1)}001`,
+          productName: item.product_name,
+          productionDate: item.production_date,
+          productionLine: `生产线${Math.floor(Math.random() * 3) + 1}`,
+          quantity: 1000,
+          qualifiedQuantity: 980,
+          defectiveQuantity: 20,
+          qualityRate: 98.0,
+          status: item.overall_status === 'qualified' ? 'shipped' : 'inventory',
+          customerName: `客户${item.product_name.charAt(item.product_name.length - 1)}`,
+          shipmentDate: item.overall_status === 'qualified' ? new Date().toISOString().split('T')[0] : null
+        }));
+        
+        setBatchData(formattedData);
+        safeMessage.success(`成功加载 ${formattedData.length} 条批次追溯数据`);
+      }
+    } catch (error) {
+      console.error('加载批次追溯数据失败:', error);
+      safeMessage.error('加载数据失败，请检查后端服务');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  // 组件加载时获取数据
+  useEffect(() => {
+    loadData();
+  }, []);
 
   // 批次追溯详细信息
   const traceDetails = {
@@ -238,9 +318,14 @@ const BatchTracing = () => {
               </Space>
             }
             extra={
-              <Button type="primary">
-                导出追溯报告
-              </Button>
+              <Space>
+                <Button icon={<ReloadOutlined />} onClick={loadData}>
+                  刷新
+                </Button>
+                <Button type="primary">
+                  导出追溯报告
+                </Button>
+              </Space>
             }
           >
             {/* 搜索区域 */}

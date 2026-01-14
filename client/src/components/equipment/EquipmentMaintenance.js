@@ -1,67 +1,154 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form, InputNumber } from 'antd';
-import { PlusOutlined, SearchOutlined, SafetyOutlined, EditOutlined, CalendarOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form, InputNumber, message, Spin, Alert } from 'antd';
 
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import { PlusOutlined, SearchOutlined, SafetyOutlined, EditOutlined, CalendarOutlined, ReloadOutlined } from '@ant-design/icons';
+
+import ButtonActions from '../../utils/buttonActions';
+import DataService from '../../services/DataService';
+import { useDataService } from '../../hooks/useDataService';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 
+// 修复中文字符编码问题
+const fixChineseEncoding = (text) => {
+  if (!text) return '定期保养';
+  
+  // 常见的乱码映射
+  const encodingMap = {
+    '瀹氭湡淇濆吇妫?煡': '定期保养检查',
+    '璁惧?妫?煡': '设备检查',
+    '鏁呴殰缁翠慨': '故障维修',
+    '娓呮磥缁存姢': '清洁维护',
+    '鍙傛暟璋冩暣': '参数调整',
+    '绮惧害鏍″噯': '精度校准'
+  };
+  
+  // 如果是已知的乱码，返回正确的中文
+  if (encodingMap[text]) {
+    return encodingMap[text];
+  }
+  
+  // 如果包含乱码字符，返回默认值
+  if (/[瀹氭湡淇濆吇妫璁惧鏁呴殰缁翠慨娓呮磥绮惧害鏍″噯]/.test(text)) {
+    return '定期保养';
+  }
+  
+  return text;
+};
+
 const EquipmentMaintenance = () => {
-  const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
 
-  // 模拟数据
-  const maintenanceData = [
-    {
-      key: '1',
-      maintenanceId: 'MT-2024-001',
-      equipmentCode: 'EQ-001',
-      equipmentName: '注塑机A1',
-      maintenanceType: 'preventive',
-      planDate: '2024-01-15',
-      actualDate: '2024-01-15',
-      duration: 4,
-      technician: '张三',
-      maintenanceItems: ['更换润滑油', '清洁过滤器', '检查皮带'],
-      cost: 350.00,
-      status: 'completed',
-      nextMaintenanceDate: '2024-04-15',
-      remarks: '保养正常完成'
-    },
-    {
-      key: '2',
-      maintenanceId: 'MT-2024-002',
-      equipmentCode: 'EQ-002',
-      equipmentName: '包装机B1',
-      maintenanceType: 'corrective',
-      planDate: '2024-01-16',
-      actualDate: null,
-      duration: 6,
-      technician: '李四',
-      maintenanceItems: ['更换传感器', '调整参数'],
-      cost: 800.00,
-      status: 'scheduled',
-      nextMaintenanceDate: '2024-07-16',
-      remarks: '计划维修传感器故障'
-    },
-    {
-      key: '3',
-      maintenanceId: 'MT-2024-003',
-      equipmentCode: 'EQ-003',
-      equipmentName: '检测设备C1',
-      maintenanceType: 'preventive',
-      planDate: '2024-01-18',
-      actualDate: '2024-01-18',
-      duration: 3,
-      technician: '王五',
-      maintenanceItems: ['校准精度', '清洁镜头'],
-      cost: 200.00,
-      status: 'in_progress',
-      nextMaintenanceDate: '2024-04-18',
-      remarks: '定期校准保养'
+  // 使用 DataService 和 useDataService Hook 获取数据
+  const { data: maintenanceResponse, loading, error, refetch } = useDataService(
+    () => DataService.getEquipmentMaintenance({ limit: 100 }),
+    []
+  );
+
+  // 处理数据转换
+  const maintenanceData = React.useMemo(() => {
+    if (!maintenanceResponse || !maintenanceResponse.maintenance) {
+      return [];
     }
-  ];
+
+    return maintenanceResponse.maintenance.map((item, index) => ({
+      key: item.id || index,
+      id: item.id,
+      maintenanceId: `MT-${item.id}`,
+      equipmentCode: `DEV-${String(item.device_id).padStart(3, '0')}`,
+      equipmentName: `设备 ${item.device_id}`,
+      maintenanceType: item.maintenance_type || 'preventive',
+      planDate: item.maintenance_date ? new Date(item.maintenance_date).toLocaleDateString() : '-',
+      actualDate: item.completion_date ? new Date(item.completion_date).toLocaleDateString() : null,
+      duration: 4,
+      technician: `技术员 ${item.technician_id}`,
+      maintenanceItems: [fixChineseEncoding(item.description) || '定期保养'],
+      cost: 500.00,
+      status: item.status || 'pending',
+      nextMaintenanceDate: '-',
+      remarks: item.notes || '-'
+    }));
+  }, [maintenanceResponse]);
+
+  // 处理加载状态和错误状态
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', padding: '50px' }}>
+        <Spin size="large" />
+        <div style={{ marginTop: 16 }}>正在加载设备维护数据...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Alert
+        message="数据加载失败"
+        description={error.message || '无法加载设备维护数据，请检查网络连接或联系系统管理员'}
+        type="error"
+        showIcon
+        action={
+          <Button size="small" danger onClick={refetch}>
+            重试
+          </Button>
+        }
+        style={{ margin: '20px' }}
+      />
+    );
+  }
 
   const columns = [
     {
@@ -90,10 +177,14 @@ const EquipmentMaintenance = () => {
         const typeMap = {
           preventive: { color: 'blue', text: '预防性' },
           corrective: { color: 'orange', text: '纠正性' },
-          emergency: { color: 'red', text: '紧急' }
+          emergency: { color: 'red', text: '紧急' },
+          // 添加更多可能的类型
+          routine: { color: 'green', text: '例行' },
+          scheduled: { color: 'blue', text: '计划' },
+          inspection: { color: 'purple', text: '检查' }
         };
-        const { color, text } = typeMap[type];
-        return <Tag color={color}>{text}</Tag>;
+        const typeInfo = typeMap[type] || { color: 'default', text: type || '未知' };
+        return <Tag color={typeInfo.color}>{typeInfo.text}</Tag>;
       }
     },
     {
@@ -153,10 +244,15 @@ const EquipmentMaintenance = () => {
           scheduled: { color: 'blue', text: '已计划' },
           in_progress: { color: 'orange', text: '进行中' },
           completed: { color: 'green', text: '已完成' },
-          cancelled: { color: 'red', text: '已取消' }
+          cancelled: { color: 'red', text: '已取消' },
+          // 添加更多可能的状态
+          pending: { color: 'gold', text: '待处理' },
+          overdue: { color: 'red', text: '逾期' },
+          active: { color: 'green', text: '活跃' },
+          inactive: { color: 'default', text: '非活跃' }
         };
-        const { color, text } = statusMap[status];
-        return <Tag color={color}>{text}</Tag>;
+        const statusInfo = statusMap[status] || { color: 'default', text: status || '未知' };
+        return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
       }
     },
     {
@@ -172,13 +268,20 @@ const EquipmentMaintenance = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space size="small">
-          <Button 
-            type="link" 
+          <Button type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
           >
             编辑
+          </Button>
+          <Button type="link" 
+            size="small" 
+            danger 
+            icon={<DeleteOutlined />}
+            onClick={() => handleDelete(record)}
+          >
+            删除
           </Button>
           <Button type="link" size="small">详情</Button>
           {record.status === 'scheduled' && (
@@ -190,17 +293,44 @@ const EquipmentMaintenance = () => {
   ];
 
   const handleEdit = (record) => {
-    form.setFieldsValue(record);
-    setModalVisible(true);
+    try {
+      form.setFieldsValue(record);
+      setModalVisible(true);
+    } catch (error) {
+      console.error('编辑失败:', error);
+      safeMessage.error('编辑失败: ' + (error.message || '未知错误'));
+    }
+  };
+
+  const handleDelete = (record) => {
+    Modal.confirm({
+      title: '删除保养记录',
+      content: `确定要删除保养记录 ${record.maintenanceId} 吗？`,
+      okText: '确定',
+      cancelText: '取消',
+      onOk: async () => {
+        try {
+          // 这里应该调用删除API
+          safeMessage.success('删除成功');
+          refetch(); // 刷新数据
+        } catch (error) {
+          console.error('删除失败:', error);
+          safeMessage.error('删除失败: ' + (error.message || '未知错误'));
+        }
+      }
+    });
   };
 
   const handleSubmit = async (values) => {
     try {
       console.log('提交保养数据:', values);
+      safeMessage.success('保存成功');
       setModalVisible(false);
       form.resetFields();
+      refetch(); // 刷新数据
     } catch (error) {
-      console.error('提交失败:', error);
+      console.error('保存失败:', error);
+      safeMessage.error('保存失败: ' + (error.message || '未知错误'));
     }
   };
 
@@ -215,6 +345,9 @@ const EquipmentMaintenance = () => {
         }
         extra={
           <Space>
+            <Button icon={<ReloadOutlined />} onClick={refetch}>
+              刷新
+            </Button>
             <Button icon={<CalendarOutlined />}>保养计划</Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
               新建保养

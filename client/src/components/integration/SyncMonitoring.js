@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, Row, Col, Statistic, Progress, Timeline, Select, DatePicker, Alert } from 'antd';
 import { SyncOutlined, PlayCircleOutlined, PauseCircleOutlined, ReloadOutlined, DownloadOutlined, FilterOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 const SyncMonitoring = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [selectedTimeRange, setSelectedTimeRange] = useState('today');
 
   // 同步日志数据

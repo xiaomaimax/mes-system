@@ -495,6 +495,15 @@ const fetchUsers = async () => {
     setLoading(false);
   }
 };
+
+// 质量检验模块使用改进的useQualityData hook
+// 包含增强的错误处理、认证验证和数据安全机制
+const { data, loading, error, pagination, loadData } = useQualityData(
+  QualityAPI.getPQCInspections,
+  transformPQCData
+);
+
+// 详见: docs/05-development/QUALITY_DATA_HOOK_IMPROVEMENTS.md
 ```
 
 ### Git提交规范
@@ -864,3 +873,131 @@ yarn install
 **文档版本**: v1.0.0  
 **最后更新**: 2024-12-22  
 **维护团队**: MES开发组
+
+
+### 属性测试 (Property-Based Testing)
+
+#### 1. 演示数据完整性测试
+
+演示数据完整性测试验证了系统初始化时创建的所有演示数据的完整性和关系正确性。
+
+**测试文件**: `server/services/DemoDataCompleteness.test.js`
+
+**测试覆盖范围**:
+- ✅ 最小数据计数验证 (生产线、设备、模具、物料等)
+- ✅ 关系完整性验证 (外键关系、引用关系)
+- ✅ 数据一致性验证 (无重复ID、必需字段存在)
+- ✅ 关系映射验证 (设备-生产线、计划-设备-物料-模具等)
+- ✅ 级联关系验证 (任务-计划、检验-任务、缺陷-检验等)
+- ✅ 库存-物料关系验证
+- ✅ 唯一性验证 (所有实体ID唯一)
+- ✅ 必需字段验证 (名称、状态、代码等)
+- ✅ 状态值有效性验证
+- ✅ 数量字段有效性验证 (正数)
+- ✅ 代码格式验证 (PLAN-XXXX, TASK-XXXX等)
+- ✅ 关系基数验证 (一对一、一对多关系)
+- ✅ 级联关系验证 (生产计划有相关任务)
+
+**运行测试**:
+```bash
+# 运行演示数据完整性测试
+npm test -- server/services/DemoDataCompleteness.test.js --no-coverage
+
+# 运行所有测试
+npm test
+
+# 运行测试并生成覆盖率报告
+npm run test:coverage
+```
+
+**测试结果示例**:
+```
+PASS server/services/DemoDataCompleteness.test.js
+  Demo Data Completeness - Property-Based Tests
+    Property 6: Demo Data Completeness
+      ✓ should create minimum required number of records for each entity type (2 ms)
+      ✓ should maintain referential integrity for all relationships
+      ✓ should maintain data consistency with no duplicates and required fields (1 ms)
+      ✓ should correctly associate equipment with production lines
+      ✓ should correctly associate production plans with equipment, materials, and molds (1 ms)
+      ✓ should correctly associate production tasks with production plans
+      ✓ should correctly associate quality inspections with production tasks
+      ✓ should correctly associate defect records with quality inspections
+      ✓ should correctly associate inventory with materials (1 ms)
+      ✓ should have unique IDs for all entities (1 ms)
+      ✓ should have all required fields for all entities (2 ms)
+      ✓ should have valid status values for all entities (1 ms)
+      ✓ should have positive quantities for all entities with quantity field (1 ms)
+      ✓ should have properly formatted code fields (3 ms)
+      ✓ should maintain correct relationship cardinality (1 ms)
+      ✓ should have related production tasks for production plans (2 ms)
+      ✓ should pass completeness verification
+      ✓ should maintain consistency across large demo dataset
+    Demo Data Completeness Edge Cases
+      ✓ should handle minimum required data set (1 ms)
+      ✓ should maintain all relationships with minimum data
+      ✓ should have no orphaned records (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       21 passed, 21 total
+```
+
+**验证的需求**:
+- Requirements 1.2: 演示数据初始化创建所有必需的数据
+- Requirements 1.3: 演示数据与前端mockData.js保持逻辑一致
+
+#### 2. 其他属性测试
+
+项目中还包含以下属性测试:
+
+**数据迁移完整性测试** (`server/services/DataMigrationCompleteness.test.js`)
+- 验证ID映射的完整性
+- 验证关系保留
+- 验证非空ID保留
+- 验证双向映射一致性
+- 验证大规模迁移完整性
+- 验证迁移幂等性
+
+**运行所有属性测试**:
+```bash
+npm test -- --testPathPattern="Completeness|Migration" --no-coverage
+```
+
+#### 3. 属性测试最佳实践
+
+**编写属性测试时**:
+1. 使用生成器函数创建随机测试数据
+2. 验证通用属性而不是特定值
+3. 包含边界情况和异常情况
+4. 验证不变量 (invariants)
+5. 验证关系和约束
+6. 使用描述性的测试名称
+
+**示例**:
+```javascript
+// ✅ 好的属性测试
+test('should maintain referential integrity for all relationships', () => {
+  const demoData = generateDemoData();
+  const verification = verifyDemoDataCompleteness(demoData);
+  
+  expect(verification.isComplete).toBe(true);
+  expect(verification.errors.length).toBe(0);
+});
+
+// ❌ 不好的单元测试
+test('should have 4 production lines', () => {
+  const demoData = generateDemoData();
+  expect(demoData.productionLines.length).toBe(4);
+});
+```
+
+#### 4. 测试覆盖率
+
+运行测试覆盖率报告:
+```bash
+npm run test:coverage
+
+# 查看HTML覆盖率报告
+open coverage/lcov-report/index.html
+```
+

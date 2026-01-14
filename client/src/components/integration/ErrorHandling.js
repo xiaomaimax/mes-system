@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, Row, Col, Statistic, Alert, Select, DatePicker, Modal, Descriptions } from 'antd';
 import { BugOutlined, ExclamationCircleOutlined, WarningOutlined, InfoCircleOutlined, ReloadOutlined, EyeOutlined, DownloadOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 const ErrorHandling = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedError, setSelectedError] = useState(null);
 

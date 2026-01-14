@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, Select, Input, Modal, Form, Transfer } from 'antd';
 import { PlusOutlined, SearchOutlined, SettingOutlined, EditOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 
 const EquipmentResponsibility = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -150,8 +152,7 @@ const EquipmentResponsibility = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space size="small">
-          <Button 
-            type="link" 
+          <Button onClick={() => handleEdit(record)} type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}

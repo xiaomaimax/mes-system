@@ -3,10 +3,12 @@ import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form
 import { PlusOutlined, SearchOutlined, ClockCircleOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
+import ButtonActions from '../../utils/buttonActions';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 const ShiftSchedule = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -167,8 +169,7 @@ const ShiftSchedule = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space size="small">
-          <Button 
-            type="link" 
+          <Button onClick={() => handleEdit(record)} type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}

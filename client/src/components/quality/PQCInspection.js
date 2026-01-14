@@ -1,96 +1,23 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form, InputNumber, Progress } from 'antd';
-import { PlusOutlined, SearchOutlined, ExperimentOutlined, EditOutlined, PlayCircleOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form, InputNumber, Progress, Alert } from 'antd';
+import { PlusOutlined, SearchOutlined, ExperimentOutlined, EditOutlined, PlayCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 
+import { QualityAPI } from '../../services/api';
+import { useQualityData } from '../../hooks/useQualityData';
+import { transformPQCData, INSPECTION_RESULT_MAP, INSPECTION_STATUS_MAP } from '../../utils/qualityDataTransformers';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 
 const PQCInspection = () => {
-  const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
 
-  // 模拟数据
-  const pqcData = [
-    {
-      key: '1',
-      inspectionId: 'PQC-2024-001',
-      productionOrderNo: 'PO-2024-001',
-      productCode: 'PROD-A001',
-      productName: '产品A',
-      productionLine: '生产线1',
-      processStep: '注塑成型',
-      inspectionTime: '2024-01-15 10:30',
-      inspector: '张三',
-      shift: '白班',
-      sampleQuantity: 20,
-      inspectedQuantity: 20,
-      qualifiedQuantity: 18,
-      defectiveQuantity: 2,
-      qualityRate: 90.0,
-      processParameters: {
-        temperature: '180°C',
-        pressure: '150MPa',
-        cycleTime: '45s'
-      },
-      defectTypes: ['尺寸偏差', '表面气泡'],
-      correctionActions: ['调整温度参数', '检查模具'],
-      result: 'conditional_pass',
-      status: 'completed',
-      remarks: '发现轻微缺陷，已调整参数'
-    },
-    {
-      key: '2',
-      inspectionId: 'PQC-2024-002',
-      productionOrderNo: 'PO-2024-001',
-      productCode: 'PROD-A001',
-      productName: '产品A',
-      productionLine: '生产线1',
-      processStep: '包装',
-      inspectionTime: '2024-01-15 14:30',
-      inspector: '李四',
-      shift: '白班',
-      sampleQuantity: 15,
-      inspectedQuantity: 15,
-      qualifiedQuantity: 15,
-      defectiveQuantity: 0,
-      qualityRate: 100.0,
-      processParameters: {
-        sealingTemp: '160°C',
-        sealingTime: '2s',
-        pressure: '0.5MPa'
-      },
-      defectTypes: [],
-      correctionActions: [],
-      result: 'pass',
-      status: 'completed',
-      remarks: '包装质量良好'
-    },
-    {
-      key: '3',
-      inspectionId: 'PQC-2024-003',
-      productionOrderNo: 'PO-2024-002',
-      productCode: 'PROD-B001',
-      productName: '产品B',
-      productionLine: '生产线2',
-      processStep: '组装',
-      inspectionTime: null,
-      inspector: '王五',
-      shift: '白班',
-      sampleQuantity: 25,
-      inspectedQuantity: 0,
-      qualifiedQuantity: 0,
-      defectiveQuantity: 0,
-      qualityRate: 0,
-      processParameters: {},
-      defectTypes: [],
-      correctionActions: [],
-      result: 'pending',
-      status: 'pending',
-      remarks: '待检验'
-    }
-  ];
+  // 使用自定义hook管理数据
+  const { data: pqcData, loading, pagination, loadData, handlePaginationChange } = useQualityData(
+    (params) => QualityAPI.getPQCInspections(params),
+    transformPQCData
+  );
 
   const columns = [
     {
@@ -196,13 +123,7 @@ const PQCInspection = () => {
       key: 'result',
       width: 100,
       render: (result) => {
-        const resultMap = {
-          pass: { color: 'green', text: '合格' },
-          conditional_pass: { color: 'orange', text: '让步接收' },
-          fail: { color: 'red', text: '不合格' },
-          pending: { color: 'blue', text: '待检验' }
-        };
-        const { color, text } = resultMap[result];
+        const { color, text } = INSPECTION_RESULT_MAP[result] || { color: 'default', text: result };
         return <Tag color={color}>{text}</Tag>;
       }
     },
@@ -231,12 +152,7 @@ const PQCInspection = () => {
       key: 'status',
       width: 100,
       render: (status) => {
-        const statusMap = {
-          pending: { color: 'orange', text: '待检验' },
-          in_progress: { color: 'blue', text: '检验中' },
-          completed: { color: 'green', text: '已完成' }
-        };
-        const { color, text } = statusMap[status];
+        const { color, text } = INSPECTION_STATUS_MAP[status] || { color: 'default', text: status };
         return <Tag color={color}>{text}</Tag>;
       }
     },
@@ -298,6 +214,22 @@ const PQCInspection = () => {
 
   return (
     <div>
+      {/* 连接状态提示 */}
+      {!loading && pqcData.length === 0 && (
+        <Alert
+          message="数据加载提示"
+          description="如果数据长时间无法加载，请检查：1) 网络连接状态 2) 后端服务是否正常运行 3) 登录状态是否有效"
+          type="info"
+          showIcon
+          style={{ marginBottom: 16 }}
+          action={
+            <Button size="small" onClick={loadData}>
+              重试加载
+            </Button>
+          }
+        />
+      )}
+
       <Card 
         title={
           <Space>
@@ -307,6 +239,9 @@ const PQCInspection = () => {
         }
         extra={
           <Space>
+            <Button icon={<ReloadOutlined />} onClick={loadData}>
+              刷新
+            </Button>
             <Button>质量趋势</Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
               新建检验单
@@ -352,11 +287,13 @@ const PQCInspection = () => {
           dataSource={pqcData}
           loading={loading}
           pagination={{
-            total: pqcData.length,
-            pageSize: 10,
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total: pagination.total,
             showSizeChanger: true,
             showQuickJumper: true,
             showTotal: (total) => `共 ${total} 条记录`,
+            onChange: handlePaginationChange
           }}
           scroll={{ x: 1800 }}
         />

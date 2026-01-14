@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>员工管理测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #40a9ff;
+        }
+        .log {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .employee-list {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .employee-item {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .employee-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>员工管理数据流测试</h1>
+    
+    <div class="test-section">
+        <h3>测试操作</h3>
+        <button onclick="loadEmployees()">加载员工列表</button>
+        <button onclick="addTestEmployee()">添加测试员工</button>
+        <button onclick="clearCache()">清除缓存</button>
+        <button onclick="clearLog()">清除日志</button>
+    </div>
+
+    <div class="test-section">
+        <h3>员工列表</h3>
+        <div id="employeeList" class="employee-list">
+            点击"加载员工列表"开始测试
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h3>操作日志</h3>
+        <div id="log" class="log">等待操作...</div>
+    </div>
+
+    <script>
+        // 模拟DataService和useDataService的行为
+        class MockDataService {
+            static _cache = new Map();
+            static _memoryStore = { employees: [] };
+
+            static _generateCacheKey(module, method, params) {
+                const paramStr = JSON.stringify(params);
+                return `${module}_${method}_${btoa(paramStr)}`;
+            }
+
+            static _getFromCache(key) {
+                const cached = this._cache.get(key);
+                if (cached && Date.now() < cached.expiry) {
+                    return cached.data;
+                }
+                return null;
+            }
+
+            static _setToCache(key, data, ttl) {
+                this._cache.set(key, {
+                    data,
+                    expiry: Date.now() + ttl
+                });
+            }
+
+            static clearCache(module = null) {
+                if (module) {
+                    for (const key of this._cache.keys()) {
+                        if (key.startsWith(`${module}_`)) {
+                            this._cache.delete(key);
+                        }
+                    }
+                } else {
+                    this._cache.clear();
+                }
+                log('DataService缓存已清除');
+            }
+
+            static _generateMockEmployees() {
+                const baseMockData = [
+                    { id: 1, name: '张师傅', department: '生产部', position: '操作员' },
+                    { id: 2, name: '李师傅', department: '生产部', position: '操作员' },
+                    { id: 3, name: '王师傅', department: '生产部', position: '操作员' }
+                ];
+                return [...baseMockData, ...this._memoryStore.employees];
+            }
+
+            static async getEmployees(params = {}, forceRefresh = false) {
+                log('[DataService.getEmployees] 开始获取员工数据');
+                
+                const cacheKey = this._generateCacheKey('production', 'getEmployees', params);
+                
+                if (!forceRefresh) {
+                    const cached = this._getFromCache(cacheKey);
+                    if (cached) {
+                        log(`[DataService.getEmployees] 使用缓存数据, 员工数量: ${cached.data?.items?.length}`);
+                        return cached;
+                    }
+                }
+
+                const mockData = this._generateMockEmployees();
+                log(`[DataService.getEmployees] 生成员工数据, 总数: ${mockData.length}`);
+                log(`[DataService.getEmployees] 内存存储中的员工数: ${this._memoryStore.employees.length}`);
+                
+                const result = {
+                    success: true,
+                    data: {
+                        items: mockData,
+                        total: mockData.length,
+                        page: params.page || 1,
+                        pageSize: params.pageSize || 10
+                    }
+                };
+
+                this._setToCache(cacheKey, result, 5 * 60 * 1000);
+                
+                return result;
+            }
+
+            static async addEmployee(employeeData) {
+                log('[DataService.addEmployee] 添加员工: ' + JSON.stringify(employeeData));
+                
+                const newEmployee = {
+                    id: Date.now(),
+                    ...employeeData,
+                    createDate: new Date().toISOString().split('T')[0],
+                    status: '在职'
+                };
+
+                this._memoryStore.employees.push(newEmployee);
+                log(`[DataService.addEmployee] 员工已添加到内存存储，当前总数: ${this._memoryStore.employees.length}`);
+                
+                this.clearCache('production');
+                
+                return {
+                    success: true,
+                    data: newEmployee,
+                    message: '员工添加成功'
+                };
+            }
+        }
+
+        // 模拟useDataService Hook
+        class MockUseDataService {
+            static _globalCache = new Map();
+
+            static clearCache(key) {
+                if (key) {
+                    this._globalCache.delete(key);
+                } else {
+                    this._globalCache.clear();
+                }
+                log('useDataService缓存已清除');
+            }
+
+            static async refetch() {
+                log('[useDataService.refetch] 手动刷新数据，清除缓存并重新加载');
+                this.clearCache();
+                return await MockDataService.getEmployees({}, true);
+            }
+        }
+
+        // 日志函数
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.textContent += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        // 显示员工列表
+        function displayEmployees(employees) {
+            const listElement = document.getElementById('employeeList');
+            if (!employees || employees.length === 0) {
+                listElement.innerHTML = '<div>暂无员工数据</div>';
+                return;
+            }
+
+            const html = employees.map(emp => 
+                `<div class="employee-item">
+                    <strong>${emp.name}</strong> - ${emp.department} - ${emp.position}
+                    <small>(ID: ${emp.id})</small>
+                </div>`
+            ).join('');
+            
+            listElement.innerHTML = html;
+        }
+
+        // 测试函数
+        async function loadEmployees() {
+            try {
+                log('开始加载员工列表...');
+                const result = await MockDataService.getEmployees();
+                
+                if (result.success) {
+                    log(`加载成功，员工数量: ${result.data.items.length}`);
+                    displayEmployees(result.data.items);
+                } else {
+                    log('加载失败: ' + result.message);
+                }
+            } catch (error) {
+                log('加载错误: ' + error.message);
+            }
+        }
+
+        async function addTestEmployee() {
+            try {
+                const testEmployee = {
+                    employeeId: 'EMP' + Date.now(),
+                    name: '测试员工' + Math.floor(Math.random() * 100),
+                    department: '生产部',
+                    position: '操作员',
+                    phone: '138****' + Math.floor(Math.random() * 10000),
+                    email: 'test@company.com'
+                };
+
+                log('开始添加测试员工...');
+                const addResult = await MockDataService.addEmployee(testEmployee);
+                
+                if (addResult.success) {
+                    log(`员工添加成功: ${addResult.data.name}`);
+                    
+                    // 模拟组件中的刷新操作
+                    log('开始刷新数据...');
+                    const refreshResult = await MockUseDataService.refetch();
+                    
+                    if (refreshResult.success) {
+                        log(`数据刷新成功，当前员工数量: ${refreshResult.data.items.length}`);
+                        displayEmployees(refreshResult.data.items);
+                    }
+                } else {
+                    log('添加失败: ' + addResult.message);
+                }
+            } catch (error) {
+                log('添加错误: ' + error.message);
+            }
+        }
+
+        function clearCache() {
+            MockDataService.clearCache();
+            MockUseDataService.clearCache();
+            log('所有缓存已清除');
+        }
+
+        function clearLog() {
+            document.getElementById('log').textContent = '';
+        }
+
+        // 页面加载完成后自动加载员工列表
+        window.onload = function() {
+            log('页面加载完成，准备测试员工管理数据流');
+            loadEmployees();
+        };
+    </script>
+</body>
+</html>

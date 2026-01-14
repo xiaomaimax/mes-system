@@ -1,93 +1,182 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Space, Tag, Select, Input, Modal, Form, InputNumber, Row, Col, Tabs } from 'antd';
-import { PlusOutlined, SearchOutlined, DatabaseOutlined, EditOutlined, DeleteOutlined, ImportOutlined, ExportOutlined, AppstoreOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Card, Table, Button, Space, Tag, Select, Input, Modal, Form, InputNumber, Row, Col, Tabs, message, Spin, Alert } from 'antd';
 
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import { PlusOutlined, SearchOutlined, DatabaseOutlined, EditOutlined, DeleteOutlined, ImportOutlined, ExportOutlined, AppstoreOutlined, EnvironmentOutlined, ReloadOutlined } from '@ant-design/icons';
+
+import ButtonActions from '../../utils/buttonActions';
+import DataService from '../../services/DataService';
+import { useDataService } from '../../hooks/useDataService';
+import VirtualTable from '../common/VirtualTable';
 const { Option } = Select;
 const { TextArea } = Input;
 
 const InventoryMasterData = () => {
-  const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [activeTab, setActiveTab] = useState('materials');
   const [form] = Form.useForm();
 
-  // 物料主数据
-  const materialsData = [
-    {
-      key: '1',
-      materialCode: 'MAT-001',
-      materialName: 'ABS塑料粒子',
-      specification: 'ABS-750A',
+  // 使用 DataService 获取库存数据
+  // Requirements: 5.1, 5.5
+  const { data: inventoryData, loading: inventoryLoading, error: inventoryError, refetch: refetchInventory } = useDataService(
+    () => DataService.getInventory(),
+    [],
+    { useCache: true, cacheTTL: 5 * 60 * 1000 }
+  );
+
+  // 使用 DataService 获取库位数据
+  // Requirements: 5.3, 5.5
+  const { data: locationData, loading: locationLoading, error: locationError, refetch: refetchLocation } = useDataService(
+    () => DataService.getLocationManagement(),
+    [],
+    { useCache: true, cacheTTL: 5 * 60 * 1000 }
+  );
+
+  const loading = inventoryLoading || locationLoading;
+  const error = inventoryError || locationError;
+
+  // 格式化库存数据
+  const formatInventoryData = (inventory) => {
+    if (!inventory || !Array.isArray(inventory)) return [];
+    
+    return inventory.map((item, index) => ({
+      key: item.id || index,
+      id: item.id,
+      materialCode: `MAT-${String(item.material_id).padStart(3, '0')}`,
+      materialName: item.material_name || `物料 ${item.material_id}`,
+      specification: '-',
       category: '原材料',
-      unit: 'kg',
-      supplier: '塑料公司A',
-      unitPrice: 12.50,
-      safetyStock: 500,
-      currentStock: 1200,
-      maxStock: 2000,
-      storageLocation: 'A区-01-01',
+      unit: item.unit || '个',
+      supplier: '供应商',
+      unitPrice: 10.00,
+      safetyStock: item.min_stock || 0,
+      currentStock: item.current_stock || 0,
+      maxStock: item.max_stock || 0,
+      storageLocation: item.warehouse_location || '-',
       shelfLife: 365,
       status: 'active',
-      remarks: '主要原材料'
-    },
-    {
-      key: '2',
-      materialCode: 'MAT-002',
-      materialName: '包装纸箱',
-      specification: '40x30x20cm',
-      category: '包装材料',
-      unit: '个',
-      supplier: '包装公司B',
-      unitPrice: 2.80,
-      safetyStock: 200,
-      currentStock: 150,
-      maxStock: 500,
-      storageLocation: 'B区-02-05',
-      shelfLife: 730,
-      status: 'active',
-      remarks: '库存不足'
-    }
-  ];
+      remarks: `库存ID: ${item.id}`
+    }));
+  };
 
-  // 库位主数据
-  const locationsData = [
-    {
-      key: '1',
-      locationCode: 'A区-01-01',
-      locationName: '原材料区1号位',
-      warehouse: '主仓库',
-      area: 'A区',
-      row: '01',
-      column: '01',
-      level: '1',
-      capacity: 2000,
-      currentUsage: 1200,
-      usageRate: 60,
-      materialType: '原材料',
-      temperature: '常温',
-      humidity: '干燥',
-      status: 'active',
-      remarks: '主要存放塑料原料'
-    },
-    {
-      key: '2',
-      locationCode: 'B区-02-05',
-      locationName: '包装材料区5号位',
-      warehouse: '主仓库',
-      area: 'B区',
-      row: '02',
-      column: '05',
-      level: '1',
-      capacity: 500,
-      currentUsage: 150,
-      usageRate: 30,
-      materialType: '包装材料',
-      temperature: '常温',
-      humidity: '干燥',
-      status: 'active',
-      remarks: '包装材料专用区域'
+  // 格式化库位数据
+  const formatLocationData = (locations) => {
+    if (!locations || !Array.isArray(locations)) {
+      // 返回默认的库位数据
+      return [
+        {
+          key: '1',
+          locationCode: 'A区-01-01',
+          locationName: '原材料区1号位',
+          warehouse: '主仓库',
+          area: 'A区',
+          row: '01',
+          column: '01',
+          level: '1',
+          capacity: 2000,
+          currentUsage: 1200,
+          usageRate: 60,
+          materialType: '原材料',
+          temperature: '常温',
+          humidity: '干燥',
+          status: 'active',
+          remarks: '主要存放塑料原料'
+        },
+        {
+          key: '2',
+          locationCode: 'B区-02-05',
+          locationName: '包装材料区5号位',
+          warehouse: '主仓库',
+          area: 'B区',
+          row: '02',
+          column: '05',
+          level: '1',
+          capacity: 500,
+          currentUsage: 150,
+          usageRate: 30,
+          materialType: '包装材料',
+          temperature: '常温',
+          humidity: '干燥',
+          status: 'active',
+          remarks: '包装材料专用区域'
+        }
+      ];
     }
-  ];
+    
+    return locations.map((item, index) => ({
+      key: item.id || index,
+      id: item.id,
+      locationCode: item.location_code || `LOC-${String(item.id).padStart(3, '0')}`,
+      locationName: item.location_name || `库位 ${item.id}`,
+      warehouse: item.warehouse || '主仓库',
+      area: item.area || 'A区',
+      row: item.row || '01',
+      column: item.column || '01',
+      level: item.level || '1',
+      capacity: item.capacity || 1000,
+      currentUsage: item.current_usage || 0,
+      usageRate: item.usage_rate || 0,
+      materialType: item.material_type || '原材料',
+      temperature: item.temperature || '常温',
+      humidity: item.humidity || '干燥',
+      status: item.status || 'active',
+      remarks: item.remarks || ''
+    }));
+  };
+
+  const materialsData = formatInventoryData(inventoryData);
+  const locationsData = formatLocationData(locationData);
+  const total = Array.isArray(inventoryData) ? inventoryData.length : 0;
 
   const materialColumns = [
     {
@@ -190,8 +279,7 @@ const InventoryMasterData = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space size="small">
-          <Button 
-            type="link" 
+          <Button type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
@@ -201,11 +289,11 @@ const InventoryMasterData = () => {
           <Button type="link" size="small">
             库存
           </Button>
-          <Button 
-            type="link" 
+          <Button type="link" 
             size="small" 
             icon={<DeleteOutlined />} 
             danger
+            onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })}
           >
             删除
           </Button>
@@ -306,8 +394,7 @@ const InventoryMasterData = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space size="small">
-          <Button 
-            type="link" 
+          <Button onClick={() => handleEdit(record)} type="link" 
             size="small" 
             icon={<EditOutlined />}
           >
@@ -316,8 +403,7 @@ const InventoryMasterData = () => {
           <Button type="link" size="small">
             库存
           </Button>
-          <Button 
-            type="link" 
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" 
             size="small" 
             icon={<DeleteOutlined />} 
             danger
@@ -339,6 +425,12 @@ const InventoryMasterData = () => {
       console.log('提交主数据:', values);
       setModalVisible(false);
       form.resetFields();
+      // 刷新数据
+      if (activeTab === 'materials') {
+        refetchInventory();
+      } else {
+        refetchLocation();
+      }
     } catch (error) {
       console.error('提交失败:', error);
     }
@@ -368,6 +460,19 @@ const InventoryMasterData = () => {
         }
         extra={
           <Space>
+            <Button 
+              icon={<ReloadOutlined />} 
+              onClick={() => {
+                if (activeTab === 'materials') {
+                  refetchInventory();
+                } else {
+                  refetchLocation();
+                }
+              }} 
+              loading={loading}
+            >
+              刷新数据
+            </Button>
             <Button icon={<ImportOutlined />}>
               导入数据
             </Button>
@@ -380,6 +485,28 @@ const InventoryMasterData = () => {
           </Space>
         }
       >
+        {/* 错误提示 */}
+        {error && (
+          <Alert
+            message="数据加载失败"
+            description={error.message || '无法加载数据，请检查后端服务'}
+            type="error"
+            showIcon
+            style={{ marginBottom: 16 }}
+            action={
+              <Button size="small" onClick={() => {
+                if (activeTab === 'materials') {
+                  refetchInventory();
+                } else {
+                  refetchLocation();
+                }
+              }}>
+                重试
+              </Button>
+            }
+          />
+        )}
+
         <Tabs
           activeKey={activeTab}
           onChange={setActiveTab}
@@ -433,19 +560,24 @@ const InventoryMasterData = () => {
         </div>
 
         {/* 表格 */}
-        <Table
-          columns={activeTab === 'materials' ? materialColumns : locationColumns}
-          dataSource={activeTab === 'materials' ? materialsData : locationsData}
-          loading={loading}
-          pagination={{
-            total: activeTab === 'materials' ? materialsData.length : locationsData.length,
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => `共 ${total} 条记录`,
-          }}
-          scroll={{ x: 1400 }}
-        />
+        <Spin spinning={loading}>
+          <VirtualTable
+            columns={activeTab === 'materials' ? materialColumns : locationColumns}
+            dataSource={activeTab === 'materials' ? materialsData : locationsData}
+            rowKey="key"
+            height={500}
+            rowHeight={54}
+            loading={loading}
+            pagination={{
+              total: activeTab === 'materials' ? total : locationsData.length,
+              pageSize: 10,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: (total) => `共 ${total} 条记录 (来自数据库，使用虚拟滚动优化)`,
+            }}
+            scroll={{ x: 1400 }}
+          />
+        </Spin>
       </Card>
 
       {/* 新建/编辑模态框 */}

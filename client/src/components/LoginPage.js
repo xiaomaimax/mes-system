@@ -1,97 +1,134 @@
 import { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
-import { UserOutlined, LockOutlined, LoginOutlined } from '@ant-design/icons';
+import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return message.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return message.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return message.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return message.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import { UserOutlined, LockOutlined, LoginOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
+/**
+ * LoginPage Component
+ * 
+ * Enhanced login page that uses the improved AuthContext.
+ * Provides user authentication with proper error handling and loading states.
+ * 
+ * Requirements: 1.1, 1.2, 4.4, 5.3
+ */
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  // 模拟用户数据
-  const users = [
-    {
-      username: 'admin',
-      password: 'admin123',
-      name: '系统管理员',
-      role: '超级管理员',
-      department: '信息部',
-      email: 'admin@mes-system.com'
-    },
-    {
-      username: 'prod_manager',
-      password: 'prod123',
-      name: '张主管',
-      role: '部门管理员',
-      department: '生产部',
-      email: 'zhang@mes-system.com'
-    },
-    {
-      username: 'quality_user',
-      password: 'quality123',
-      name: '李检验员',
-      role: '普通用户',
-      department: '质量部',
-      email: 'li@mes-system.com'
-    },
-    {
-      username: 'tech_engineer',
-      password: 'tech123',
-      name: '王工程师',
-      role: '技术管理员',
-      department: '技术部',
-      email: 'wang@mes-system.com'
-    }
+  // 快速登录用户列表
+  const quickLoginUsers = [
+    { username: 'admin', password: 'admin123', name: '系统管理员' },
+    { username: 'prod_manager', password: 'prod123', name: '生产主管' },
+    { username: 'quality_user', password: 'quality123', name: '质量检验员' },
+    { username: 'tech_engineer', password: 'tech123', name: '技术工程师' }
   ];
 
+  /**
+   * Handle login with form submission
+   * Requirement 1.2: Establish user context before rendering authenticated components
+   */
   const handleLogin = async (values) => {
     setLoading(true);
     
-    // 模拟登录验证
-    setTimeout(() => {
-      const user = users.find(u => u.username === values.username && u.password === values.password);
-      
-      if (user) {
-        // 保存用户信息到localStorage
-        const userInfo = {
-          ...user,
-          loginTime: new Date().toISOString(),
-          token: `token_${user.username}_${Date.now()}`
-        };
-        
-        localStorage.setItem('userToken', userInfo.token);
-        localStorage.setItem('userInfo', JSON.stringify(userInfo));
-        
-        message.success(`欢迎回来，${user.name}！`);
-        
-        // 跳转到首页
-        navigate('/dashboard');
+    try {
+      // Use enhanced login from AuthContext
+      const result = await login(values.username, values.password);
+
+      if (result.success) {
+        // 登录成功，立即导航
+        setLoading(false);
+        navigate('/dashboard', { replace: true });
       } else {
-        message.error('用户名或密码错误，请重试');
+        safeMessage.error(result.message || '登录失败，请重试');
+        setLoading(false);
       }
-      
+    } catch (error) {
+      console.error('[LoginPage] Login error:', error);
+      safeMessage.error('登录失败，请检查后端服务是否正常');
       setLoading(false);
-    }, 1000);
+    }
   };
 
-  const handleQuickLogin = (user) => {
+  /**
+   * Handle quick login
+   * Requirement 1.2: Establish user context before rendering authenticated components
+   */
+  const handleQuickLogin = async (user) => {
     setLoading(true);
     
-    setTimeout(() => {
-      const userInfo = {
-        ...user,
-        loginTime: new Date().toISOString(),
-        token: `token_${user.username}_${Date.now()}`
-      };
-      
-      localStorage.setItem('userToken', userInfo.token);
-      localStorage.setItem('userInfo', JSON.stringify(userInfo));
-      
-      message.success(`欢迎，${user.name}！`);
-      navigate('/dashboard');
+    try {
+      // Use enhanced login from AuthContext
+      const result = await login(user.username, user.password);
+
+      if (result.success) {
+        // 登录成功，立即导航
+        setLoading(false);
+        navigate('/dashboard', { replace: true });
+      } else {
+        safeMessage.error(result.message || '登录失败，请重试');
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('[LoginPage] Quick login error:', error);
+      safeMessage.error('登录失败，请检查后端服务是否正常');
       setLoading(false);
-    }, 800);
+    }
   };
 
   return (
@@ -196,7 +233,7 @@ const LoginPage = () => {
               gap: '6px',
               marginBottom: '12px'
             }}>
-              {users.map((user, index) => (
+              {quickLoginUsers.map((user, index) => (
                 <div
                   key={index}
                   onClick={() => !loading && handleQuickLogin(user)}

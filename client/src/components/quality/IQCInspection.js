@@ -1,7 +1,61 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form, InputNumber, Rate } from 'antd';
-import { PlusOutlined, SearchOutlined, AuditOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form, InputNumber, Rate, message, Spin } from 'antd';
 
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import { PlusOutlined, SearchOutlined, AuditOutlined, EditOutlined, CheckCircleOutlined, CloseCircleOutlined, ReloadOutlined } from '@ant-design/icons';
+
+import ButtonActions from '../../utils/buttonActions';
+import { QualityAPI } from '../../services/api';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -11,86 +65,66 @@ const IQCInspection = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
 
-  // 模拟数据
-  const iqcData = [
-    {
-      key: '1',
-      inspectionId: 'IQC-2024-001',
-      purchaseOrderNo: 'PO-2024-001',
-      supplierName: '供应商A',
-      materialCode: 'MAT-001',
-      materialName: '原料A',
-      batchNo: 'BATCH-001',
-      deliveryDate: '2024-01-15',
-      inspectionDate: '2024-01-15',
-      inspector: '张三',
-      sampleQuantity: 50,
-      inspectedQuantity: 50,
-      qualifiedQuantity: 48,
-      defectiveQuantity: 2,
-      qualityRate: 96.0,
-      inspectionItems: [
-        { item: '外观检查', result: 'pass', score: 5 },
-        { item: '尺寸检测', result: 'pass', score: 4 },
-        { item: '材质检验', result: 'fail', score: 2 }
-      ],
-      overallScore: 3.7,
-      result: 'conditional_pass',
-      defectTypes: ['尺寸偏差', '表面划痕'],
-      remarks: '部分产品存在轻微划痕，可接收但需供应商改进',
-      status: 'completed'
-    },
-    {
-      key: '2',
-      inspectionId: 'IQC-2024-002',
-      purchaseOrderNo: 'PO-2024-002',
-      supplierName: '供应商B',
-      materialCode: 'MAT-002',
-      materialName: '原料B',
-      batchNo: 'BATCH-002',
-      deliveryDate: '2024-01-16',
-      inspectionDate: '2024-01-16',
-      inspector: '李四',
-      sampleQuantity: 30,
-      inspectedQuantity: 30,
-      qualifiedQuantity: 30,
-      defectiveQuantity: 0,
-      qualityRate: 100.0,
-      inspectionItems: [
-        { item: '外观检查', result: 'pass', score: 5 },
-        { item: '尺寸检测', result: 'pass', score: 5 },
-        { item: '材质检验', result: 'pass', score: 5 }
-      ],
-      overallScore: 5.0,
-      result: 'pass',
-      defectTypes: [],
-      remarks: '质量优良，全部合格',
-      status: 'completed'
-    },
-    {
-      key: '3',
-      inspectionId: 'IQC-2024-003',
-      purchaseOrderNo: 'PO-2024-003',
-      supplierName: '供应商C',
-      materialCode: 'MAT-003',
-      materialName: '包装材料',
-      batchNo: 'BATCH-003',
-      deliveryDate: '2024-01-17',
-      inspectionDate: null,
-      inspector: '王五',
-      sampleQuantity: 100,
-      inspectedQuantity: 0,
-      qualifiedQuantity: 0,
-      defectiveQuantity: 0,
-      qualityRate: 0,
-      inspectionItems: [],
-      overallScore: 0,
-      result: 'pending',
-      defectTypes: [],
-      remarks: '待检验',
-      status: 'pending'
+  // 从数据库加载的数据
+  const [iqcData, setIqcData] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  // 从数据库加载质量检验数据
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const response = await QualityAPI.getQualityInspections({ inspection_type: 'incoming', limit: 100 });
+      if (response.success) {
+        // 转换数据格式以适配表格
+        const formattedData = response.data.inspections.map((item, index) => ({
+          key: item.id || index,
+          id: item.id,
+          inspectionId: `IQC-${item.id}`,
+          purchaseOrderNo: `PO-${item.production_order_id}`,
+          supplierName: '供应商',
+          materialCode: `MAT-${String(item.production_order_id).padStart(3, '0')}`,
+          materialName: `物料 ${item.production_order_id}`,
+          batchNo: `BATCH-${item.id}`,
+          deliveryDate: item.inspection_date ? new Date(item.inspection_date).toLocaleDateString() : '-',
+          inspectionDate: item.inspection_date ? new Date(item.inspection_date).toLocaleDateString() : '-',
+          inspector: `检验员 ${item.inspector_id}`,
+          sampleQuantity: item.inspected_quantity || 0,
+          inspectedQuantity: item.inspected_quantity || 0,
+          qualifiedQuantity: item.qualified_quantity || 0,
+          defectiveQuantity: item.defective_quantity || 0,
+          qualityRate: item.quality_rate || 0,
+          inspectionItems: [],
+          overallScore: (item.quality_rate || 0) / 20,
+          result: item.quality_rate >= 95 ? 'pass' : item.quality_rate >= 90 ? 'conditional_pass' : 'fail',
+          defectTypes: item.defect_types ? (
+            (() => {
+              try {
+                return JSON.parse(item.defect_types);
+              } catch (e) {
+                console.warn('JSON解析失败，使用默认值:', item.defect_types);
+                return [];
+              }
+            })()
+          ) : [],
+          remarks: item.notes || '-',
+          status: 'completed'
+        }));
+        setIqcData(formattedData);
+        setTotal(response.data.total);
+        safeMessage.success(`成功加载 ${formattedData.length} 条IQC检验数据`);
+      }
+    } catch (error) {
+      console.error('加载IQC检验数据失败:', error);
+      safeMessage.error('加载数据失败，请检查后端服务是否正常');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  // 组件加载时获取数据
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const columns = [
     {
@@ -251,8 +285,7 @@ const IQCInspection = () => {
               开始检验
             </Button>
           )}
-          <Button 
-            type="link" 
+          <Button type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}

@@ -40,11 +40,14 @@ import {
   ClockCircleOutlined,
   EyeOutlined
 } from '@ant-design/icons';
-import dayjs from 'dayjs';const { 
-Option } = Select;
+import dayjs from 'dayjs';
+import ButtonActions from '../../utils/buttonActions';
+
+const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const LineMaterialsManagement = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [deliveryModalVisible, setDeliveryModalVisible] = useState(false);
@@ -295,16 +298,14 @@ const LineMaterialsManagement = () => {
           >
             详情
           </Button>
-          <Button 
-            type="link" 
+          <Button onClick={() => handleEdit(record)} type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
           >
             编辑
           </Button>
-          <Button 
-            type="link" 
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" 
             size="small" 
             icon={<DeleteOutlined />} 
             danger
@@ -342,12 +343,12 @@ const LineMaterialsManagement = () => {
     try {
       setLoading(true);
       console.log('提交线边物料数据:', values);
-      message.success('线边物料信息保存成功！');
+      safeMessage.success('线边物料信息保存成功！');
       setModalVisible(false);
       form.resetFields();
     } catch (error) {
       console.error('提交失败:', error);
-      message.error('保存失败，请重试！');
+      safeMessage.error('保存失败，请重试！');
     } finally {
       setLoading(false);
     }
@@ -357,12 +358,12 @@ const LineMaterialsManagement = () => {
     try {
       setLoading(true);
       console.log('提交配送申请:', values);
-      message.success('配送申请提交成功！');
+      safeMessage.success('配送申请提交成功！');
       setDeliveryModalVisible(false);
       deliveryForm.resetFields();
     } catch (error) {
       console.error('提交失败:', error);
-      message.error('提交失败，请重试！');
+      safeMessage.error('提交失败，请重试！');
     } finally {
       setLoading(false);
     }

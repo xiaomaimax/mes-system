@@ -1,7 +1,59 @@
 import { useState } from 'react';
+import ButtonActions from '../../utils/buttonActions';
 import { Card, Row, Col, Button, Space, Table, Form, Input, Select, Modal, Tag, Avatar, Descriptions, DatePicker, Switch, message } from 'antd';
-import { 
-  UserOutlined, 
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import {   UserOutlined, 
   EditOutlined, 
   DeleteOutlined, 
   PlusOutlined,
@@ -214,7 +266,7 @@ const UserManagement = () => {
           <Button type="link" size="small" icon={<EyeOutlined />} onClick={() => handleView(record)}>
             查看
           </Button>
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
             编辑
           </Button>
           {record.status === '正常' ? (
@@ -256,7 +308,7 @@ const UserManagement = () => {
       title: '确认锁定用户',
       content: `确定要锁定用户 ${record.realName} 吗？锁定后该用户将无法登录系统。`,
       onOk() {
-        message.success('用户已锁定');
+        safeMessage.success('用户已锁定');
       }
     });
   };
@@ -266,7 +318,7 @@ const UserManagement = () => {
       title: '确认解锁用户',
       content: `确定要解锁用户 ${record.realName} 吗？`,
       onOk() {
-        message.success('用户已解锁');
+        safeMessage.success('用户已解锁');
       }
     });
   };
@@ -276,7 +328,7 @@ const UserManagement = () => {
       title: '确认重置密码',
       content: `确定要重置用户 ${record.realName} 的密码吗？新密码将通过邮件发送给用户。`,
       onOk() {
-        message.success('密码重置成功，新密码已发送至用户邮箱');
+        safeMessage.success('密码重置成功，新密码已发送至用户邮箱');
       }
     });
   };
@@ -286,7 +338,7 @@ const UserManagement = () => {
       title: '确认删除',
       content: `确定要删除用户 ${record.realName} 吗？此操作不可恢复。`,
       onOk() {
-        message.success('删除成功');
+        safeMessage.success('删除成功');
       }
     });
   };
@@ -295,7 +347,7 @@ const UserManagement = () => {
     try {
       const values = await form.validateFields();
       console.log('保存用户信息:', values);
-      message.success(editingRecord ? '更新成功' : '添加成功');
+      safeMessage.success(editingRecord ? '更新成功' : '添加成功');
       setModalVisible(false);
     } catch (error) {
       console.error('验证失败:', error);

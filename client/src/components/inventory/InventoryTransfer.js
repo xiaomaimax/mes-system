@@ -1,11 +1,65 @@
 import React, { useState } from 'react';
 import { Card, Table, Button, Space, Modal, Form, Input, Select, DatePicker, InputNumber, message, Tag, Divider, Row, Col, Statistic } from 'antd';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
 import { TransactionOutlined, PlusOutlined, EditOutlined, DeleteOutlined, CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 const { TextArea } = Input;
 
 const InventoryTransfer = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [transferList, setTransferList] = useState([
     {
       key: '1',
@@ -126,8 +180,7 @@ const InventoryTransfer = () => {
       width: 150,
       render: (_, record) => (
         <Space size="small">
-          <Button 
-            type="link" 
+          <Button onClick={() => handleEdit(record)} type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
@@ -135,8 +188,7 @@ const InventoryTransfer = () => {
           >
             编辑
           </Button>
-          <Button 
-            type="link" 
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" 
             size="small" 
             danger 
             icon={<DeleteOutlined />}
@@ -181,7 +233,7 @@ const InventoryTransfer = () => {
       content: '确定要删除这条调拨记录吗？',
       onOk: () => {
         setTransferList(transferList.filter(item => item.key !== key));
-        message.success('删除成功');
+        safeMessage.success('删除成功');
       }
     });
   };
@@ -194,7 +246,7 @@ const InventoryTransfer = () => {
         setTransferList(transferList.map(item => 
           item.key === key ? { ...item, status: 'completed' } : item
         ));
-        message.success('调拨完成');
+        safeMessage.success('调拨完成');
       }
     });
   };
@@ -213,20 +265,20 @@ const InventoryTransfer = () => {
         setTransferList(transferList.map(item => 
           item.key === editingTransfer.key ? { ...item, ...transferData } : item
         ));
-        message.success('调拨单更新成功');
+        safeMessage.success('调拨单更新成功');
       } else {
         const newTransfer = {
           key: Date.now().toString(),
           ...transferData
         };
         setTransferList([...transferList, newTransfer]);
-        message.success('调拨单创建成功');
+        safeMessage.success('调拨单创建成功');
       }
 
       setIsModalVisible(false);
       form.resetFields();
     } catch (error) {
-      message.error('操作失败');
+      safeMessage.error('操作失败');
     }
   };
 

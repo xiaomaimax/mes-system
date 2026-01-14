@@ -1,5 +1,57 @@
-import React, { useState } from 'react';
-import { Tabs, Card, Row, Col, Button, Space, Table, DatePicker, Select, Statistic, Progress, Tooltip, Modal, Form, Input, Upload, List, Tag, message, Alert, Avatar } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Tabs, Card, Row, Col, Button, Space, Table, DatePicker, Select, Statistic, Progress, Tooltip, Modal, Form, Input, Upload, List, Tag, message, Alert, Avatar, Spin } from 'antd';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
 import { 
   BarChartOutlined, 
   FileTextOutlined, 
@@ -18,6 +70,7 @@ import {
   UploadOutlined,
   EyeOutlined
 } from '@ant-design/icons';
+import DataService from '../services/DataService';
 import {
   LineChart,
   Line,
@@ -41,6 +94,19 @@ const { Option } = Select;
 
 const SimpleReports = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  
+  // 报表数据加载状态
+  const [productionReportLoading, setProductionReportLoading] = useState(false);
+  const [productionReportError, setProductionReportError] = useState(null);
+  const [productionReportData, setProductionReportData] = useState([]);
+  
+  const [qualityReportLoading, setQualityReportLoading] = useState(false);
+  const [qualityReportError, setQualityReportError] = useState(null);
+  const [qualityReportData, setQualityReportData] = useState([]);
+  
+  const [equipmentReportLoading, setEquipmentReportLoading] = useState(false);
+  const [equipmentReportError, setEquipmentReportError] = useState(null);
+  const [equipmentReportData, setEquipmentReportData] = useState([]);
   
   // 自定义报表相关状态
   const [templateModalVisible, setTemplateModalVisible] = useState(false);
@@ -75,6 +141,84 @@ const SimpleReports = () => {
     }
   ]);
   const [form] = Form.useForm();
+
+  // 加载生产报表数据
+  useEffect(() => {
+    const loadProductionReports = async () => {
+      setProductionReportLoading(true);
+      setProductionReportError(null);
+      try {
+        const result = await DataService.getProductionReports();
+        if (result.success && result.data) {
+          setProductionReportData(Array.isArray(result.data) ? result.data : []);
+        } else {
+          setProductionReportError(result.error?.message || '加载生产报表失败');
+          setProductionReportData([]);
+        }
+      } catch (error) {
+        setProductionReportError(error.message || '加载生产报表失败');
+        setProductionReportData([]);
+      } finally {
+        setProductionReportLoading(false);
+      }
+    };
+    
+    if (activeTab === 'production') {
+      loadProductionReports();
+    }
+  }, [activeTab]);
+
+  // 加载质量报表数据
+  useEffect(() => {
+    const loadQualityReports = async () => {
+      setQualityReportLoading(true);
+      setQualityReportError(null);
+      try {
+        const result = await DataService.getQualityReports();
+        if (result.success && result.data) {
+          setQualityReportData(Array.isArray(result.data) ? result.data : []);
+        } else {
+          setQualityReportError(result.error?.message || '加载质量报表失败');
+          setQualityReportData([]);
+        }
+      } catch (error) {
+        setQualityReportError(error.message || '加载质量报表失败');
+        setQualityReportData([]);
+      } finally {
+        setQualityReportLoading(false);
+      }
+    };
+    
+    if (activeTab === 'quality') {
+      loadQualityReports();
+    }
+  }, [activeTab]);
+
+  // 加载设备报表数据
+  useEffect(() => {
+    const loadEquipmentReports = async () => {
+      setEquipmentReportLoading(true);
+      setEquipmentReportError(null);
+      try {
+        const result = await DataService.getEquipmentReports();
+        if (result.success && result.data) {
+          setEquipmentReportData(Array.isArray(result.data) ? result.data : []);
+        } else {
+          setEquipmentReportError(result.error?.message || '加载设备报表失败');
+          setEquipmentReportData([]);
+        }
+      } catch (error) {
+        setEquipmentReportError(error.message || '加载设备报表失败');
+        setEquipmentReportData([]);
+      } finally {
+        setEquipmentReportLoading(false);
+      }
+    };
+    
+    if (activeTab === 'equipment') {
+      loadEquipmentReports();
+    }
+  }, [activeTab]);
 
   // 报表模板数据
   const reportTemplates = [
@@ -144,7 +288,7 @@ const SimpleReports = () => {
     setCustomReports([...customReports, newReport]);
     setCreateReportModalVisible(false);
     form.resetFields();
-    message.success('报表创建成功！');
+    safeMessage.success('报表创建成功！');
   };
 
   const handleDeleteReport = (id) => {
@@ -153,7 +297,7 @@ const SimpleReports = () => {
       content: '确定要删除这个报表吗？',
       onOk: () => {
         setCustomReports(customReports.filter(report => report.id !== id));
-        message.success('报表删除成功！');
+        safeMessage.success('报表删除成功！');
       }
     });
   };
@@ -162,7 +306,7 @@ const SimpleReports = () => {
     setCustomReports(customReports.map(report => 
       report.id === id ? { ...report, status: '已发布' } : report
     ));
-    message.success('报表发布成功！');
+    safeMessage.success('报表发布成功！');
   };
 
   // 模拟图表数据
@@ -687,7 +831,44 @@ const SimpleReports = () => {
           <Button type="primary" icon={<FileTextOutlined />}>生成报表</Button>
           <Button icon={<DownloadOutlined />}>导出Excel</Button>
         </Space>
-        <Table dataSource={productionData} columns={productionColumns} />
+        
+        {productionReportError && (
+          <Alert 
+            type="error" 
+            message="加载失败" 
+            description={productionReportError}
+            showIcon
+            style={{ marginBottom: '16px' }}
+            action={
+              <Button size="small" onClick={() => {
+                setProductionReportLoading(true);
+                DataService.getProductionReports().then(result => {
+                  if (result.success) {
+                    setProductionReportData(result.data);
+                    setProductionReportError(null);
+                  } else {
+                    setProductionReportError(result.error?.message);
+                  }
+                  setProductionReportLoading(false);
+                });
+              }}>
+                重试
+              </Button>
+            }
+          />
+        )}
+        
+        {productionReportLoading ? (
+          <Spin tip="加载中..." style={{ display: 'flex', justifyContent: 'center', padding: '50px' }} />
+        ) : productionReportData.length === 0 ? (
+          <Alert type="info" message="暂无生产报表数据" showIcon />
+        ) : (
+          <Table 
+            dataSource={productionReportData.map((item, index) => ({ ...item, key: index }))} 
+            columns={productionColumns}
+            pagination={{ pageSize: 10 }}
+          />
+        )}
       </Card>
 
       <Row gutter={16} style={{ marginBottom: '16px' }}>
@@ -740,7 +921,44 @@ const SimpleReports = () => {
           <Button type="primary" icon={<FileTextOutlined />}>生成报表</Button>
           <Button icon={<DownloadOutlined />}>导出Excel</Button>
         </Space>
-        <Table dataSource={qualityData} columns={qualityColumns} />
+        
+        {qualityReportError && (
+          <Alert 
+            type="error" 
+            message="加载失败" 
+            description={qualityReportError}
+            showIcon
+            style={{ marginBottom: '16px' }}
+            action={
+              <Button size="small" onClick={() => {
+                setQualityReportLoading(true);
+                DataService.getQualityReports().then(result => {
+                  if (result.success) {
+                    setQualityReportData(result.data);
+                    setQualityReportError(null);
+                  } else {
+                    setQualityReportError(result.error?.message);
+                  }
+                  setQualityReportLoading(false);
+                });
+              }}>
+                重试
+              </Button>
+            }
+          />
+        )}
+        
+        {qualityReportLoading ? (
+          <Spin tip="加载中..." style={{ display: 'flex', justifyContent: 'center', padding: '50px' }} />
+        ) : qualityReportData.length === 0 ? (
+          <Alert type="info" message="暂无质量报表数据" showIcon />
+        ) : (
+          <Table 
+            dataSource={qualityReportData.map((item, index) => ({ ...item, key: index }))} 
+            columns={qualityColumns}
+            pagination={{ pageSize: 10 }}
+          />
+        )}
       </Card>
 
       <Row gutter={16} style={{ marginBottom: '16px' }}>
@@ -825,7 +1043,44 @@ const SimpleReports = () => {
           <Button type="primary" icon={<FileTextOutlined />}>生成报表</Button>
           <Button icon={<DownloadOutlined />}>导出Excel</Button>
         </Space>
-        <Table dataSource={equipmentData} columns={equipmentColumns} />
+        
+        {equipmentReportError && (
+          <Alert 
+            type="error" 
+            message="加载失败" 
+            description={equipmentReportError}
+            showIcon
+            style={{ marginBottom: '16px' }}
+            action={
+              <Button size="small" onClick={() => {
+                setEquipmentReportLoading(true);
+                DataService.getEquipmentReports().then(result => {
+                  if (result.success) {
+                    setEquipmentReportData(result.data);
+                    setEquipmentReportError(null);
+                  } else {
+                    setEquipmentReportError(result.error?.message);
+                  }
+                  setEquipmentReportLoading(false);
+                });
+              }}>
+                重试
+              </Button>
+            }
+          />
+        )}
+        
+        {equipmentReportLoading ? (
+          <Spin tip="加载中..." style={{ display: 'flex', justifyContent: 'center', padding: '50px' }} />
+        ) : equipmentReportData.length === 0 ? (
+          <Alert type="info" message="暂无设备报表数据" showIcon />
+        ) : (
+          <Table 
+            dataSource={equipmentReportData.map((item, index) => ({ ...item, key: index }))} 
+            columns={equipmentColumns}
+            pagination={{ pageSize: 10 }}
+          />
+        )}
       </Card>
 
       <Row gutter={16} style={{ marginBottom: '16px' }}>

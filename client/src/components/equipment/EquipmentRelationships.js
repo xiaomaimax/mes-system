@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, Select, Input, Tree, Row, Col } from 'antd';
 import { SearchOutlined, LinkOutlined, ApartmentOutlined, ToolOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 
 const EquipmentRelationships = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // 设备层级树数据

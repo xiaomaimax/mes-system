@@ -1,7 +1,60 @@
 import React, { useState } from 'react';
 import { Card, Table, Button, Space, Modal, Form, Input, Select, Tag, message, Row, Col, Steps, Descriptions, Divider, Timeline, Upload } from 'antd';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, UploadOutlined, FileTextOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 const { TextArea } = Input;
 const { Step } = Steps;
@@ -166,10 +219,10 @@ const ProcessChangeControl = () => {
           <Button type="link" size="small" icon={<EyeOutlined />} onClick={() => handleViewDetail(record)}>
             查看
           </Button>
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
             编辑
           </Button>
-          <Button type="link" size="small" danger icon={<DeleteOutlined />}>
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" size="small" danger icon={<DeleteOutlined />}>
             删除
           </Button>
         </Space>
@@ -198,7 +251,7 @@ const ProcessChangeControl = () => {
     try {
       const values = await form.validateFields();
       console.log('保存变更申请:', values);
-      message.success('保存成功');
+      safeMessage.success('保存成功');
       setModalVisible(false);
     } catch (error) {
       console.error('验证失败:', error);
@@ -230,9 +283,9 @@ const ProcessChangeControl = () => {
     onChange(info) {
       const { status } = info.file;
       if (status === 'done') {
-        message.success(`${info.file.name} 文件上传成功`);
+        safeMessage.success(`${info.file.name} 文件上传成功`);
       } else if (status === 'error') {
-        message.error(`${info.file.name} 文件上传失败`);
+        safeMessage.error(`${info.file.name} 文件上传失败`);
       }
     }
   };

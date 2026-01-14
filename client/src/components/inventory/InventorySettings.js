@@ -1,7 +1,60 @@
 import React, { useState } from 'react';
 import { Card, Form, Input, InputNumber, Switch, Button, Space, Divider, Row, Col, Select, message, Tabs } from 'antd';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
 import { SettingOutlined, SaveOutlined, ReloadOutlined, BellOutlined, DatabaseOutlined, SecurityScanOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -10,6 +63,7 @@ const InventorySettings = () => {
   const [alertForm] = Form.useForm();
   const [systemForm] = Form.useForm();
 
+  const [editingRecord, setEditingRecord] = useState(null);
   const [settings, setSettings] = useState({
     // 基础设置
     defaultWarehouse: 'main',
@@ -34,17 +88,17 @@ const InventorySettings = () => {
 
   const handleBasicSave = (values) => {
     setSettings({ ...settings, ...values });
-    message.success('基础设置保存成功');
+    safeMessage.success('基础设置保存成功');
   };
 
   const handleAlertSave = (values) => {
     setSettings({ ...settings, ...values });
-    message.success('预警设置保存成功');
+    safeMessage.success('预警设置保存成功');
   };
 
   const handleSystemSave = (values) => {
     setSettings({ ...settings, ...values });
-    message.success('系统设置保存成功');
+    safeMessage.success('系统设置保存成功');
   };
 
   const resetSettings = () => {

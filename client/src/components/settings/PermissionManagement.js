@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import ButtonActions from '../../utils/buttonActions';
 import { Card, Table, Button, Space, Tag, Tree, Input } from 'antd';
-import { 
-  KeyOutlined, 
+import {   KeyOutlined, 
   SearchOutlined,
   AppstoreOutlined,
   SettingOutlined

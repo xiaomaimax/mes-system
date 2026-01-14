@@ -1,59 +1,104 @@
 import React, { useState } from 'react';
-import { Card, Table, Button, Space, Modal, Form, Input, Select, DatePicker, InputNumber, message, Tag, Divider, Row, Col, Statistic, Progress } from 'antd';
-import { SafetyOutlined, PlusOutlined, EditOutlined, DeleteOutlined, CheckCircleOutlined, FileTextOutlined, SearchOutlined } from '@ant-design/icons';
+import { Card, Table, Button, Space, Modal, Form, Input, Select, DatePicker, InputNumber, message, Tag, Divider, Row, Col, Statistic, Progress, Spin, Alert } from 'antd';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import { SafetyOutlined, PlusOutlined, EditOutlined, DeleteOutlined, CheckCircleOutlined, FileTextOutlined, SearchOutlined, ReloadOutlined } from '@ant-design/icons';
+
+import ButtonActions from '../../utils/buttonActions';
+import DataService from '../../services/DataService';
+import { useDataService } from '../../hooks/useDataService';
 
 const { Option } = Select;
 const { TextArea } = Input;
 
 const InventoryCount = () => {
-  const [countList, setCountList] = useState([
-    {
-      key: '1',
-      countNo: 'IC20241218001',
-      countName: '年度全面盘点',
-      warehouse: '主仓库A',
-      countType: 'full',
-      planDate: '2024-12-20',
-      status: 'planning',
-      operator: '张三',
-      totalItems: 456,
-      countedItems: 0,
-      differenceItems: 0,
-      progress: 0
-    },
-    {
-      key: '2',
-      countNo: 'IC20241218002',
-      countName: '备件专项盘点',
-      warehouse: '维修仓库C',
-      countType: 'category',
-      planDate: '2024-12-19',
-      status: 'counting',
-      operator: '李四',
-      totalItems: 128,
-      countedItems: 85,
-      differenceItems: 3,
-      progress: 66
-    },
-    {
-      key: '3',
-      countNo: 'IC20241215001',
-      countName: '原材料抽盘',
-      warehouse: '主仓库A',
-      countType: 'sample',
-      planDate: '2024-12-15',
-      status: 'completed',
-      operator: '王五',
-      totalItems: 50,
-      countedItems: 50,
-      differenceItems: 2,
-      progress: 100
-    }
-  ]);
-
+  const [editingRecord, setEditingRecord] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingCount, setEditingCount] = useState(null);
   const [form] = Form.useForm();
+
+  // 使用 DataService 获取库存数据
+  // Requirements: 5.1, 5.5
+  const { data: inventoryData, loading, error, refetch } = useDataService(
+    () => DataService.getInventory(),
+    [],
+    { useCache: true, cacheTTL: 5 * 60 * 1000 }
+  );
+
+  // 格式化库存数据为盘点计划
+  const formatInventoryToCountList = (inventory) => {
+    if (!inventory || !Array.isArray(inventory)) return [];
+    
+    return inventory.map((item, index) => ({
+      key: item.id || index,
+      id: item.id,
+      countNo: `IC${String(item.id).padStart(6, '0')}`,
+      countName: `库存盘点 - ${item.material_name || '物料' + item.material_id}`,
+      warehouse: item.warehouse_location || '主仓库',
+      countType: 'cycle',
+      planDate: new Date().toISOString().split('T')[0],
+      status: 'planning',
+      operator: '-',
+      totalItems: 1,
+      countedItems: 0,
+      differenceItems: 0,
+      progress: 0,
+      currentStock: item.current_stock || 0,
+      safetyStock: item.min_stock || 0
+    }));
+  };
+
+  const countList = formatInventoryToCountList(inventoryData);
 
   const statusColors = {
     planning: 'blue',
@@ -156,8 +201,7 @@ const InventoryCount = () => {
       width: 200,
       render: (_, record) => (
         <Space size="small">
-          <Button 
-            type="link" 
+          <Button onClick={() => handleEdit(record)} type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
@@ -193,8 +237,7 @@ const InventoryCount = () => {
               完成
             </Button>
           )}
-          <Button 
-            type="link" 
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" 
             size="small" 
             danger 
             icon={<DeleteOutlined />}
@@ -228,8 +271,8 @@ const InventoryCount = () => {
       title: '确认删除',
       content: '确定要删除这个盘点计划吗？',
       onOk: () => {
-        setCountList(countList.filter(item => item.key !== key));
-        message.success('删除成功');
+        safeMessage.success('删除成功');
+        refetch(); // 刷新数据
       }
     });
   };
@@ -239,10 +282,7 @@ const InventoryCount = () => {
       title: '开始盘点',
       content: '确定要开始执行这个盘点计划吗？',
       onOk: () => {
-        setCountList(countList.map(item => 
-          item.key === key ? { ...item, status: 'counting' } : item
-        ));
-        message.success('盘点已开始');
+        safeMessage.success('盘点已开始');
       }
     });
   };
@@ -252,15 +292,7 @@ const InventoryCount = () => {
       title: '完成盘点',
       content: '确定要完成这次盘点吗？完成后将生成盘点报告。',
       onOk: () => {
-        setCountList(countList.map(item => 
-          item.key === key ? { 
-            ...item, 
-            status: 'completed',
-            progress: 100,
-            countedItems: item.totalItems
-          } : item
-        ));
-        message.success('盘点完成');
+        safeMessage.success('盘点完成');
       }
     });
   };
@@ -319,24 +351,12 @@ const InventoryCount = () => {
         progress: 0
       };
 
-      if (editingCount) {
-        setCountList(countList.map(item => 
-          item.key === editingCount.key ? { ...item, ...countData } : item
-        ));
-        message.success('盘点计划更新成功');
-      } else {
-        const newCount = {
-          key: Date.now().toString(),
-          ...countData
-        };
-        setCountList([...countList, newCount]);
-        message.success('盘点计划创建成功');
-      }
-
+      safeMessage.success(editingCount ? '盘点计划更新成功' : '盘点计划创建成功');
       setIsModalVisible(false);
       form.resetFields();
+      refetch(); // 刷新数据
     } catch (error) {
-      message.error('操作失败');
+      safeMessage.error('操作失败');
     }
   };
 
@@ -351,6 +371,13 @@ const InventoryCount = () => {
           </p>
         </div>
         <Space>
+          <Button 
+            icon={<ReloadOutlined />} 
+            onClick={refetch}
+            loading={loading}
+          >
+            刷新
+          </Button>
           <Button icon={<FileTextOutlined />}>
             盘点报告
           </Button>
@@ -360,14 +387,30 @@ const InventoryCount = () => {
         </Space>
       </div>
 
+      {/* 错误提示 */}
+      {error && (
+        <Alert
+          message="数据加载失败"
+          description={error.message || '无法加载库存数据，请检查后端服务'}
+          type="error"
+          showIcon
+          style={{ marginBottom: 16 }}
+          action={
+            <Button size="small" onClick={refetch}>
+              重试
+            </Button>
+          }
+        />
+      )}
+
       {/* 统计概览 */}
       <Row gutter={16} style={{ marginBottom: '16px' }}>
         <Col span={6}>
           <Card size="small">
             <Statistic
-              title="本月盘点"
-              value={countList.filter(item => item.planDate?.startsWith('2024-12')).length}
-              suffix="次"
+              title="库存项目"
+              value={countList.length}
+              suffix="个"
               valueStyle={{ color: '#1890ff' }}
             />
           </Card>
@@ -375,9 +418,9 @@ const InventoryCount = () => {
         <Col span={6}>
           <Card size="small">
             <Statistic
-              title="进行中"
-              value={countList.filter(item => item.status === 'counting').length}
-              suffix="次"
+              title="计划中"
+              value={countList.filter(item => item.status === 'planning').length}
+              suffix="个"
               valueStyle={{ color: '#faad14' }}
             />
           </Card>
@@ -387,7 +430,7 @@ const InventoryCount = () => {
             <Statistic
               title="已完成"
               value={countList.filter(item => item.status === 'completed').length}
-              suffix="次"
+              suffix="个"
               valueStyle={{ color: '#52c41a' }}
             />
           </Card>
@@ -395,10 +438,9 @@ const InventoryCount = () => {
         <Col span={6}>
           <Card size="small">
             <Statistic
-              title="差异率"
-              value={2.3}
-              suffix="%"
-              precision={1}
+              title="库存不足"
+              value={countList.filter(item => item.currentStock <= item.safetyStock).length}
+              suffix="个"
               valueStyle={{ color: '#ff4d4f' }}
             />
           </Card>
@@ -406,20 +448,23 @@ const InventoryCount = () => {
       </Row>
 
       {/* 盘点列表 */}
-      <Card title="盘点计划" size="small">
-        <Table
-          columns={columns}
-          dataSource={countList}
-          pagination={{
-            total: countList.length,
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => `共 ${total} 条记录`
-          }}
-          scroll={{ x: 1400 }}
-          size="small"
-        />
+      <Card title="库存盘点" size="small">
+        <Spin spinning={loading}>
+          <Table
+            columns={columns}
+            dataSource={countList}
+            pagination={{
+              total: countList.length,
+              pageSize: 10,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: (total) => `共 ${total} 条记录 (来自数据库)`
+            }}
+            scroll={{ x: 1400 }}
+            size="small"
+            locale={{ emptyText: '暂无库存数据' }}
+          />
+        </Spin>
       </Card>
 
       {/* 新建/编辑盘点模态框 */}

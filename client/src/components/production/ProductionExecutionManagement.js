@@ -36,10 +36,12 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 const { TextArea } = Input;
 
 const ProductionExecutionManagement = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
@@ -295,22 +297,22 @@ const ProductionExecutionManagement = () => {
   ];
 
   const handleStart = (record) => {
-    message.success(`任务 ${record.taskNumber} 开始执行`);
+    safeMessage.success(`任务 ${record.taskNumber} 开始执行`);
     // 这里可以调用API开始生产任务
   };
 
   const handlePause = (record) => {
-    message.warning(`任务 ${record.taskNumber} 已暂停`);
+    safeMessage.warning(`任务 ${record.taskNumber} 已暂停`);
     // 这里可以调用API暂停生产任务
   };
 
   const handleComplete = (record) => {
-    message.success(`任务 ${record.taskNumber} 已完成`);
+    safeMessage.success(`任务 ${record.taskNumber} 已完成`);
     // 这里可以调用API完成生产任务
   };
 
   const handleResume = (record) => {
-    message.success(`任务 ${record.taskNumber} 继续执行`);
+    safeMessage.success(`任务 ${record.taskNumber} 继续执行`);
     // 这里可以调用API恢复生产任务
   };
 

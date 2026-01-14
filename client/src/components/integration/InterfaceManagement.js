@@ -1,7 +1,60 @@
 import React, { useState } from 'react';
 import { Card, Table, Button, Space, Modal, Form, Input, Select, Tag, message, Row, Col, Switch, Descriptions, Divider, Steps, Timeline } from 'antd';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
 import { PlusOutlined, EditOutlined, DeleteOutlined, PlayCircleOutlined, PauseCircleOutlined, EyeOutlined, ApiOutlined, ExperimentOutlined, SettingOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -167,7 +220,7 @@ const InterfaceManagement = () => {
           <Button type="link" size="small" icon={<ExperimentOutlined />} onClick={() => handleTest(record)}>
             测试
           </Button>
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
             编辑
           </Button>
           <Button 
@@ -207,14 +260,14 @@ const InterfaceManagement = () => {
 
   const handleToggleStatus = (record) => {
     const newStatus = record.status === '运行中' ? '已停用' : '运行中';
-    message.success(`接口已${newStatus === '运行中' ? '启用' : '停用'}`);
+    safeMessage.success(`接口已${newStatus === '运行中' ? '启用' : '停用'}`);
   };
 
   const handleSave = async () => {
     try {
       const values = await form.validateFields();
       console.log('保存接口配置:', values);
-      message.success('保存成功');
+      safeMessage.success('保存成功');
       setModalVisible(false);
     } catch (error) {
       console.error('验证失败:', error);
@@ -222,9 +275,9 @@ const InterfaceManagement = () => {
   };
 
   const handleTestInterface = () => {
-    message.loading('正在测试接口连接...', 2);
+    safeMessage.loading('正在测试接口连接...', 2);
     setTimeout(() => {
-      message.success('接口测试成功');
+      safeMessage.success('接口测试成功');
       setTestModalVisible(false);
     }, 2000);
   };
@@ -414,7 +467,7 @@ const InterfaceManagement = () => {
           <Button key="test" icon={<ExperimentOutlined />} onClick={() => handleTest(selectedInterface)}>
             测试接口
           </Button>,
-          <Button key="edit" type="primary" icon={<EditOutlined />} onClick={() => handleEdit(selectedInterface)}>
+          <Button onClick={() => handleEdit(record)} key="edit" type="primary" icon={<EditOutlined />} onClick={() => handleEdit(selectedInterface)}>
             编辑
           </Button>
         ]}

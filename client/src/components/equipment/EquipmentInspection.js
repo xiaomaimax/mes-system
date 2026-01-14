@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form, Radio, Rate } from 'antd';
 import { PlusOutlined, SearchOutlined, EyeOutlined, EditOutlined, CheckCircleOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
+import { equipmentData } from '../../data/mockData';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 
 const EquipmentInspection = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -104,8 +107,8 @@ const EquipmentInspection = () => {
           weekly: { color: 'green', text: '周检' },
           monthly: { color: 'orange', text: '月检' }
         };
-        const { color, text } = typeMap[type];
-        return <Tag color={color}>{text}</Tag>;
+        const typeInfo = typeMap[type] || { color: 'default', text: type || '未知' };
+        return <Tag color={typeInfo.color}>{typeInfo.text}</Tag>;
       }
     },
     {
@@ -152,8 +155,8 @@ const EquipmentInspection = () => {
           completed: { color: 'green', text: '已完成' },
           overdue: { color: 'red', text: '已逾期' }
         };
-        const { color, text } = statusMap[status];
-        return <Tag color={color}>{text}</Tag>;
+        const statusInfo = statusMap[status] || { color: 'default', text: status || '未知' };
+        return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
       }
     },
     {

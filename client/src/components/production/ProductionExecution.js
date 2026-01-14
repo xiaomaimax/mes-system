@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Card, Row, Col, Statistic, Button, Table, Tag, Progress, Space, Select, Input } from 'antd';
 import { PlayCircleOutlined, PauseCircleOutlined, StopOutlined, ReloadOutlined, SearchOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 
 const ProductionExecution = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // 实时生产数据

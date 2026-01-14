@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, Progress, Alert, Select, Input, Row, Col, Statistic } from 'antd';
 import { SearchOutlined, AlertOutlined, ExclamationCircleOutlined, WarningOutlined, BellOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 
 const SparePartsAlert = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // 模拟数据

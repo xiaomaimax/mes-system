@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import ButtonActions from '../../utils/buttonActions';
 import { Card, Row, Col, Button, Space, Table, Form, Input, Select, DatePicker, Modal, Tag, Progress, Rate, Statistic } from 'antd';
-import { 
-  TrophyOutlined, 
+import {   TrophyOutlined, 
   EditOutlined, 
   EyeOutlined, 
   PlusOutlined,
@@ -214,7 +214,7 @@ const PerformanceManagement = () => {
           <Button type="link" size="small" icon={<EyeOutlined />} onClick={() => handleView(record)}>
             查看
           </Button>
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
             编辑
           </Button>
         </Space>

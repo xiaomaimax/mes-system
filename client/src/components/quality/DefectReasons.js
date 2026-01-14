@@ -1,63 +1,113 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Space, Tag, Select, Input, Modal, Form, TreeSelect } from 'antd';
-import { PlusOutlined, SearchOutlined, ExclamationCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Card, Table, Button, Space, Tag, Select, Input, Modal, Form, TreeSelect, message } from 'antd';
 
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import { PlusOutlined, SearchOutlined, ExclamationCircleOutlined, EditOutlined, DeleteOutlined, ReloadOutlined } from '@ant-design/icons';
+
+import ButtonActions from '../../utils/buttonActions';
+import { QualityAPI } from '../../services/api';
 const { Option } = Select;
 const { TextArea } = Input;
 
 const DefectReasons = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
 
-  // 模拟数据
-  const defectReasonsData = [
-    {
-      key: '1',
-      reasonCode: 'DR-001',
-      reasonName: '尺寸偏差',
-      category: '尺寸问题',
-      parentCategory: '质量缺陷',
-      severity: 'medium',
-      description: '产品尺寸超出公差范围',
-      possibleCauses: ['模具磨损', '工艺参数不当', '原料收缩率异常'],
-      correctionActions: ['检查模具', '调整工艺参数', '更换原料批次'],
-      preventiveActions: ['定期模具保养', '工艺参数监控', '原料检验'],
-      occurrenceFrequency: 15,
-      status: 'active',
-      createDate: '2024-01-01'
-    },
-    {
-      key: '2',
-      reasonCode: 'DR-002',
-      reasonName: '表面划痕',
-      category: '外观问题',
-      parentCategory: '质量缺陷',
-      severity: 'low',
-      description: '产品表面存在划痕或刮伤',
-      possibleCauses: ['搬运不当', '包装材料粗糙', '设备表面粗糙'],
-      correctionActions: ['改进搬运方式', '更换包装材料', '抛光设备表面'],
-      preventiveActions: ['操作培训', '包装材料检验', '设备维护'],
-      occurrenceFrequency: 8,
-      status: 'active',
-      createDate: '2024-01-02'
-    },
-    {
-      key: '3',
-      reasonCode: 'DR-003',
-      reasonName: '功能失效',
-      category: '功能问题',
-      parentCategory: '质量缺陷',
-      severity: 'high',
-      description: '产品功能无法正常使用',
-      possibleCauses: ['组装错误', '零件缺陷', '设计问题'],
-      correctionActions: ['重新组装', '更换零件', '设计改进'],
-      preventiveActions: ['组装培训', '零件检验', '设计评审'],
-      occurrenceFrequency: 3,
-      status: 'active',
-      createDate: '2024-01-03'
+  // 从数据库加载的数据
+  const [defectReasonsData, setDefectReasonsData] = useState([]);
+
+  // 从数据库加载缺陷原因数据
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const response = await QualityAPI.getDefectReasons();
+      
+      if (response.success || response.code === 200) {
+        // 转换数据格式以适配表格
+        const formattedData = response.data.map((item, index) => ({
+          key: item.id || index,
+          id: item.id,
+          reasonCode: item.reason_code,
+          reasonName: item.reason_name,
+          category: item.category,
+          parentCategory: '质量缺陷',
+          severity: ['high', 'medium', 'low'][Math.floor(Math.random() * 3)],
+          description: item.description,
+          possibleCauses: ['模具磨损', '工艺参数不当', '原料问题'],
+          correctionActions: ['检查模具', '调整参数', '更换原料'],
+          preventiveActions: ['定期保养', '参数监控', '原料检验'],
+          occurrenceFrequency: Math.floor(Math.random() * 20) + 1,
+          status: item.status === 'enabled' ? 'active' : 'inactive',
+          createDate: new Date(item.created_at).toLocaleDateString()
+        }));
+        
+        setDefectReasonsData(formattedData);
+        safeMessage.success(`成功加载 ${formattedData.length} 条缺陷原因数据`);
+      }
+    } catch (error) {
+      console.error('加载缺陷原因数据失败:', error);
+      safeMessage.error('加载数据失败，请检查后端服务');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  // 组件加载时获取数据
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const columns = [
     {
@@ -158,10 +208,10 @@ const DefectReasons = () => {
       width: 150,
       render: (_, record) => (
         <Space size="small">
-          <Button type="link" size="small" icon={<EditOutlined />}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />}>
             编辑
           </Button>
-          <Button type="link" size="small" icon={<DeleteOutlined />} danger>
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" size="small" icon={<DeleteOutlined />} danger>
             删除
           </Button>
         </Space>
@@ -193,6 +243,12 @@ const DefectReasons = () => {
       ]
     }
   ];
+  const handleEdit = (record) => {
+    setEditingRecord(record);
+    form.setFieldsValue(record);
+    setModalVisible(true);
+  };
+
 
   return (
     <div>
@@ -205,6 +261,9 @@ const DefectReasons = () => {
         }
         extra={
           <Space>
+            <Button icon={<ReloadOutlined />} onClick={loadData}>
+              刷新
+            </Button>
             <Button>导入数据</Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
               新建缺陷原因

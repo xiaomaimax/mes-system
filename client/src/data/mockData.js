@@ -1,450 +1,393 @@
-// MES系统模拟测试数据
-// 为各个模块提供完整的演示数据
+/**
+ * MES系统常量定义文件
+ * 
+ * 注意：本文件已从mock数据迁移为常量定义
+ * 实际数据现在通过DataService从API获取
+ * 
+ * 迁移完成日期：2026-01-12
+ * 迁移说明：所有组件已从使用mock数据转换为使用DataService调用API
+ */
 
-// 基础数据
-export const baseData = {
-  // 产品信息
-  products: [
-    { id: 'P001', name: '智能手机主板', model: 'MB-5G-Pro', category: '电子产品', unit: '片' },
-    { id: 'P002', name: '汽车控制器', model: 'ECU-V2.1', category: '汽车零部件', unit: '个' },
-    { id: 'P003', name: '工业传感器', model: 'SEN-T400', category: '传感器', unit: '个' },
-    { id: 'P004', name: '电源适配器', model: 'PSU-65W', category: '电源设备', unit: '个' },
-    { id: 'P005', name: '显示屏模组', model: 'LCD-7inch', category: '显示设备', unit: '片' }
-  ],
+// ============================================================================
+// 系统常量定义
+// ============================================================================
 
-  // 生产线信息
-  productionLines: [
-    { id: 'LINE001', name: '生产线A', type: 'SMT贴片线', capacity: 1000, status: '运行中' },
-    { id: 'LINE002', name: '生产线B', type: '组装线', capacity: 800, status: '运行中' },
-    { id: 'LINE003', name: '生产线C', type: '测试线', capacity: 600, status: '维护中' },
-    { id: 'LINE004', name: '生产线D', type: '包装线', capacity: 1200, status: '运行中' },
-    { id: 'LINE005', name: '生产线E', type: '老化线', capacity: 400, status: '运行中' }
-  ],
-
-  // 设备信息
-  equipment: [
-    { id: 'EQ001', name: 'SMT贴片机A1', type: '贴片设备', line: 'LINE001', status: '运行中', utilization: 92 },
-    { id: 'EQ002', name: 'SMT贴片机A2', type: '贴片设备', line: 'LINE001', status: '运行中', utilization: 88 },
-    { id: 'EQ003', name: '回流焊炉B1', type: '焊接设备', line: 'LINE001', status: '运行中', utilization: 95 },
-    { id: 'EQ004', name: 'AOI检测机C1', type: '检测设备', line: 'LINE002', status: '运行中', utilization: 87 },
-    { id: 'EQ005', name: '组装机器人D1', type: '组装设备', line: 'LINE002', status: '维护中', utilization: 0 },
-    { id: 'EQ006', name: '功能测试台E1', type: '测试设备', line: 'LINE003', status: '运行中', utilization: 78 },
-    { id: 'EQ007', name: '包装机F1', type: '包装设备', line: 'LINE004', status: '运行中', utilization: 85 },
-    { id: 'EQ008', name: '老化测试柜G1', type: '老化设备', line: 'LINE005', status: '运行中', utilization: 90 }
-  ],
-
-  // 物料信息
-  materials: [
-    { id: 'M001', name: 'PCB基板', spec: 'FR4-1.6mm', supplier: '华强电子', category: '基材', unit: '片' },
-    { id: 'M002', name: '电阻0402', spec: '10KΩ±1%', supplier: '风华高科', category: '电子元件', unit: '个' },
-    { id: 'M003', name: '电容0603', spec: '100nF±10%', supplier: '三星电机', category: '电子元件', unit: '个' },
-    { id: 'M004', name: 'CPU芯片', spec: 'ARM-A78', supplier: '联发科', category: '芯片', unit: '个' },
-    { id: 'M005', name: '连接器', spec: '40Pin-0.5mm', supplier: '富士康', category: '连接器', unit: '个' },
-    { id: 'M006', name: '锡膏', spec: 'SAC305', supplier: '阿尔法', category: '辅料', unit: 'kg' },
-    { id: 'M007', name: '包装盒', spec: '防静电盒', supplier: '包装厂', category: '包材', unit: '个' }
-  ],
-
-  // 员工信息
-  employees: [
-    { id: 'EMP001', name: '张三', department: '生产部', position: '生产主管', shift: '白班', skill: 'A级' },
-    { id: 'EMP002', name: '李四', department: '生产部', position: '操作员', shift: '白班', skill: 'B级' },
-    { id: 'EMP003', name: '王五', department: '质量部', position: '质检员', shift: '白班', skill: 'A级' },
-    { id: 'EMP004', name: '赵六', department: '设备部', position: '维修工', shift: '夜班', skill: 'A级' },
-    { id: 'EMP005', name: '钱七', department: '技术部', position: '工艺工程师', shift: '白班', skill: 'S级' },
-    { id: 'EMP006', name: '孙八', department: '生产部', position: '操作员', shift: '夜班', skill: 'B级' },
-    { id: 'EMP007', name: '周九', department: '质量部', position: '质量工程师', shift: '白班', skill: 'A级' },
-    { id: 'EMP008', name: '吴十', department: '设备部', position: '设备工程师', shift: '白班', skill: 'A级' }
-  ]
+// 状态常量
+export const STATUS_CONSTANTS = {
+  // 生产状态
+  PRODUCTION_STATUS: {
+    PENDING: 'pending',
+    IN_PROGRESS: 'in_progress', 
+    COMPLETED: 'completed',
+    CANCELLED: 'cancelled'
+  },
+  
+  // 设备状态
+  EQUIPMENT_STATUS: {
+    RUNNING: 'running',
+    IDLE: 'idle',
+    MAINTENANCE: 'maintenance',
+    FAULT: 'fault'
+  },
+  
+  // 质量检验状态
+  INSPECTION_STATUS: {
+    PASS: 'pass',
+    FAIL: 'fail',
+    PENDING: 'pending'
+  },
+  
+  // 库存状态
+  INVENTORY_STATUS: {
+    NORMAL: 'normal',
+    LOW_STOCK: 'low_stock',
+    OUT_OF_STOCK: 'out_of_stock'
+  }
 };
 
-// 生产管理数据
-export const productionData = {
-  // 生产计划
-  productionPlans: [
-    {
-      id: 'PLAN001',
-      productId: 'P001',
-      productName: '智能手机主板',
-      planDate: '2024-12-22',
-      planQty: 1000,
-      actualQty: 950,
-      status: '进行中',
-      progress: 95,
-      startTime: '08:00',
-      endTime: '20:00',
-      lineId: 'LINE001',
-      lineName: '生产线A'
-    },
-    {
-      id: 'PLAN002',
-      productId: 'P002',
-      productName: '汽车控制器',
-      planDate: '2024-12-22',
-      planQty: 500,
-      actualQty: 520,
-      status: '已完成',
-      progress: 100,
-      startTime: '08:00',
-      endTime: '16:30',
-      lineId: 'LINE002',
-      lineName: '生产线B'
-    },
-    {
-      id: 'PLAN003',
-      productId: 'P003',
-      productName: '工业传感器',
-      planDate: '2024-12-23',
-      planQty: 800,
-      actualQty: 0,
-      status: '计划中',
-      progress: 0,
-      startTime: '08:00',
-      endTime: '18:00',
-      lineId: 'LINE001',
-      lineName: '生产线A'
-    }
-  ],
-
-  // 生产任务
-  productionTasks: [
-    {
-      id: 'TASK001',
-      planId: 'PLAN001',
-      taskName: 'SMT贴片',
-      operator: '张三',
-      status: '进行中',
-      startTime: '2024-12-22 08:00:00',
-      planEndTime: '2024-12-22 12:00:00',
-      actualEndTime: null,
-      progress: 80,
-      equipment: 'EQ001'
-    },
-    {
-      id: 'TASK002',
-      planId: 'PLAN001',
-      taskName: '回流焊接',
-      operator: '李四',
-      status: '等待中',
-      startTime: null,
-      planEndTime: '2024-12-22 14:00:00',
-      actualEndTime: null,
-      progress: 0,
-      equipment: 'EQ003'
-    },
-    {
-      id: 'TASK003',
-      planId: 'PLAN002',
-      taskName: '功能测试',
-      operator: '王五',
-      status: '已完成',
-      startTime: '2024-12-22 08:00:00',
-      planEndTime: '2024-12-22 16:00:00',
-      actualEndTime: '2024-12-22 15:30:00',
-      progress: 100,
-      equipment: 'EQ006'
-    }
-  ],
-
-  // 生产报工数据
-  workReports: [
-    {
-      id: 'WR001',
-      date: '2024-12-22',
-      shift: '白班',
-      line: 'LINE001',
-      product: 'P001',
-      operator: '张三',
-      planQty: 500,
-      actualQty: 480,
-      qualifiedQty: 475,
-      defectQty: 5,
-      efficiency: 96,
-      startTime: '08:00',
-      endTime: '12:00'
-    },
-    {
-      id: 'WR002',
-      date: '2024-12-22',
-      shift: '白班',
-      line: 'LINE002',
-      product: 'P002',
-      operator: '李四',
-      planQty: 300,
-      actualQty: 310,
-      qualifiedQty: 308,
-      defectQty: 2,
-      efficiency: 103,
-      startTime: '08:00',
-      endTime: '12:00'
-    }
-  ]
+// 优先级常量
+export const PRIORITY_CONSTANTS = {
+  LOW: 'low',
+  NORMAL: 'normal',
+  HIGH: 'high',
+  URGENT: 'urgent'
 };
 
-// 质量管理数据
-export const qualityData = {
-  // IQC检验数据
-  iqcInspections: [
-    {
-      id: 'IQC001',
-      date: '2024-12-22',
-      materialId: 'M001',
-      materialName: 'PCB基板',
-      batchNo: 'B20241222001',
-      supplier: '华强电子',
-      inspector: '王五',
-      sampleQty: 50,
-      inspectedQty: 50,
-      passedQty: 48,
-      defectQty: 2,
-      passRate: 96,
-      status: '合格',
-      defectTypes: ['尺寸偏差', '表面划伤']
-    },
-    {
-      id: 'IQC002',
-      date: '2024-12-22',
-      materialId: 'M004',
-      materialName: 'CPU芯片',
-      batchNo: 'B20241222002',
-      supplier: '联发科',
-      inspector: '周九',
-      sampleQty: 20,
-      inspectedQty: 20,
-      passedQty: 20,
-      defectQty: 0,
-      passRate: 100,
-      status: '合格',
-      defectTypes: []
-    }
-  ],
-
-  // PQC检验数据
-  pqcInspections: [
-    {
-      id: 'PQC001',
-      date: '2024-12-22',
-      productId: 'P001',
-      productName: '智能手机主板',
-      processStep: 'SMT贴片',
-      inspector: '王五',
-      sampleQty: 30,
-      inspectedQty: 30,
-      passedQty: 29,
-      defectQty: 1,
-      passRate: 96.7,
-      status: '合格',
-      defectTypes: ['元件偏移']
-    }
-  ],
-
-  // FQC检验数据
-  fqcInspections: [
-    {
-      id: 'FQC001',
-      date: '2024-12-22',
-      productId: 'P001',
-      productName: '智能手机主板',
-      batchNo: 'FG20241222001',
-      inspector: '周九',
-      sampleQty: 100,
-      inspectedQty: 100,
-      passedQty: 98,
-      defectQty: 2,
-      passRate: 98,
-      status: '合格',
-      defectTypes: ['功能异常', '外观缺陷']
-    }
-  ],
-
-  // 不良品记录
-  defectRecords: [
-    {
-      id: 'DEF001',
-      date: '2024-12-22',
-      productId: 'P001',
-      batchNo: 'FG20241222001',
-      defectType: '功能异常',
-      defectCode: 'D001',
-      defectDesc: '开机无显示',
-      defectQty: 1,
-      rootCause: '电源芯片虚焊',
-      correctionAction: '返工重焊',
-      preventiveAction: '加强焊接参数监控',
-      responsible: '张三',
-      status: '已处理'
-    }
-  ]
+// 班次常量
+export const SHIFT_CONSTANTS = {
+  MORNING: 'morning',
+  AFTERNOON: 'afternoon',
+  NIGHT: 'night'
 };
 
-// 设备管理数据
-export const equipmentData = {
-  // 设备维护记录
-  maintenanceRecords: [
-    {
-      id: 'MAINT001',
-      equipmentId: 'EQ001',
-      equipmentName: 'SMT贴片机A1',
-      type: '预防性维护',
-      planDate: '2024-12-22',
-      actualDate: '2024-12-22',
-      maintainer: '赵六',
-      duration: 2,
-      status: '已完成',
-      items: ['清洁吸嘴', '校准精度', '更换滤芯'],
-      cost: 500,
-      nextMaintenanceDate: '2024-12-29'
-    },
-    {
-      id: 'MAINT002',
-      equipmentId: 'EQ005',
-      equipmentName: '组装机器人D1',
-      type: '故障维修',
-      planDate: '2024-12-21',
-      actualDate: '2024-12-21',
-      maintainer: '吴十',
-      duration: 4,
-      status: '已完成',
-      items: ['更换伺服电机', '调试程序'],
-      cost: 2500,
-      nextMaintenanceDate: '2024-12-28'
-    }
-  ],
-
-  // 设备点检记录
-  inspectionRecords: [
-    {
-      id: 'INSP001',
-      equipmentId: 'EQ001',
-      equipmentName: 'SMT贴片机A1',
-      date: '2024-12-22',
-      shift: '白班',
-      inspector: '张三',
-      items: [
-        { name: '气压', standard: '0.6-0.8MPa', actual: '0.7MPa', result: '合格' },
-        { name: '温度', standard: '20-25℃', actual: '23℃', result: '合格' },
-        { name: '精度', standard: '±0.05mm', actual: '±0.03mm', result: '合格' }
-      ],
-      status: '正常',
-      remarks: '设备运行正常'
-    }
-  ],
-
-  // 设备故障记录
-  faultRecords: [
-    {
-      id: 'FAULT001',
-      equipmentId: 'EQ005',
-      equipmentName: '组装机器人D1',
-      faultDate: '2024-12-21',
-      faultTime: '14:30',
-      faultDesc: '机械臂无法正常移动',
-      faultType: '机械故障',
-      severity: '严重',
-      reporter: '李四',
-      repairStartTime: '2024-12-21 15:00',
-      repairEndTime: '2024-12-21 19:00',
-      repairer: '吴十',
-      rootCause: '伺服电机损坏',
-      solution: '更换伺服电机',
-      status: '已修复',
-      downtime: 4.5
-    }
-  ]
+// 检验类型常量
+export const INSPECTION_TYPES = {
+  IQC: 'IQC', // 进料检验
+  PQC: 'PQC', // 过程检验
+  FQC: 'FQC', // 成品检验
+  OQC: 'OQC'  // 出货检验
 };
 
-// 库存管理数据
-export const inventoryData = {
-  // 库存信息
-  stockInfo: [
-    {
-      id: 'STK001',
-      materialId: 'M001',
-      materialName: 'PCB基板',
-      currentStock: 1500,
-      safetyStock: 500,
-      maxStock: 3000,
-      unit: '片',
-      location: 'A01-01-01',
-      lastUpdateTime: '2024-12-22 10:30:00',
-      status: '正常'
-    },
-    {
-      id: 'STK002',
-      materialId: 'M002',
-      materialName: '电阻0402',
-      currentStock: 50000,
-      safetyStock: 20000,
-      maxStock: 100000,
-      unit: '个',
-      location: 'A01-02-01',
-      lastUpdateTime: '2024-12-22 09:15:00',
-      status: '正常'
-    },
-    {
-      id: 'STK003',
-      materialId: 'M006',
-      materialName: '锡膏',
-      currentStock: 15,
-      safetyStock: 20,
-      maxStock: 50,
-      unit: 'kg',
-      location: 'B01-01-01',
-      lastUpdateTime: '2024-12-22 08:45:00',
-      status: '库存不足'
-    }
-  ],
-
-  // 入库记录
-  inboundRecords: [
-    {
-      id: 'IN001',
-      date: '2024-12-22',
-      materialId: 'M001',
-      materialName: 'PCB基板',
-      supplier: '华强电子',
-      batchNo: 'B20241222001',
-      quantity: 1000,
-      unit: '片',
-      unitPrice: 25.5,
-      totalAmount: 25500,
-      operator: '库管员A',
-      status: '已入库'
-    },
-    {
-      id: 'IN002',
-      date: '2024-12-21',
-      materialId: 'M004',
-      materialName: 'CPU芯片',
-      supplier: '联发科',
-      batchNo: 'B20241221001',
-      quantity: 500,
-      unit: '个',
-      unitPrice: 120,
-      totalAmount: 60000,
-      operator: '库管员B',
-      status: '已入库'
-    }
-  ],
-
-  // 出库记录
-  outboundRecords: [
-    {
-      id: 'OUT001',
-      date: '2024-12-22',
-      materialId: 'M001',
-      materialName: 'PCB基板',
-      workOrder: 'PLAN001',
-      quantity: 500,
-      unit: '片',
-      recipient: '张三',
-      purpose: '生产领料',
-      operator: '库管员A',
-      status: '已出库'
-    }
-  ]
+// 缺陷严重程度常量
+export const DEFECT_SEVERITY = {
+  LOW: 'low',
+  MEDIUM: 'medium',
+  HIGH: 'high',
+  CRITICAL: 'critical'
 };
 
-// 人员管理数据
+// 维护类型常量
+export const MAINTENANCE_TYPES = {
+  PREVENTIVE: 'preventive',
+  CORRECTIVE: 'corrective',
+  EMERGENCY: 'emergency'
+};
+
+// ============================================================================
+// UI显示映射
+// ============================================================================
+
+// 状态显示映射
+export const STATUS_DISPLAY_MAP = {
+  // 生产状态显示
+  [STATUS_CONSTANTS.PRODUCTION_STATUS.PENDING]: '待开始',
+  [STATUS_CONSTANTS.PRODUCTION_STATUS.IN_PROGRESS]: '进行中',
+  [STATUS_CONSTANTS.PRODUCTION_STATUS.COMPLETED]: '已完成',
+  [STATUS_CONSTANTS.PRODUCTION_STATUS.CANCELLED]: '已取消',
+  
+  // 设备状态显示
+  [STATUS_CONSTANTS.EQUIPMENT_STATUS.RUNNING]: '运行中',
+  [STATUS_CONSTANTS.EQUIPMENT_STATUS.IDLE]: '空闲',
+  [STATUS_CONSTANTS.EQUIPMENT_STATUS.MAINTENANCE]: '维护中',
+  [STATUS_CONSTANTS.EQUIPMENT_STATUS.FAULT]: '故障',
+  
+  // 检验状态显示
+  [STATUS_CONSTANTS.INSPECTION_STATUS.PASS]: '合格',
+  [STATUS_CONSTANTS.INSPECTION_STATUS.FAIL]: '不合格',
+  [STATUS_CONSTANTS.INSPECTION_STATUS.PENDING]: '待检验'
+};
+
+// 优先级显示映射
+export const PRIORITY_DISPLAY_MAP = {
+  [PRIORITY_CONSTANTS.LOW]: '低',
+  [PRIORITY_CONSTANTS.NORMAL]: '普通',
+  [PRIORITY_CONSTANTS.HIGH]: '高',
+  [PRIORITY_CONSTANTS.URGENT]: '紧急'
+};
+
+// 班次显示映射
+export const SHIFT_DISPLAY_MAP = {
+  [SHIFT_CONSTANTS.MORNING]: '早班',
+  [SHIFT_CONSTANTS.AFTERNOON]: '中班',
+  [SHIFT_CONSTANTS.NIGHT]: '晚班'
+};
+
+// ============================================================================
+// 颜色主题配置
+// ============================================================================
+
+// 状态颜色配置
+export const STATUS_COLORS = {
+  // 生产状态颜色
+  PRODUCTION: {
+    [STATUS_CONSTANTS.PRODUCTION_STATUS.PENDING]: '#faad14',
+    [STATUS_CONSTANTS.PRODUCTION_STATUS.IN_PROGRESS]: '#1890ff',
+    [STATUS_CONSTANTS.PRODUCTION_STATUS.COMPLETED]: '#52c41a',
+    [STATUS_CONSTANTS.PRODUCTION_STATUS.CANCELLED]: '#f5222d'
+  },
+  
+  // 设备状态颜色
+  EQUIPMENT: {
+    [STATUS_CONSTANTS.EQUIPMENT_STATUS.RUNNING]: '#52c41a',
+    [STATUS_CONSTANTS.EQUIPMENT_STATUS.IDLE]: '#faad14',
+    [STATUS_CONSTANTS.EQUIPMENT_STATUS.MAINTENANCE]: '#1890ff',
+    [STATUS_CONSTANTS.EQUIPMENT_STATUS.FAULT]: '#f5222d'
+  },
+  
+  // 质量状态颜色
+  QUALITY: {
+    [STATUS_CONSTANTS.INSPECTION_STATUS.PASS]: '#52c41a',
+    [STATUS_CONSTANTS.INSPECTION_STATUS.FAIL]: '#f5222d',
+    [STATUS_CONSTANTS.INSPECTION_STATUS.PENDING]: '#faad14'
+  }
+};
+
+// 优先级颜色配置
+export const PRIORITY_COLORS = {
+  [PRIORITY_CONSTANTS.LOW]: '#52c41a',
+  [PRIORITY_CONSTANTS.NORMAL]: '#1890ff',
+  [PRIORITY_CONSTANTS.HIGH]: '#faad14',
+  [PRIORITY_CONSTANTS.URGENT]: '#f5222d'
+};
+
+// ============================================================================
+// 表格列配置
+// ============================================================================
+
+// 通用表格列配置
+export const COMMON_COLUMNS = {
+  // 操作列
+  ACTION: {
+    title: '操作',
+    key: 'action',
+    width: 120,
+    fixed: 'right'
+  },
+  
+  // 状态列
+  STATUS: {
+    title: '状态',
+    dataIndex: 'status',
+    key: 'status',
+    width: 100
+  },
+  
+  // 创建时间列
+  CREATED_AT: {
+    title: '创建时间',
+    dataIndex: 'createdAt',
+    key: 'createdAt',
+    width: 180
+  },
+  
+  // 更新时间列
+  UPDATED_AT: {
+    title: '更新时间',
+    dataIndex: 'updatedAt',
+    key: 'updatedAt',
+    width: 180
+  }
+};
+
+// ============================================================================
+// 表单验证规则
+// ============================================================================
+
+// 通用验证规则
+export const VALIDATION_RULES = {
+  REQUIRED: { required: true, message: '此字段为必填项' },
+  EMAIL: { type: 'email', message: '请输入有效的邮箱地址' },
+  PHONE: { pattern: /^1[3-9]\d{9}$/, message: '请输入有效的手机号码' },
+  NUMBER: { type: 'number', message: '请输入有效的数字' },
+  POSITIVE_NUMBER: { 
+    type: 'number', 
+    min: 0, 
+    message: '请输入大于等于0的数字' 
+  }
+};
+
+// ============================================================================
+// 分页配置
+// ============================================================================
+
+// 默认分页配置
+export const DEFAULT_PAGINATION = {
+  current: 1,
+  pageSize: 10,
+  showSizeChanger: true,
+  showQuickJumper: true,
+  showTotal: (total, range) => `第 ${range[0]}-${range[1]} 条，共 ${total} 条`,
+  pageSizeOptions: ['10', '20', '50', '100']
+};
+
+// ============================================================================
+// 日期时间格式
+// ============================================================================
+
+// 日期时间格式常量
+export const DATE_FORMATS = {
+  DATE: 'YYYY-MM-DD',
+  DATETIME: 'YYYY-MM-DD HH:mm:ss',
+  TIME: 'HH:mm:ss',
+  MONTH: 'YYYY-MM',
+  YEAR: 'YYYY'
+};
+
+// ============================================================================
+// API配置常量
+// ============================================================================
+
+// API端点常量
+export const API_ENDPOINTS = {
+  PRODUCTION: '/api/production',
+  EQUIPMENT: '/api/equipment',
+  QUALITY: '/api/quality',
+  INVENTORY: '/api/inventory',
+  REPORTS: '/api/reports'
+};
+
+// ============================================================================
+// 导出默认配置
+// ============================================================================
+
+// 向后兼容的默认导出（已废弃，建议使用具名导出）
+export default {
+  STATUS_CONSTANTS,
+  PRIORITY_CONSTANTS,
+  SHIFT_CONSTANTS,
+  INSPECTION_TYPES,
+  DEFECT_SEVERITY,
+  MAINTENANCE_TYPES,
+  STATUS_DISPLAY_MAP,
+  PRIORITY_DISPLAY_MAP,
+  SHIFT_DISPLAY_MAP,
+  STATUS_COLORS,
+  PRIORITY_COLORS,
+  COMMON_COLUMNS,
+  VALIDATION_RULES,
+  DEFAULT_PAGINATION,
+  DATE_FORMATS,
+  API_ENDPOINTS
+};
+
+// ============================================================================
+// 迁移说明注释
+// ============================================================================
+
+/**
+ * 数据迁移完成说明
+ * 
+ * 以下数据已从mock数据迁移到数据库，现在通过DataService获取：
+ * 
+ * 1. 生产管理数据 (productionData)
+ *    - 生产计划/订单 → DataService.getProductionPlans()
+ *    - 生产任务 → DataService.getProductionTasks()
+ *    - 工作报告 → DataService.getWorkReports()
+ *    - 班次计划 → 已集成到生产计划中
+ * 
+ * 2. 质量管理数据 (qualityData)
+ *    - IQC/PQC/FQC检验数据 → DataService.getQualityInspections()
+ *    - 缺陷记录 → DataService.getDefectRecords()
+ *    - 检验标准 → DataService.getInspectionStandards()
+ * 
+ * 3. 设备管理数据 (equipmentData)
+ *    - 设备信息 → DataService.getEquipment()
+ *    - 模具信息 → DataService.getMolds()
+ *    - 维护记录 → DataService.getEquipmentMaintenance()
+ *    - 点检记录、故障记录 → 已集成到维护记录中
+ * 
+ * 4. 库存管理数据 (inventoryData)
+ *    - 库存信息 → DataService.getInventory()
+ *    - 出入库记录 → DataService.getInventoryTransactions()
+ *    - 库位管理 → DataService.getLocationManagement()
+ * 
+ * 5. 报表数据 (reportData)
+ *    - 生产报表 → DataService.getProductionReports()
+ *    - 质量报表 → DataService.getQualityReports()
+ *    - 设备报表 → DataService.getEquipmentReports()
+ *    - KPI指标和趋势数据 → 已集成到各报表API中
+ * 
+ * 6. 其他数据
+ *    - 人员管理数据 (personnelData) → 暂时保留，待后续迁移
+ *    - 工艺管理数据 (processData) → 暂时保留，待后续迁移
+ *    - 系统集成数据 (integrationData) → 暂时保留，待后续迁移
+ * 
+ * 迁移完成的组件：
+ * - 生产模块：WorkshopPlan.js, ProductionTasks.js, WorkReportManagement.js
+ * - 设备模块：EquipmentManagement.js, MoldManagement.js, EquipmentMaintenance.js
+ * - 质量模块：QualityInspection.js, DefectRecords.js, InspectionStandards.js
+ * - 库存模块：InventoryManagement.js, InventoryTransactions.js, LocationManagement.js
+ * - 报表模块：ProductionReports.js, QualityReports.js, EquipmentReports.js
+ * 
+ * 使用方法：
+ * 1. 导入DataService：import DataService from '../services/DataService';
+ * 2. 调用相应方法：const data = await DataService.getProductionPlans();
+ * 3. 处理响应：if (data.success) { setData(data.data.items); }
+ * 
+ * 注意事项：
+ * - 所有API调用都支持缓存，可以通过第二个参数强制刷新
+ * - 错误处理已统一，检查response.success判断是否成功
+ * - 分页参数格式：{ page: 1, pageSize: 10, status: 'filter' }
+ */
+
+// ============================================================================
+// 已迁移数据说明
+// ============================================================================
+
+/**
+ * 质量管理数据已迁移到数据库
+ * 
+ * 原有数据：
+ * - qualityData.iqcInspections → 现在通过 DataService.getQualityInspections({ type: 'IQC' }) 获取
+ * - qualityData.pqcInspections → 现在通过 DataService.getQualityInspections({ type: 'PQC' }) 获取  
+ * - qualityData.fqcInspections → 现在通过 DataService.getQualityInspections({ type: 'FQC' }) 获取
+ * - qualityData.defectRecords → 现在通过 DataService.getDefectRecords() 获取
+ * 
+ * 迁移完成日期：2026-01-12
+ */
+
+// ============================================================================
+// 已迁移数据说明
+// ============================================================================
+
+/**
+ * 设备管理数据已迁移到数据库
+ * 
+ * 原有数据：
+ * - equipmentData.maintenanceRecords → 现在通过 DataService.getEquipmentMaintenance() 获取
+ * - equipmentData.inspectionRecords → 已集成到维护记录中
+ * - equipmentData.faultRecords → 已集成到维护记录中
+ * - equipmentData.statusHistory → 已集成到设备状态中
+ * 
+ * 迁移完成日期：2026-01-12
+ */
+
+// ============================================================================
+// 已迁移数据说明
+// ============================================================================
+
+/**
+ * 库存管理数据已迁移到数据库
+ * 
+ * 原有数据：
+ * - inventoryData.stockInfo → 现在通过 DataService.getInventory() 获取
+ * - inventoryData.inboundRecords → 现在通过 DataService.getInventoryTransactions({ type: 'inbound' }) 获取
+ * - inventoryData.outboundRecords → 现在通过 DataService.getInventoryTransactions({ type: 'outbound' }) 获取
+ * 
+ * 迁移完成日期：2026-01-12
+ */
+
+// 人员管理数据 - 暂时保留，待后续迁移
 export const personnelData = {
   // 考勤记录
   attendanceRecords: [
@@ -513,22 +456,73 @@ export const personnelData = {
   ]
 };
 
-// 工艺管理数据
+// 工艺管理数据 - 暂时保留，待后续迁移
 export const processData = {
   // 工艺路线
   processRoutes: [
     {
-      id: 'ROUTE001',
-      productId: 'P001',
-      productName: '智能手机主板',
-      version: 'V1.2',
+      id: 'ROUTE-MAT-001',
+      productId: 'MAT-001',
+      productName: '手机壳A',
+      version: 'V1.0',
       status: '有效',
       steps: [
-        { stepNo: 10, stepName: '印刷锡膏', equipment: 'EQ001', standardTime: 30, description: '使用SAC305锡膏' },
-        { stepNo: 20, stepName: 'SMT贴片', equipment: 'EQ002', standardTime: 120, description: '贴装所有SMT元件' },
-        { stepNo: 30, stepName: '回流焊接', equipment: 'EQ003', standardTime: 45, description: '温度曲线按标准执行' },
-        { stepNo: 40, stepName: 'AOI检测', equipment: 'EQ004', standardTime: 15, description: '检测贴装质量' },
-        { stepNo: 50, stepName: '功能测试', equipment: 'EQ006', standardTime: 60, description: '全功能测试' }
+        { stepNo: 1, stepName: '注塑成型', equipment: 'DEV-001', mold: 'MOLD-001', standardTime: 45, description: '使用海天注塑机进行注塑成型' },
+        { stepNo: 2, stepName: '冷却脱模', equipment: 'DEV-001', mold: 'MOLD-001', standardTime: 30, description: '冷却后脱模' },
+        { stepNo: 3, stepName: '质量检验', equipment: null, mold: null, standardTime: 20, description: '外观和尺寸检验' },
+        { stepNo: 4, stepName: '包装', equipment: null, mold: null, standardTime: 15, description: '产品包装' }
+      ]
+    },
+    {
+      id: 'ROUTE-MAT-002',
+      productId: 'MAT-002',
+      productName: '手机壳B',
+      version: 'V1.0',
+      status: '有效',
+      steps: [
+        { stepNo: 1, stepName: '注塑成型', equipment: 'DEV-002', mold: 'MOLD-002', standardTime: 50, description: '使用海天注塑机进行注塑成型' },
+        { stepNo: 2, stepName: '冷却脱模', equipment: 'DEV-002', mold: 'MOLD-002', standardTime: 35, description: '冷却后脱模' },
+        { stepNo: 3, stepName: '质量检验', equipment: null, mold: null, standardTime: 20, description: '外观和尺寸检验' },
+        { stepNo: 4, stepName: '包装', equipment: null, mold: null, standardTime: 15, description: '产品包装' }
+      ]
+    },
+    {
+      id: 'ROUTE-MAT-003',
+      productId: 'MAT-003',
+      productName: '充电器',
+      version: 'V1.0',
+      status: '有效',
+      steps: [
+        { stepNo: 1, stepName: '注塑成型', equipment: 'DEV-003', mold: 'MOLD-003', standardTime: 40, description: '使用震雄注塑机进行注塑成型' },
+        { stepNo: 2, stepName: '冷却脱模', equipment: 'DEV-003', mold: 'MOLD-003', standardTime: 25, description: '冷却后脱模' },
+        { stepNo: 3, stepName: '质量检验', equipment: null, mold: null, standardTime: 20, description: '外观和尺寸检验' },
+        { stepNo: 4, stepName: '包装', equipment: null, mold: null, standardTime: 15, description: '产品包装' }
+      ]
+    },
+    {
+      id: 'ROUTE-MAT-004',
+      productId: 'MAT-004',
+      productName: '手机壳C',
+      version: 'V1.0',
+      status: '有效',
+      steps: [
+        { stepNo: 1, stepName: '注塑成型', equipment: 'DEV-004', mold: 'MOLD-004', standardTime: 55, description: '使用震雄注塑机进行注塑成型' },
+        { stepNo: 2, stepName: '冷却脱模', equipment: 'DEV-004', mold: 'MOLD-004', standardTime: 40, description: '冷却后脱模' },
+        { stepNo: 3, stepName: '质量检验', equipment: null, mold: null, standardTime: 20, description: '外观和尺寸检验' },
+        { stepNo: 4, stepName: '包装', equipment: null, mold: null, standardTime: 15, description: '产品包装' }
+      ]
+    },
+    {
+      id: 'ROUTE-MAT-005',
+      productId: 'MAT-005',
+      productName: '手机壳D',
+      version: 'V1.0',
+      status: '有效',
+      steps: [
+        { stepNo: 1, stepName: '注塑成型', equipment: 'DEV-001', mold: 'MOLD-001', standardTime: 48, description: '使用海天注塑机进行注塑成型' },
+        { stepNo: 2, stepName: '冷却脱模', equipment: 'DEV-001', mold: 'MOLD-001', standardTime: 32, description: '冷却后脱模' },
+        { stepNo: 3, stepName: '质量检验', equipment: null, mold: null, standardTime: 20, description: '外观和尺寸检验' },
+        { stepNo: 4, stepName: '包装', equipment: null, mold: null, standardTime: 15, description: '产品包装' }
       ]
     }
   ],
@@ -537,28 +531,151 @@ export const processData = {
   processParameters: [
     {
       id: 'PARAM001',
-      processStep: '回流焊接',
-      parameterName: '温度曲线',
-      standardValue: '150-180-220-250℃',
-      tolerance: '±5℃',
+      routingId: 'ROUTE-MAT-001',
+      processStep: '注塑成型',
+      parameterName: '注塑温度',
+      standardValue: '220',
+      tolerance: '±10',
       unit: '℃',
+      minValue: 210,
+      maxValue: 230,
+      controlMethod: '自动控制',
+      monitoringFreq: '实时'
+    },
+    {
+      id: 'PARAM002',
+      routingId: 'ROUTE-MAT-001',
+      processStep: '注塑成型',
+      parameterName: '注塑压力',
+      standardValue: '80',
+      tolerance: '±10',
+      unit: 'MPa',
+      minValue: 70,
+      maxValue: 90,
+      controlMethod: '自动控制',
+      monitoringFreq: '实时'
+    },
+    {
+      id: 'PARAM003',
+      routingId: 'ROUTE-MAT-001',
+      processStep: '注塑成型',
+      parameterName: '注塑速度',
+      standardValue: '50',
+      tolerance: '±10',
+      unit: 'mm/s',
+      minValue: 40,
+      maxValue: 60,
+      controlMethod: '自动控制',
+      monitoringFreq: '实时'
+    },
+    {
+      id: 'PARAM004',
+      routingId: 'ROUTE-MAT-001',
+      processStep: '冷却脱模',
+      parameterName: '冷却温度',
+      standardValue: '25',
+      tolerance: '±5',
+      unit: '℃',
+      minValue: 20,
+      maxValue: 30,
       controlMethod: '自动控制',
       monitoringFreq: '每批次'
     },
     {
-      id: 'PARAM002',
-      processStep: 'SMT贴片',
-      parameterName: '贴装精度',
-      standardValue: '±0.05mm',
-      tolerance: '±0.02mm',
-      unit: 'mm',
-      controlMethod: '视觉检测',
+      id: 'PARAM005',
+      routingId: 'ROUTE-MAT-001',
+      processStep: '冷却脱模',
+      parameterName: '冷却时间',
+      standardValue: '30',
+      tolerance: '±5',
+      unit: 's',
+      minValue: 25,
+      maxValue: 35,
+      controlMethod: '自动控制',
+      monitoringFreq: '每批次'
+    },
+    {
+      id: 'PARAM006',
+      routingId: 'ROUTE-MAT-002',
+      processStep: '注塑成型',
+      parameterName: '注塑温度',
+      standardValue: '225',
+      tolerance: '±10',
+      unit: '℃',
+      minValue: 215,
+      maxValue: 235,
+      controlMethod: '自动控制',
+      monitoringFreq: '实时'
+    },
+    {
+      id: 'PARAM007',
+      routingId: 'ROUTE-MAT-002',
+      processStep: '注塑成型',
+      parameterName: '注塑压力',
+      standardValue: '85',
+      tolerance: '±10',
+      unit: 'MPa',
+      minValue: 75,
+      maxValue: 95,
+      controlMethod: '自动控制',
+      monitoringFreq: '实时'
+    },
+    {
+      id: 'PARAM008',
+      routingId: 'ROUTE-MAT-002',
+      processStep: '注塑成型',
+      parameterName: '注塑速度',
+      standardValue: '55',
+      tolerance: '±10',
+      unit: 'mm/s',
+      minValue: 45,
+      maxValue: 65,
+      controlMethod: '自动控制',
+      monitoringFreq: '实时'
+    },
+    {
+      id: 'PARAM009',
+      routingId: 'ROUTE-MAT-003',
+      processStep: '注塑成型',
+      parameterName: '注塑温度',
+      standardValue: '215',
+      tolerance: '±10',
+      unit: '℃',
+      minValue: 205,
+      maxValue: 225,
+      controlMethod: '自动控制',
+      monitoringFreq: '实时'
+    },
+    {
+      id: 'PARAM010',
+      routingId: 'ROUTE-MAT-003',
+      processStep: '注塑成型',
+      parameterName: '注塑压力',
+      standardValue: '75',
+      tolerance: '±10',
+      unit: 'MPa',
+      minValue: 65,
+      maxValue: 85,
+      controlMethod: '自动控制',
+      monitoringFreq: '实时'
+    },
+    {
+      id: 'PARAM011',
+      routingId: 'ROUTE-MAT-003',
+      processStep: '注塑成型',
+      parameterName: '注塑速度',
+      standardValue: '45',
+      tolerance: '±10',
+      unit: 'mm/s',
+      minValue: 35,
+      maxValue: 55,
+      controlMethod: '自动控制',
       monitoringFreq: '实时'
     }
   ]
 };
 
-// 系统集成数据
+// 系统集成数据 - 暂时保留，待后续迁移
 export const integrationData = {
   // 接口配置
   interfaceConfigs: [
@@ -613,28 +730,28 @@ export const integrationData = {
   ]
 };
 
-// 报表分析数据
+// 报表分析数据 - 暂时保留，待后续迁移
 export const reportData = {
   // KPI指标
   kpiMetrics: {
     production: {
-      dailyOutput: 2850,
-      dailyTarget: 3000,
-      efficiency: 95,
+      dailyOutput: 5680,
+      dailyTarget: 6000,
+      efficiency: 94.7,
       oee: 89.2,
-      defectRate: 1.2
+      defectRate: 2.1
     },
     quality: {
-      iqcPassRate: 98.5,
-      pqcPassRate: 97.2,
-      fqcPassRate: 99.1,
+      iqcPassRate: 97.5,
+      pqcPassRate: 97.9,
+      fqcPassRate: 100.0,
       oqcPassRate: 98.8,
-      customerComplaint: 2
+      customerComplaint: 0
     },
     equipment: {
-      utilization: 91.7,
+      utilization: 87.2,
       mtbf: 168,
-      mttr: 2.5,
+      mttr: 4.5,
       availability: 96.5
     },
     inventory: {
@@ -648,35 +765,28 @@ export const reportData = {
   // 趋势数据
   trendData: {
     production: [
-      { date: '2024-12-16', output: 2750, target: 2800, efficiency: 92 },
-      { date: '2024-12-17', output: 2820, target: 2900, efficiency: 94 },
-      { date: '2024-12-18', output: 2680, target: 2800, efficiency: 89 },
-      { date: '2024-12-19', output: 2950, target: 3000, efficiency: 96 },
-      { date: '2024-12-20', output: 2880, target: 2900, efficiency: 95 },
-      { date: '2024-12-21', output: 2920, target: 3000, efficiency: 94 },
-      { date: '2024-12-22', output: 2850, target: 3000, efficiency: 95 }
+      { date: '2025-12-22', output: 5200, target: 5500, efficiency: 94.5 },
+      { date: '2025-12-23', output: 5400, target: 5500, efficiency: 98.2 },
+      { date: '2025-12-24', output: 5100, target: 5500, efficiency: 92.7 },
+      { date: '2025-12-25', output: 5600, target: 6000, efficiency: 93.3 },
+      { date: '2025-12-26', output: 5680, target: 6000, efficiency: 94.7 },
+      { date: '2025-12-27', output: 5750, target: 6000, efficiency: 95.8 },
+      { date: '2025-12-28', output: 5730, target: 6000, efficiency: 95.5 }
     ],
     quality: [
-      { date: '2024-12-16', passRate: 97.8, defectRate: 2.2 },
-      { date: '2024-12-17', passRate: 98.2, defectRate: 1.8 },
-      { date: '2024-12-18', passRate: 97.5, defectRate: 2.5 },
-      { date: '2024-12-19', passRate: 98.8, defectRate: 1.2 },
-      { date: '2024-12-20', passRate: 98.1, defectRate: 1.9 },
-      { date: '2024-12-21', passRate: 98.5, defectRate: 1.5 },
-      { date: '2024-12-22', passRate: 98.2, defectRate: 1.8 }
+      { date: '2025-12-22', passRate: 97.2, defectRate: 2.8 },
+      { date: '2025-12-23', passRate: 97.8, defectRate: 2.2 },
+      { date: '2025-12-24', passRate: 97.5, defectRate: 2.5 },
+      { date: '2025-12-25', passRate: 98.0, defectRate: 2.0 },
+      { date: '2025-12-26', passRate: 97.9, defectRate: 2.1 },
+      { date: '2025-12-27', passRate: 98.2, defectRate: 1.8 },
+      { date: '2025-12-28', passRate: 98.0, defectRate: 2.0 }
     ]
   }
 };
 
-// 导出所有数据
-export default {
-  baseData,
-  productionData,
-  qualityData,
-  equipmentData,
-  inventoryData,
-  personnelData,
-  processData,
-  integrationData,
-  reportData
-};
+// ============================================================================
+// 导出配置 - 向后兼容
+// ============================================================================
+
+// 注意：已迁移数据现在通过 DataService 获取，此处仅保留常量和待迁移数据

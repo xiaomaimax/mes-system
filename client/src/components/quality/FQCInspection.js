@@ -1,32 +1,126 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form, InputNumber } from 'antd';
-import { PlusOutlined, SearchOutlined, CheckSquareOutlined, EditOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form, InputNumber, message, Spin } from 'antd';
 
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import { PlusOutlined, SearchOutlined, CheckSquareOutlined, EditOutlined, ReloadOutlined } from '@ant-design/icons';
+
+import ButtonActions from '../../utils/buttonActions';
+import { QualityAPI } from '../../services/api';
 const FQCInspection = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
 
-  // 模拟数据
-  const fqcData = [
-    {
-      key: '1',
-      inspectionId: 'FQC-2024-001',
-      productionOrderNo: 'PO-2024-001',
-      productCode: 'PROD-A001',
-      productName: '产品A',
-      batchNo: 'BATCH-A001',
-      inspectionDate: '2024-01-15',
-      inspector: '张三',
-      totalQuantity: 1000,
-      sampleQuantity: 50,
-      qualifiedQuantity: 48,
-      defectiveQuantity: 2,
-      qualityRate: 96.0,
-      result: 'pass',
-      status: 'completed'
+  // 从数据库加载的数据
+  const [fqcData, setFqcData] = useState([]);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0
+  });
+
+  // 从数据库加载FQC检验数据
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const response = await QualityAPI.getFQCInspections({
+        page: pagination.current,
+        limit: pagination.pageSize
+      });
+      
+      if (response.success || response.code === 200) {
+        // 转换数据格式以适配表格
+        const formattedData = response.data.map((item, index) => ({
+          key: item.id || index,
+          id: item.id,
+          inspectionId: item.inspection_id,
+          productionOrderNo: `PO-${item.batch_number}`,
+          productCode: `PROD-${item.product_name.charAt(item.product_name.length - 1)}001`,
+          productName: item.product_name,
+          batchNo: item.batch_number,
+          inspectionDate: item.inspection_date,
+          inspector: item.inspector,
+          totalQuantity: item.inspection_qty * 20, // 假设总数是检验数量的20倍
+          sampleQuantity: item.inspection_qty,
+          qualifiedQuantity: item.qualified_qty,
+          defectiveQuantity: item.inspection_qty - item.qualified_qty,
+          qualityRate: item.pass_rate,
+          result: item.inspection_result,
+          status: item.status
+        }));
+        
+        setFqcData(formattedData);
+        if (response.pagination) {
+          setPagination(prev => ({
+            ...prev,
+            total: response.pagination.total
+          }));
+        }
+        safeMessage.success(`成功加载 ${formattedData.length} 条FQC检验数据`);
+      }
+    } catch (error) {
+      console.error('加载FQC检验数据失败:', error);
+      safeMessage.error('加载数据失败，请检查后端服务');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  // 组件加载时获取数据
+  useEffect(() => {
+    loadData();
+  }, [pagination.current, pagination.pageSize]);
 
   const columns = [
     {
@@ -120,7 +214,7 @@ const FQCInspection = () => {
       width: 150,
       render: (_, record) => (
         <Space size="small">
-          <Button type="link" size="small" icon={<EditOutlined />}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />}>
             编辑
           </Button>
           <Button type="link" size="small">详情</Button>
@@ -128,6 +222,12 @@ const FQCInspection = () => {
       ),
     },
   ];
+  const handleEdit = (record) => {
+    setEditingRecord(record);
+    form.setFieldsValue(record);
+    setModalVisible(true);
+  };
+
 
   return (
     <div>
@@ -139,9 +239,14 @@ const FQCInspection = () => {
           </Space>
         }
         extra={
-          <Button type="primary" icon={<PlusOutlined />}>
-            新建检验单
-          </Button>
+          <Space>
+            <Button icon={<ReloadOutlined />} onClick={loadData}>
+              刷新
+            </Button>
+            <Button type="primary" icon={<PlusOutlined />}>
+              新建检验单
+            </Button>
+          </Space>
         }
       >
         <Table
@@ -149,9 +254,19 @@ const FQCInspection = () => {
           dataSource={fqcData}
           loading={loading}
           pagination={{
-            total: fqcData.length,
-            pageSize: 10,
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total: pagination.total,
+            showSizeChanger: true,
+            showQuickJumper: true,
             showTotal: (total) => `共 ${total} 条记录`,
+            onChange: (page, pageSize) => {
+              setPagination(prev => ({
+                ...prev,
+                current: page,
+                pageSize: pageSize
+              }));
+            }
           }}
         />
       </Card>

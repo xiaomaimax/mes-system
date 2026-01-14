@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import ButtonActions from '../../utils/buttonActions';
+import { baseData, productionData } from '../../data/mockData';
 import { 
   Card, 
   Table, 
@@ -23,8 +25,7 @@ import {
   List,
   Avatar
 } from 'antd';
-import { 
-  DatabaseOutlined, 
+import {   DatabaseOutlined, 
   SearchOutlined, 
   EditOutlined, 
   DeleteOutlined, 
@@ -43,6 +44,7 @@ import {
 const { TextArea } = Input;
 
 const ProductionMasterDataManagement = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('products');
   const [modalVisible, setModalVisible] = useState(false);
@@ -264,8 +266,7 @@ const ProductionMasterDataManagement = () => {
           >
             详情
           </Button>
-          <Button 
-            type="link" 
+          <Button onClick={() => handleEdit(record)} type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
@@ -279,8 +280,7 @@ const ProductionMasterDataManagement = () => {
           >
             复制
           </Button>
-          <Button 
-            type="link" 
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" 
             size="small" 
             icon={<DeleteOutlined />} 
             danger
@@ -489,29 +489,29 @@ const ProductionMasterDataManagement = () => {
       
       // 验证产品编码格式
       if (values.productCode && !validateProductCode(values.productCode)) {
-        message.error('产品编码格式不正确，应为：XXX-XXXXXX（如：INJ-123456）');
+        safeMessage.error('产品编码格式不正确，应为：XXX-XXXXXX（如：INJ-123456）');
         return;
       }
 
       // 验证成本和价格
       if (values.standardCost && values.sellingPrice && values.standardCost >= values.sellingPrice) {
-        message.warning('销售价格应大于标准成本');
+        safeMessage.warning('销售价格应大于标准成本');
       }
 
       // 验证库存设置
       if (values.safetyStock && values.maxStock && values.safetyStock >= values.maxStock) {
-        message.error('安全库存不能大于等于最大库存');
+        safeMessage.error('安全库存不能大于等于最大库存');
         return;
       }
 
       console.log('提交主数据:', values);
-      message.success('主数据保存成功！');
+      safeMessage.success('主数据保存成功！');
       setModalVisible(false);
       form.resetFields();
       setSelectedRecord(null);
     } catch (error) {
       console.error('提交失败:', error);
-      message.error('保存失败，请重试！');
+      safeMessage.error('保存失败，请重试！');
     } finally {
       setLoading(false);
     }
@@ -693,8 +693,7 @@ const ProductionMasterDataManagement = () => {
             >
               详情
             </Button>
-            <Button 
-              type="link" 
+            <Button onClick={() => handleEdit(record)} type="link" 
               size="small" 
               icon={<EditOutlined />}
             >
@@ -707,8 +706,7 @@ const ProductionMasterDataManagement = () => {
             >
               复制
             </Button>
-            <Button 
-              type="link" 
+            <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" 
               size="small" 
               icon={<DeleteOutlined />} 
               danger
@@ -854,8 +852,7 @@ const ProductionMasterDataManagement = () => {
             >
               详情
             </Button>
-            <Button 
-              type="link" 
+            <Button onClick={() => handleEdit(record)} type="link" 
               size="small" 
               icon={<EditOutlined />}
             >
@@ -868,8 +865,7 @@ const ProductionMasterDataManagement = () => {
             >
               配置
             </Button>
-            <Button 
-              type="link" 
+            <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" 
               size="small" 
               icon={<DeleteOutlined />} 
               danger
@@ -1028,8 +1024,7 @@ const ProductionMasterDataManagement = () => {
             >
               详情
             </Button>
-            <Button 
-              type="link" 
+            <Button onClick={() => handleEdit(record)} type="link" 
               size="small" 
               icon={<EditOutlined />}
             >
@@ -1049,8 +1044,7 @@ const ProductionMasterDataManagement = () => {
             >
               导出
             </Button>
-            <Button 
-              type="link" 
+            <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" 
               size="small" 
               icon={<DeleteOutlined />} 
               danger
@@ -1277,7 +1271,7 @@ const ProductionMasterDataManagement = () => {
                           const code = generateProductCode(productType);
                           form.setFieldsValue({ productCode: code });
                         } else {
-                          message.warning('请先选择产品类型');
+                          safeMessage.warning('请先选择产品类型');
                         }
                       }}
                     >

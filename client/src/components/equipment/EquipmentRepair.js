@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Modal, Form, InputNumber, Steps, Upload, Descriptions, Row, Col, Statistic, Timeline, Progress, Divider } from 'antd';
 import { PlusOutlined, SearchOutlined, ToolOutlined, EditOutlined, EyeOutlined, UploadOutlined, ClockCircleOutlined, ExclamationCircleOutlined, CheckCircleOutlined, UserOutlined, WarningOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const { TextArea } = Input;
 const { Step } = Steps;
 
 const EquipmentRepair = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
@@ -145,10 +147,10 @@ const EquipmentRepair = () => {
           medium: { color: 'blue', text: '中', icon: <ClockCircleOutlined /> },
           low: { color: 'green', text: '低', icon: <CheckCircleOutlined /> }
         };
-        const { color, text, icon } = priorityMap[priority];
+        const priorityInfo = priorityMap[priority] || { color: 'default', text: priority || '未知', icon: null };
         return (
-          <Tag color={color} icon={icon}>
-            {text}
+          <Tag color={priorityInfo.color} icon={priorityInfo.icon}>
+            {priorityInfo.text}
           </Tag>
         );
       }
@@ -221,8 +223,8 @@ const EquipmentRepair = () => {
           completed: { color: 'success', text: '已完成' },
           cancelled: { color: 'error', text: '已取消' }
         };
-        const { color, text } = statusMap[status];
-        return <Tag color={color}>{text}</Tag>;
+        const statusInfo = statusMap[status] || { color: 'default', text: status || '未知' };
+        return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
       }
     },
     {

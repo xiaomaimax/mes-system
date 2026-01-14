@@ -7,6 +7,7 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 const APIDocumentation = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [activeTab, setActiveTab] = useState('rest-api');
 
   // API文档数据
@@ -284,6 +285,7 @@ public class MESIntegrationService {
 import requests
 import json
 
+import ButtonActions from '../../utils/buttonActions';
 def create_production_order():
     url = "http://mes.company.com/api/v1/production-orders"
     

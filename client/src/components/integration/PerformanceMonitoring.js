@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Card, Row, Col, Statistic, Table, Select, DatePicker, Button, Space, Tag } from 'antd';
 import { ThunderboltOutlined, ClockCircleOutlined, TrophyOutlined, WarningOutlined, ReloadOutlined, DownloadOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 const PerformanceMonitoring = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [selectedTimeRange, setSelectedTimeRange] = useState('today');
 
   // 性能数据

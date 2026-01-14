@@ -1,10 +1,65 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Space, Modal, Form, Input, Select, InputNumber, Tag, message, Row, Col, Steps, Divider, Tree, Descriptions, Timeline } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined, BranchesOutlined, PlayCircleOutlined, EyeOutlined, CopyOutlined, CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Card, Table, Button, Space, Modal, Form, Input, Select, InputNumber, Tag, message, Row, Col, Steps, Divider, Descriptions, Spin } from 'antd';
 
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import { PlusOutlined, EditOutlined, DeleteOutlined, BranchesOutlined, PlayCircleOutlined, EyeOutlined, CopyOutlined, ReloadOutlined } from '@ant-design/icons';
+
+import ButtonActions from '../../utils/buttonActions';
+import { ProcessAPI } from '../../services/api';
+import DataService from '../../services/DataService';
+import { useDataService } from '../../hooks/useDataService';
 const { Option } = Select;
 const { TextArea } = Input;
-const { Step } = Steps;
 
 const ProcessRouting = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -12,69 +67,75 @@ const ProcessRouting = () => {
   const [editingRecord, setEditingRecord] = useState(null);
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [form] = Form.useForm();
+  
+  // 从数据库加载的数据
+  const [routingData, setRoutingData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
 
-  // 工艺路线数据
-  const routingData = [
-    {
-      key: '1',
-      routeCode: 'RT-001',
-      routeName: '塑料外壳A工艺路线',
-      productCode: 'P001',
-      productName: '塑料外壳A',
-      version: 'V2.1',
-      status: '生效中',
-      totalSteps: 8,
-      cycleTime: 45,
-      createDate: '2024-01-15',
-      creator: '张工程师',
-      operations: [
-        { seq: 10, opCode: 'OP001', opName: '注塑成型', workCenter: '注塑车间', standardTime: 15, setupTime: 5 },
-        { seq: 20, opCode: 'OP002', opName: '去毛刺', workCenter: '后处理', standardTime: 8, setupTime: 2 },
-        { seq: 30, opCode: 'OP003', opName: '表面处理', workCenter: '表处车间', standardTime: 12, setupTime: 3 },
-        { seq: 40, opCode: 'OP004', opName: '质量检验', workCenter: '质检区', standardTime: 5, setupTime: 1 },
-        { seq: 50, opCode: 'OP005', opName: '包装', workCenter: '包装区', standardTime: 5, setupTime: 1 }
-      ]
-    },
-    {
-      key: '2',
-      routeCode: 'RT-002',
-      routeName: '电子组件B工艺路线',
-      productCode: 'P002',
-      productName: '电子组件B',
-      version: 'V1.5',
-      status: '待验证',
-      totalSteps: 12,
-      cycleTime: 78,
-      createDate: '2024-02-20',
-      creator: '李主管',
-      operations: [
-        { seq: 10, opCode: 'OP006', opName: 'PCB贴片', workCenter: 'SMT车间', standardTime: 25, setupTime: 10 },
-        { seq: 20, opCode: 'OP007', opName: '回流焊接', workCenter: 'SMT车间', standardTime: 15, setupTime: 5 },
-        { seq: 30, opCode: 'OP008', opName: '功能测试', workCenter: '测试区', standardTime: 20, setupTime: 8 },
-        { seq: 40, opCode: 'OP009', opName: '老化测试', workCenter: '测试区', standardTime: 180, setupTime: 15 },
-        { seq: 50, opCode: 'OP010', opName: '最终检验', workCenter: '质检区', standardTime: 8, setupTime: 2 }
-      ]
-    },
-    {
-      key: '3',
-      routeCode: 'RT-003',
-      routeName: '机械零件C工艺路线',
-      productCode: 'P003',
-      productName: '机械零件C',
-      version: 'V3.0',
-      status: '生效中',
-      totalSteps: 6,
-      cycleTime: 32,
-      createDate: '2024-03-10',
-      creator: '王技术员',
-      operations: [
-        { seq: 10, opCode: 'OP011', opName: '粗加工', workCenter: '机加车间', standardTime: 15, setupTime: 8 },
-        { seq: 20, opCode: 'OP012', opName: '精加工', workCenter: '机加车间', standardTime: 12, setupTime: 5 },
-        { seq: 30, opCode: 'OP013', opName: '热处理', workCenter: '热处理', standardTime: 60, setupTime: 20 },
-        { seq: 40, opCode: 'OP014', opName: '精密加工', workCenter: '精加工', standardTime: 8, setupTime: 3 }
-      ]
+  // 使用 DataService 和 useDataService Hook 获取数据
+  const { 
+    data: processRoutingResponse, 
+    loading: dataLoading, 
+    error: dataError, 
+    refetch: refetchProcessRouting 
+  } = useDataService(
+    () => DataService.getProcessRouting({ limit: 100 }),
+    [],
+    { cacheKey: 'process_routing' }
+  );
+
+  // 从数据库加载工艺路由数据
+  const loadData = async () => {
+    try {
+      await refetchProcessRouting();
+      safeMessage.success('数据刷新成功');
+    } catch (error) {
+      console.error('加载工艺路由数据失败:', error);
+      safeMessage.error('加载数据失败，请检查后端服务是否正常');
     }
-  ];
+  };
+
+  // 处理数据转换
+  useEffect(() => {
+    if (processRoutingResponse && processRoutingResponse.routings) {
+      const formattedData = processRoutingResponse.routings.map((item, index) => ({
+        key: item.id || index,
+        id: item.id,
+        routeCode: item.routing_code,
+        routeName: `${item.process_name}工艺路线`,
+        productCode: `MAT-${String(item.material_id).padStart(3, '0')}`,
+        productName: item.process_name,
+        version: 'V1.0',
+        status: '生效中',
+        totalSteps: 4,
+        cycleTime: item.estimated_time || 0,
+        createDate: item.created_at ? new Date(item.created_at).toLocaleDateString() : '-',
+        creator: item.notes && item.notes.includes('自动生成') ? '排程同步' : '系统',
+        processSequence: item.process_sequence,
+        equipmentId: item.equipment_id,
+        moldId: item.mold_id,
+        notes: item.notes,
+        operations: [
+          { seq: item.process_sequence * 10, opCode: item.routing_code, opName: item.process_name, workCenter: '注塑车间', standardTime: item.estimated_time || 0, setupTime: 5 }
+        ]
+      }));
+      
+      setRoutingData(formattedData);
+      setTotal(processRoutingResponse.total || formattedData.length);
+      
+      // 统计排程同步的工艺路线
+      const syncedCount = formattedData.filter(d => d.creator === '排程同步').length;
+      if (syncedCount > 0) {
+        console.log(`成功加载 ${formattedData.length} 条工艺路由数据（其中 ${syncedCount} 条来自排程同步）`);
+      }
+    }
+  }, [processRoutingResponse]);
+
+  // 组件加载时获取数据
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const columns = [
     {
@@ -132,7 +193,12 @@ const ProcessRouting = () => {
     {
       title: '创建人',
       dataIndex: 'creator',
-      key: 'creator'
+      key: 'creator',
+      render: (creator) => (
+        <Tag color={creator === '排程同步' ? 'blue' : 'default'}>
+          {creator}
+        </Tag>
+      )
     },
     {
       title: '创建日期',
@@ -153,7 +219,7 @@ const ProcessRouting = () => {
           <Button type="link" size="small" icon={<CopyOutlined />}>
             复制
           </Button>
-          <Button type="link" size="small" danger icon={<DeleteOutlined />}>
+          <Button type="link" size="small" danger icon={<DeleteOutlined />} onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })}>
             删除
           </Button>
         </Space>
@@ -198,10 +264,10 @@ const ProcessRouting = () => {
       key: 'action',
       render: () => (
         <Space size="middle">
-          <Button type="link" size="small" icon={<EditOutlined />}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />}>
             编辑
           </Button>
-          <Button type="link" size="small" danger icon={<DeleteOutlined />}>
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" size="small" danger icon={<DeleteOutlined />}>
             删除
           </Button>
         </Space>
@@ -230,10 +296,12 @@ const ProcessRouting = () => {
     try {
       const values = await form.validateFields();
       console.log('保存工艺路线:', values);
-      message.success('保存成功');
+      safeMessage.success('保存成功');
       setModalVisible(false);
+      refetchProcessRouting(); // 刷新数据
     } catch (error) {
-      console.error('验证失败:', error);
+      console.error('保存失败:', error);
+      safeMessage.error('保存失败: ' + (error.message || '未知错误'));
     }
   };
 
@@ -274,6 +342,9 @@ const ProcessRouting = () => {
             </Select>
           </Space>
           <Space>
+            <Button icon={<ReloadOutlined />} onClick={loadData} loading={dataLoading || loading}>
+              刷新数据
+            </Button>
             <Button icon={<BranchesOutlined />}>工艺流程图</Button>
             <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
               新建工艺路线
@@ -281,18 +352,20 @@ const ProcessRouting = () => {
           </Space>
         </div>
 
-        <Table
-          columns={columns}
-          dataSource={routingData}
-          pagination={{
-            total: routingData.length,
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => `共 ${total} 条记录`
-          }}
-          size="small"
-        />
+        <Spin spinning={dataLoading || loading}>
+          <Table
+            columns={columns}
+            dataSource={routingData}
+            pagination={{
+              total: total,
+              pageSize: 10,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: (total) => `共 ${total} 条记录 (来自数据库)`
+            }}
+            size="small"
+          />
+        </Spin>
       </Card>
 
       {/* 新建/编辑工艺路线模态框 */}
@@ -393,7 +466,7 @@ const ProcessRouting = () => {
           <Button key="close" onClick={() => setDetailModalVisible(false)}>
             关闭
           </Button>,
-          <Button key="edit" type="primary" icon={<EditOutlined />}>
+          <Button onClick={() => handleEdit(record)} key="edit" type="primary" icon={<EditOutlined />}>
             编辑
           </Button>
         ]}

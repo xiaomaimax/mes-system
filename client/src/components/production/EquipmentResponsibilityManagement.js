@@ -43,10 +43,12 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const EquipmentResponsibilityManagement = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [assignModalVisible, setAssignModalVisible] = useState(false);
@@ -325,16 +327,14 @@ const EquipmentResponsibilityManagement = () => {
           >
             重新分配
           </Button>
-          <Button 
-            type="link" 
+          <Button onClick={() => handleEdit(record)} type="link" 
             size="small" 
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
           >
             编辑
           </Button>
-          <Button 
-            type="link" 
+          <Button onClick={() => ButtonActions.simulateDelete('记录 ' + record.id, () => { safeMessage.success('删除成功'); })} type="link" 
             size="small" 
             icon={<DeleteOutlined />} 
             danger
@@ -370,12 +370,12 @@ const EquipmentResponsibilityManagement = () => {
     try {
       setLoading(true);
       console.log('提交责任设备数据:', values);
-      message.success('责任设备信息保存成功！');
+      safeMessage.success('责任设备信息保存成功！');
       setModalVisible(false);
       form.resetFields();
     } catch (error) {
       console.error('提交失败:', error);
-      message.error('保存失败，请重试！');
+      safeMessage.error('保存失败，请重试！');
     } finally {
       setLoading(false);
     }

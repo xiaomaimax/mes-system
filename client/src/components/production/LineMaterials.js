@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, Tag, Select, Input, Progress, Alert } from 'antd';
 import { SearchOutlined, ShoppingCartOutlined, ExclamationCircleOutlined, ReloadOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 
 const LineMaterials = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // 模拟数据

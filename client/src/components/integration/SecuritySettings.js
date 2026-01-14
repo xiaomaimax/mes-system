@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import ButtonActions from '../../utils/buttonActions';
 import { Card, Row, Col, Button, Space, Table, Form, Input, Select, Switch, Modal, Tag, Alert, Tabs, Divider, List, Avatar, Progress, Statistic } from 'antd';
-import { 
-  SecurityScanOutlined, 
+import {   SecurityScanOutlined, 
   KeyOutlined, 
   UserOutlined, 
   LockOutlined, 
@@ -179,7 +179,7 @@ const SecuritySettings = () => {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
             编辑
           </Button>
           <Button type="link" size="small" icon={<KeyOutlined />}>
@@ -230,7 +230,7 @@ const SecuritySettings = () => {
       key: 'action',
       render: () => (
         <Space size="middle">
-          <Button type="link" size="small" icon={<EditOutlined />}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />}>
             编辑
           </Button>
           <Button type="link" size="small" icon={<UserOutlined />}>

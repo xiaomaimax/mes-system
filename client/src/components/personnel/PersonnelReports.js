@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import ButtonActions from '../../utils/buttonActions';
 import { Card, Row, Col, Button, Space, Table, Select, DatePicker, Tabs, Statistic, Progress } from 'antd';
-import { 
-  BarChartOutlined, 
+import {   BarChartOutlined, 
   PieChartOutlined, 
   LineChartOutlined, 
   DownloadOutlined,
@@ -17,6 +17,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const PersonnelReports = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [activeTab, setActiveTab] = useState('attendance-report');
 
   // 考勤报表数据

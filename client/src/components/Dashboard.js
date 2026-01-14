@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col, Card, Statistic, Progress, Table } from 'antd';
 import { 
   LineChartOutlined, 
@@ -138,6 +139,13 @@ const Dashboard = () => {
       </Row>
     </div>
   );
+};
+
+Dashboard.propTypes = {
+  // Dashboard是独立组件，不接收props
+};
+
+Dashboard.defaultProps = {
 };
 
 export default Dashboard;

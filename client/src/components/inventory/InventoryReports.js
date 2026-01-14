@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Card, Row, Col, Button, Space, Select, DatePicker, Table, Statistic, Progress, Divider, Tag } from 'antd';
 import { BarChartOutlined, DownloadOutlined, PrinterOutlined, FileExcelOutlined, FilePdfOutlined, ReloadOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const InventoryReports = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [reportType, setReportType] = useState('inventory-summary');
   const [dateRange, setDateRange] = useState(null);
   const [warehouse, setWarehouse] = useState('all');

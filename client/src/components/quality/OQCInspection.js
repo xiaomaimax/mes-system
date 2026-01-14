@@ -1,31 +1,24 @@
-import React, { useState } from 'react';
-import { Card, Table, Button, Space, Tag, DatePicker, Select, Input } from 'antd';
-import { PlusOutlined, SearchOutlined, ExportOutlined, EditOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import { Card, Table, Button, Space, Tag, DatePicker, Select, Input, Alert } from 'antd';
+import { PlusOutlined, SearchOutlined, ExportOutlined, EditOutlined, ReloadOutlined } from '@ant-design/icons';
+
+import { QualityAPI } from '../../services/api';
+import { useQualityData } from '../../hooks/useQualityData';
+import { transformOQCData, INSPECTION_RESULT_MAP } from '../../utils/qualityDataTransformers';
 
 const OQCInspection = () => {
-  const [loading, setLoading] = useState(false);
+  const [editingRecord, setEditingRecord] = useState(null);
 
-  // 模拟数据
-  const oqcData = [
-    {
-      key: '1',
-      inspectionId: 'OQC-2024-001',
-      shipmentNo: 'SHIP-2024-001',
-      customerName: '客户A',
-      productCode: 'PROD-A001',
-      productName: '产品A',
-      batchNo: 'BATCH-A001',
-      shipmentQuantity: 500,
-      sampleQuantity: 25,
-      qualifiedQuantity: 25,
-      defectiveQuantity: 0,
-      qualityRate: 100.0,
-      inspectionDate: '2024-01-15',
-      inspector: '李四',
-      result: 'pass',
-      status: 'completed'
-    }
-  ];
+  // 使用自定义hook管理数据
+  const { data: oqcData, loading, pagination, loadData, handlePaginationChange } = useQualityData(
+    (params) => QualityAPI.getOQCInspections(params),
+    transformOQCData
+  );
+
+  const handleEdit = (record) => {
+    setEditingRecord(record);
+    console.log('编辑记录:', record);
+  };
 
   const columns = [
     {
@@ -95,12 +88,7 @@ const OQCInspection = () => {
       key: 'result',
       width: 100,
       render: (result) => {
-        const resultMap = {
-          pass: { color: 'green', text: '合格' },
-          fail: { color: 'red', text: '不合格' },
-          pending: { color: 'blue', text: '待检验' }
-        };
-        const { color, text } = resultMap[result];
+        const { color, text } = INSPECTION_RESULT_MAP[result] || { color: 'default', text: result };
         return <Tag color={color}>{text}</Tag>;
       }
     },
@@ -110,7 +98,7 @@ const OQCInspection = () => {
       width: 150,
       render: (_, record) => (
         <Space size="small">
-          <Button type="link" size="small" icon={<EditOutlined />}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />}>
             编辑
           </Button>
           <Button type="link" size="small">详情</Button>
@@ -121,6 +109,22 @@ const OQCInspection = () => {
 
   return (
     <div>
+      {/* 连接状态提示 */}
+      {!loading && oqcData.length === 0 && (
+        <Alert
+          message="数据加载提示"
+          description="如果数据长时间无法加载，请检查：1) 网络连接状态 2) 后端服务是否正常运行 3) 登录状态是否有效"
+          type="info"
+          showIcon
+          style={{ marginBottom: 16 }}
+          action={
+            <Button size="small" onClick={loadData}>
+              重试加载
+            </Button>
+          }
+        />
+      )}
+
       <Card 
         title={
           <Space>
@@ -129,9 +133,14 @@ const OQCInspection = () => {
           </Space>
         }
         extra={
-          <Button type="primary" icon={<PlusOutlined />}>
-            新建检验单
-          </Button>
+          <Space>
+            <Button icon={<ReloadOutlined />} onClick={loadData}>
+              刷新
+            </Button>
+            <Button type="primary" icon={<PlusOutlined />}>
+              新建检验单
+            </Button>
+          </Space>
         }
       >
         <Table
@@ -139,9 +148,13 @@ const OQCInspection = () => {
           dataSource={oqcData}
           loading={loading}
           pagination={{
-            total: oqcData.length,
-            pageSize: 10,
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total: pagination.total,
+            showSizeChanger: true,
+            showQuickJumper: true,
             showTotal: (total) => `共 ${total} 条记录`,
+            onChange: handlePaginationChange
           }}
         />
       </Card>

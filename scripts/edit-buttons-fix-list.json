@@ -1,0 +1,382 @@
+[
+  {
+    "name": "ProductionTaskManagement",
+    "path": "client/src/components/production/ProductionTaskManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "WorkReportManagement",
+    "path": "client/src/components/production/WorkReportManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "ShiftScheduleManagement",
+    "path": "client/src/components/production/ShiftScheduleManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "EquipmentResponsibilityManagement",
+    "path": "client/src/components/production/EquipmentResponsibilityManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "LineMaterialsManagement",
+    "path": "client/src/components/production/LineMaterialsManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "ProductionMasterDataManagement",
+    "path": "client/src/components/production/ProductionMasterDataManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "EquipmentMasterData",
+    "path": "client/src/components/equipment/EquipmentMasterData.js",
+    "issues": [
+      "缺少handleEdit函数",
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑",
+      "缺少表单数据填充"
+    ]
+  },
+  {
+    "name": "EquipmentMaintenance",
+    "path": "client/src/components/equipment/EquipmentMaintenance.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "EquipmentInspection",
+    "path": "client/src/components/equipment/EquipmentInspection.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "EquipmentRepair",
+    "path": "client/src/components/equipment/EquipmentRepair.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "EquipmentArchives",
+    "path": "client/src/components/equipment/EquipmentArchives.js",
+    "issues": [
+      "缺少handleEdit函数",
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑",
+      "缺少表单数据填充"
+    ]
+  },
+  {
+    "name": "IQCInspection",
+    "path": "client/src/components/quality/IQCInspection.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "PQCInspection",
+    "path": "client/src/components/quality/PQCInspection.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "FQCInspection",
+    "path": "client/src/components/quality/FQCInspection.js",
+    "issues": [
+      "缺少handleEdit函数",
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑",
+      "缺少表单数据填充"
+    ]
+  },
+  {
+    "name": "OQCInspection",
+    "path": "client/src/components/quality/OQCInspection.js",
+    "issues": [
+      "缺少handleEdit函数",
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑",
+      "缺少表单数据填充",
+      "缺少模态框控制"
+    ]
+  },
+  {
+    "name": "InspectionStandards",
+    "path": "client/src/components/quality/InspectionStandards.js",
+    "issues": [
+      "缺少handleEdit函数",
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑",
+      "缺少表单数据填充"
+    ]
+  },
+  {
+    "name": "DefectReasons",
+    "path": "client/src/components/quality/DefectReasons.js",
+    "issues": [
+      "缺少handleEdit函数",
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑",
+      "缺少表单数据填充"
+    ]
+  },
+  {
+    "name": "InventoryMasterData",
+    "path": "client/src/components/inventory/InventoryMasterData.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "InventoryTransfer",
+    "path": "client/src/components/inventory/InventoryTransfer.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少模态框控制"
+    ]
+  },
+  {
+    "name": "InventoryCount",
+    "path": "client/src/components/inventory/InventoryCount.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少模态框控制"
+    ]
+  },
+  {
+    "name": "ExternalSpareParts",
+    "path": "client/src/components/inventory/ExternalSpareParts.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少编辑状态跟踪",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "ProcessRouting",
+    "path": "client/src/components/process/ProcessRouting.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "ProcessParameters",
+    "path": "client/src/components/process/ProcessParameters.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "ProcessDocuments",
+    "path": "client/src/components/process/ProcessDocuments.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "ProcessSOP",
+    "path": "client/src/components/process/ProcessSOP.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "ProcessOptimization",
+    "path": "client/src/components/process/ProcessOptimization.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "ProcessValidation",
+    "path": "client/src/components/process/ProcessValidation.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "ProcessChangeControl",
+    "path": "client/src/components/process/ProcessChangeControl.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "ProcessMasterData",
+    "path": "client/src/components/process/ProcessMasterData.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "EmployeeManagement",
+    "path": "client/src/components/personnel/EmployeeManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "DepartmentManagement",
+    "path": "client/src/components/personnel/DepartmentManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "TrainingManagement",
+    "path": "client/src/components/personnel/TrainingManagement.js",
+    "issues": [
+      "缺少状态管理"
+    ]
+  },
+  {
+    "name": "PerformanceManagement",
+    "path": "client/src/components/personnel/PerformanceManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "SkillCertification",
+    "path": "client/src/components/personnel/SkillCertification.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "WorkSchedule",
+    "path": "client/src/components/personnel/WorkSchedule.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "UserManagement",
+    "path": "client/src/components/settings/UserManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "RoleManagement",
+    "path": "client/src/components/settings/RoleManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "DepartmentAccess",
+    "path": "client/src/components/settings/DepartmentAccess.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "InterfaceManagement",
+    "path": "client/src/components/integration/InterfaceManagement.js",
+    "issues": [
+      "缺少状态管理",
+      "缺少数据更新逻辑"
+    ]
+  },
+  {
+    "name": "DataMapping",
+    "path": "client/src/components/integration/DataMapping.js",
+    "issues": [
+      "缺少状态管理"
+    ]
+  },
+  {
+    "name": "SystemConfiguration",
+    "path": "client/src/components/integration/SystemConfiguration.js",
+    "issues": [
+      "缺少状态管理"
+    ]
+  },
+  {
+    "name": "SecuritySettings",
+    "path": "client/src/components/integration/SecuritySettings.js",
+    "issues": [
+      "缺少状态管理"
+    ]
+  },
+  {
+    "name": "SyncScheduler",
+    "path": "client/src/components/integration/SyncScheduler.js",
+    "issues": [
+      "缺少状态管理"
+    ]
+  },
+  {
+    "name": "DataTransformEngine",
+    "path": "client/src/components/integration/DataTransformEngine.js",
+    "issues": [
+      "缺少状态管理"
+    ]
+  }
+]

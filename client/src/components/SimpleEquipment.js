@@ -1,14 +1,17 @@
+// MIGRATION STATUS: Migrated - DataService integrated with async calls
+// COMPLETED: Replaced mockData usage with actual DataService calls
+
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Button, Space, Statistic, Progress, Tabs, Badge, List, Avatar, Alert, Table, Tag } from 'antd';
 import { ToolOutlined, SafetyOutlined, SearchOutlined, ExclamationCircleOutlined, ToolTwoTone, FolderOutlined, LinkOutlined, AppstoreOutlined, SettingOutlined, CheckCircleOutlined, WarningOutlined } from '@ant-design/icons';
-import { DataService, DataFormatter, DataCalculator } from '../utils/dataUtils';
+import DataService from '../services/DataService';
+import { DataFormatter, DataCalculator } from '../utils/dataUtils';
 import EquipmentMaintenance from './equipment/EquipmentMaintenance';
 import EquipmentInspection from './equipment/EquipmentInspection';
 import EquipmentRepair from './equipment/EquipmentRepair';
 import EquipmentArchives from './equipment/EquipmentArchives';
 import EquipmentRelationships from './equipment/EquipmentRelationships';
 import EquipmentMasterData from './equipment/EquipmentMasterData';
-
 const SimpleEquipment = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -17,6 +20,11 @@ const SimpleEquipment = () => {
       key: 'overview',
       label: '概览',
       icon: <ToolOutlined />
+    },
+    {
+      key: 'master-data',
+      label: '主数据',
+      icon: <AppstoreOutlined />
     },
     {
       key: 'maintenance',
@@ -42,11 +50,6 @@ const SimpleEquipment = () => {
       key: 'relationships',
       label: '设备关系',
       icon: <LinkOutlined />
-    },
-    {
-      key: 'master-data',
-      label: '主数据',
-      icon: <AppstoreOutlined />
     }
   ];
 

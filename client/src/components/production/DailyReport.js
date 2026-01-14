@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Card, Table, Button, Space, DatePicker, Select, Row, Col, Statistic } from 'antd';
 import { SearchOutlined, FileDoneOutlined, DownloadOutlined, PrinterOutlined } from '@ant-design/icons';
 
+import ButtonActions from '../../utils/buttonActions';
 const { Option } = Select;
 
 const DailyReport = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 

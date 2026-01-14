@@ -1,0 +1,228 @@
+/**
+ * PreloadIndicator 样式文件
+ * Requirements: 10.5
+ */
+
+.preload-indicator {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+.preload-indicator-top-right {
+  top: 20px;
+  right: 20px;
+}
+
+.preload-indicator-bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
+.preload-indicator-bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+
+.preload-indicator-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.preload-indicator-button {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  min-width: 40px;
+  height: 32px;
+}
+
+.preload-indicator-button:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #40a9ff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.preload-indicator-loading {
+  border-color: #1890ff;
+  background: rgba(24, 144, 255, 0.1);
+}
+
+.preload-indicator-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin-left: 2px;
+}
+
+.preload-indicator-progress {
+  width: 60px;
+}
+
+.preload-indicator-progress .ant-progress-line {
+  margin: 0;
+}
+
+.preload-indicator-progress .ant-progress-bg {
+  height: 2px !important;
+}
+
+/* 详情弹窗样式 */
+.preload-indicator-popover .ant-popover-content {
+  padding: 0;
+}
+
+.preload-details {
+  width: 280px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.preload-details-header {
+  padding: 12px 16px 8px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+.preload-details-stats {
+  padding: 12px 16px;
+}
+
+.preload-stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.preload-stat-item:last-child {
+  margin-bottom: 0;
+}
+
+.preload-details-progress {
+  padding: 8px 16px;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+.preload-details-actions {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.preload-details-tasks {
+  padding: 12px 16px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.preload-task-list {
+  margin-top: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.preload-task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+  font-size: 11px;
+}
+
+.preload-task-item:not(:last-child) {
+  border-bottom: 1px solid #f5f5f5;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .preload-indicator-top-right {
+    top: 10px;
+    right: 10px;
+  }
+  
+  .preload-indicator-bottom-right {
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .preload-indicator-bottom-left {
+    bottom: 10px;
+    left: 10px;
+  }
+  
+  .preload-indicator-button {
+    padding: 2px 6px;
+    height: 28px;
+    min-width: 36px;
+  }
+  
+  .preload-indicator-text {
+    font-size: 11px;
+  }
+  
+  .preload-indicator-progress {
+    width: 50px;
+  }
+  
+  .preload-details {
+    width: 260px;
+  }
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .preload-indicator-button {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: #434343;
+    color: #fff;
+  }
+  
+  .preload-indicator-button:hover {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: #177ddc;
+  }
+  
+  .preload-details-header {
+    background: #1f1f1f;
+    border-bottom-color: #434343;
+  }
+  
+  .preload-details-progress {
+    background: #1f1f1f;
+    border-color: #434343;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .preload-indicator-button {
+    border-width: 2px;
+    border-color: #000;
+  }
+  
+  .preload-details-header,
+  .preload-details-progress,
+  .preload-details-actions {
+    border-color: #000;
+  }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  .preload-indicator-button {
+    transition: none;
+  }
+}

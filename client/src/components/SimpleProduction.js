@@ -1,19 +1,22 @@
+// MIGRATION STATUS: Partially migrated - mockData imports removed, DataService imported
+// TODO: Replace mockData usage with actual DataService calls
+
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Button, Space, Statistic, Tabs, Progress, Badge, List, Avatar, Divider, Alert, Table, Tag } from 'antd';
 import { LineChartOutlined, ProjectOutlined, PlayCircleOutlined, FileTextOutlined, CalendarOutlined, SettingOutlined, ClockCircleOutlined, ShoppingCartOutlined, DatabaseOutlined, TrophyOutlined, TeamOutlined, AlertOutlined, CheckCircleOutlined, ExclamationCircleOutlined, RiseOutlined } from '@ant-design/icons';
-import { DataService, DataFormatter, DataCalculator } from '../utils/dataUtils';
+import DataService from '../services/DataService';
+import { DataFormatter, DataCalculator } from '../utils/dataUtils';
 
 // 逐步添加组件来找出问题
 import ProductionMasterDataManagement from './production/ProductionMasterDataManagement';
-import WorkshopPlanManagement from './production/WorkshopPlanManagement';
-import ProductionTaskManagement from './production/ProductionTaskManagement';
+import WorkshopPlan from './production/WorkshopPlan';
+import ProductionTasks from './production/ProductionTasks';
 import ProductionExecutionManagement from './production/ProductionExecutionManagement';
 import WorkReportManagement from './production/WorkReportManagement';
 import DailyReportSimple from './production/DailyReportSimple';
 import EquipmentResponsibilityManagement from './production/EquipmentResponsibilityManagement';
 import ShiftScheduleManagement from './production/ShiftScheduleManagement';
 import LineMaterialsManagement from './production/LineMaterialsManagement';
-
 const SimpleProductionFixed = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [productionData, setProductionData] = useState({
@@ -26,14 +29,34 @@ const SimpleProductionFixed = () => {
 
   // 加载生产数据
   useEffect(() => {
-    const loadData = () => {
-      setProductionData({
-        plans: DataService.getProductionPlans(),
-        tasks: DataService.getProductionTasks(),
-        reports: DataService.getWorkReports(),
-        equipment: DataService.getEquipment(),
-        employees: DataService.getEmployees()
-      });
+    const loadData = async () => {
+      try {
+        const [plansResult, tasksResult, reportsResult, equipmentResult, employeesResult] = await Promise.all([
+          DataService.getProductionPlans(),
+          DataService.getProductionTasks(),
+          DataService.getWorkReports(),
+          DataService.getEquipment(),
+          DataService.getEmployees()
+        ]);
+
+        setProductionData({
+          plans: plansResult.data?.items || [],
+          tasks: tasksResult.data?.items || [],
+          reports: reportsResult.data?.items || [],
+          equipment: equipmentResult.data?.items || [],
+          employees: employeesResult.data?.items || []
+        });
+      } catch (error) {
+        console.error('加载生产数据失败:', error);
+        // 设置空数据以防止错误
+        setProductionData({
+          plans: [],
+          tasks: [],
+          reports: [],
+          equipment: [],
+          employees: []
+        });
+      }
     };
     
     loadData();
@@ -41,16 +64,28 @@ const SimpleProductionFixed = () => {
 
   // 计算生产统计数据
   const calculateStats = () => {
-    const { plans, tasks, reports } = productionData;
+    const { plans, tasks, reports, equipment, employees } = productionData;
     
     const totalPlans = plans.length;
     const completedPlans = plans.filter(p => p.status === '已完成').length;
     const runningPlans = plans.filter(p => p.status === '进行中').length;
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(t => t.status === '已完成').length;
+    const waitingTasks = tasks.filter(t => t.status === '等待中').length;
+    const runningTasks = tasks.filter(t => t.status === '进行中').length;
     
-    const totalPlanQty = plans.reduce((sum, p) => sum + p.planQty, 0);
-    const totalActualQty = plans.reduce((sum, p) => sum + p.actualQty, 0);
+    const runningEquipment = equipment.filter(e => e.status === '运行中').length;
+    const maintenanceEquipment = equipment.filter(e => e.status === '维护中').length;
+    
+    const onlineEmployees = employees.filter(e => e.shift === '白班').length;
+    const dayShiftEmployees = employees.filter(e => e.shift === '白班').length;
+    const nightShiftEmployees = employees.filter(e => e.shift === '夜班').length;
+    
+    const equipmentUtilization = equipment.length > 0 ? 
+      DataCalculator.calculateAverage(equipment.map(e => e.utilization || 0)) : 0;
+    
+    const totalPlanQty = plans.reduce((sum, p) => sum + (p.planQty || 0), 0);
+    const totalActualQty = plans.reduce((sum, p) => sum + (p.actualQty || 0), 0);
     const overallEfficiency = totalPlanQty > 0 ? DataCalculator.calculateEfficiency(totalActualQty, totalPlanQty) : 0;
     
     return {
@@ -59,6 +94,14 @@ const SimpleProductionFixed = () => {
       runningPlans,
       totalTasks,
       completedTasks,
+      waitingTasks,
+      runningTasks,
+      runningEquipment,
+      maintenanceEquipment,
+      onlineEmployees,
+      dayShiftEmployees,
+      nightShiftEmployees,
+      equipmentUtilization,
       totalPlanQty,
       totalActualQty,
       overallEfficiency
@@ -125,9 +168,9 @@ const SimpleProductionFixed = () => {
       case 'master-data':
         return <ProductionMasterDataManagement />;
       case 'workshop-plan':
-        return <WorkshopPlanManagement />;
+        return <WorkshopPlan />;
       case 'production-tasks':
-        return <ProductionTaskManagement />;
+        return <ProductionTasks />;
       case 'production-execution':
         return <ProductionExecutionManagement />;
       case 'work-report':
@@ -169,7 +212,7 @@ const SimpleProductionFixed = () => {
       {/* 重要提醒 */}
       <Alert
         message="生产提醒"
-        description={`当前有 ${stats.runningPlans} 个生产计划正在进行中，${productionData.tasks.filter(t => t.status === '等待中').length} 个任务等待执行！`}
+        description={`当前有 ${stats.runningPlans} 个生产计划正在进行中，${stats.waitingTasks || 0} 个任务等待执行！`}
         type="info"
         showIcon
         icon={<ExclamationCircleOutlined />}
@@ -202,7 +245,7 @@ const SimpleProductionFixed = () => {
           <Card>
             <Statistic
               title="进行中任务"
-              value={productionData.tasks.filter(t => t.status === '进行中').length}
+              value={stats.runningTasks || 0}
               suffix="个"
               prefix={<ProjectOutlined />}
               valueStyle={{ color: '#1890ff', fontSize: '24px' }}
@@ -223,7 +266,7 @@ const SimpleProductionFixed = () => {
           <Card>
             <Statistic
               title="设备利用率"
-              value={DataCalculator.calculateAverage(productionData.equipment.map(e => e.utilization))}
+              value={stats.equipmentUtilization || 0}
               precision={1}
               suffix="%"
               prefix={<SettingOutlined />}
@@ -232,11 +275,11 @@ const SimpleProductionFixed = () => {
             <div style={{ marginTop: '8px' }}>
               <Badge 
                 status="success" 
-                text={`${productionData.equipment.filter(e => e.status === '运行中').length}台运行中`} 
+                text={`${stats.runningEquipment || 0}台运行中`} 
               />
               <Badge 
                 status="warning" 
-                text={`${productionData.equipment.filter(e => e.status === '维护中').length}台维护中`} 
+                text={`${stats.maintenanceEquipment || 0}台维护中`} 
                 style={{ marginLeft: '8px' }} 
               />
             </div>
@@ -246,14 +289,14 @@ const SimpleProductionFixed = () => {
           <Card>
             <Statistic
               title="在线员工"
-              value={productionData.employees.filter(e => e.shift === '白班').length}
+              value={stats.onlineEmployees || 0}
               suffix="人"
               prefix={<TeamOutlined />}
               valueStyle={{ color: '#faad14', fontSize: '24px' }}
             />
             <div style={{ marginTop: '8px', fontSize: '12px', color: '#666' }}>
-              白班: {productionData.employees.filter(e => e.shift === '白班').length}人 | 
-              夜班: {productionData.employees.filter(e => e.shift === '夜班').length}人
+              白班: {stats.dayShiftEmployees || 0}人 | 
+              夜班: {stats.nightShiftEmployees || 0}人
             </div>
           </Card>
         </Col>

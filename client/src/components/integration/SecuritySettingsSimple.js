@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import ButtonActions from '../../utils/buttonActions';
 import { Card, Row, Col, Button, Space, Table, Form, Input, Select, Switch, Tag, Alert, Tabs, Statistic, Progress } from 'antd';
-import { 
-  SecurityScanOutlined, 
+import {   SecurityScanOutlined, 
   KeyOutlined, 
   UserOutlined, 
   SafetyOutlined,
@@ -13,6 +13,7 @@ import {
 const { Option } = Select;
 
 const SecuritySettingsSimple = () => {
+  const [editingRecord, setEditingRecord] = useState(null);
   const [activeTab, setActiveTab] = useState('auth-config');
 
   // 认证配置数据
@@ -80,7 +81,7 @@ const SecuritySettingsSimple = () => {
       key: 'action',
       render: () => (
         <Space size="middle">
-          <Button type="link" size="small" icon={<EditOutlined />}>
+          <Button onClick={() => handleEdit(record)} type="link" size="small" icon={<EditOutlined />}>
             编辑
           </Button>
         </Space>

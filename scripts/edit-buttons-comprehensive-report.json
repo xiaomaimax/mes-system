@@ -1,0 +1,4447 @@
+{
+  "timestamp": "2025-12-25T06:46:50.973Z",
+  "summary": {
+    "totalComponents": 56,
+    "passedComponents": 55,
+    "overallPercentage": 98
+  },
+  "results": [
+    {
+      "file": "DepartmentAccess.js",
+      "path": "client\\src\\components\\settings\\DepartmentAccess.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "RoleManagement.js",
+      "path": "client\\src\\components\\settings\\RoleManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "UserManagement.js",
+      "path": "client\\src\\components\\settings\\UserManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "DepartmentManagement.js",
+      "path": "client\\src\\components\\personnel\\DepartmentManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "EmployeeManagement.js",
+      "path": "client\\src\\components\\personnel\\EmployeeManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "PerformanceManagement.js",
+      "path": "client\\src\\components\\personnel\\PerformanceManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "SkillCertification.js",
+      "path": "client\\src\\components\\personnel\\SkillCertification.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "TrainingManagement.js",
+      "path": "client\\src\\components\\personnel\\TrainingManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "WorkSchedule.js",
+      "path": "client\\src\\components\\personnel\\WorkSchedule.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ProcessChangeControl.js",
+      "path": "client\\src\\components\\process\\ProcessChangeControl.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ProcessDocuments.js",
+      "path": "client\\src\\components\\process\\ProcessDocuments.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ProcessMasterData.js",
+      "path": "client\\src\\components\\process\\ProcessMasterData.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ProcessOptimization.js",
+      "path": "client\\src\\components\\process\\ProcessOptimization.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ProcessParameters.js",
+      "path": "client\\src\\components\\process\\ProcessParameters.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ProcessRouting.js",
+      "path": "client\\src\\components\\process\\ProcessRouting.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ProcessSOP.js",
+      "path": "client\\src\\components\\process\\ProcessSOP.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ProcessValidation.js",
+      "path": "client\\src\\components\\process\\ProcessValidation.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "DataMapping.js",
+      "path": "client\\src\\components\\integration\\DataMapping.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "DataTransformEngine.js",
+      "path": "client\\src\\components\\integration\\DataTransformEngine.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "InterfaceManagement.js",
+      "path": "client\\src\\components\\integration\\InterfaceManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "SecuritySettings.js",
+      "path": "client\\src\\components\\integration\\SecuritySettings.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "SecuritySettingsFixed.js",
+      "path": "client\\src\\components\\integration\\SecuritySettingsFixed.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "SecuritySettingsSimple.js",
+      "path": "client\\src\\components\\integration\\SecuritySettingsSimple.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "SyncScheduler.js",
+      "path": "client\\src\\components\\integration\\SyncScheduler.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "SystemConfiguration.js",
+      "path": "client\\src\\components\\integration\\SystemConfiguration.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ExternalSpareParts.js",
+      "path": "client\\src\\components\\inventory\\ExternalSpareParts.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "InventoryCount.js",
+      "path": "client\\src\\components\\inventory\\InventoryCount.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "InventoryMasterData.js",
+      "path": "client\\src\\components\\inventory\\InventoryMasterData.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "InventoryTransfer.js",
+      "path": "client\\src\\components\\inventory\\InventoryTransfer.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "EquipmentResponsibility.js",
+      "path": "client\\src\\components\\production\\EquipmentResponsibility.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "EquipmentResponsibilityManagement.js",
+      "path": "client\\src\\components\\production\\EquipmentResponsibilityManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "LineMaterialsManagement.js",
+      "path": "client\\src\\components\\production\\LineMaterialsManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "MasterData.js",
+      "path": "client\\src\\components\\production\\MasterData.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ProductionMasterDataManagement.js",
+      "path": "client\\src\\components\\production\\ProductionMasterDataManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ProductionTaskManagement.js",
+      "path": "client\\src\\components\\production\\ProductionTaskManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ProductionTasks.js",
+      "path": "client\\src\\components\\production\\ProductionTasks.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ShiftSchedule.js",
+      "path": "client\\src\\components\\production\\ShiftSchedule.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "ShiftScheduleManagement.js",
+      "path": "client\\src\\components\\production\\ShiftScheduleManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "WorkReport.js",
+      "path": "client\\src\\components\\production\\WorkReport.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "WorkReportManagement.js",
+      "path": "client\\src\\components\\production\\WorkReportManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "WorkshopPlan.js",
+      "path": "client\\src\\components\\production\\WorkshopPlan.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "WorkshopPlanManagement.js",
+      "path": "client\\src\\components\\production\\WorkshopPlanManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "WorkshopPlanManagementSafe.js",
+      "path": "client\\src\\components\\production\\WorkshopPlanManagementSafe.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "DefectReasons.js",
+      "path": "client\\src\\components\\quality\\DefectReasons.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "FQCInspection.js",
+      "path": "client\\src\\components\\quality\\FQCInspection.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "InspectionStandards.js",
+      "path": "client\\src\\components\\quality\\InspectionStandards.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "IQCInspection.js",
+      "path": "client\\src\\components\\quality\\IQCInspection.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "OQCInspection.js",
+      "path": "client\\src\\components\\quality\\OQCInspection.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "PQCInspection.js",
+      "path": "client\\src\\components\\quality\\PQCInspection.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "EquipmentArchives.js",
+      "path": "client\\src\\components\\equipment\\EquipmentArchives.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "EquipmentInspection.js",
+      "path": "client\\src\\components\\equipment\\EquipmentInspection.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "EquipmentMaintenance.js",
+      "path": "client\\src\\components\\equipment\\EquipmentMaintenance.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "EquipmentMasterData.js",
+      "path": "client\\src\\components\\equipment\\EquipmentMasterData.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "EquipmentRelationships.js",
+      "path": "client\\src\\components\\equipment\\EquipmentRelationships.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "EquipmentRepair.js",
+      "path": "client\\src\\components\\equipment\\EquipmentRepair.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": true,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 7,
+      "maxScore": 8,
+      "issues": [
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    },
+    {
+      "file": "PermissionManagement.js",
+      "path": "client\\src\\components\\settings\\PermissionManagement.js",
+      "checks": {
+        "editState": {
+          "name": "编辑状态管理",
+          "passed": true,
+          "patterns": [
+            "editingRecord",
+            "editingItem",
+            "editingData"
+          ]
+        },
+        "handleEdit": {
+          "name": "handleEdit函数",
+          "passed": false,
+          "patterns": [
+            "handleEdit",
+            "onEdit"
+          ]
+        },
+        "handleSave": {
+          "name": "handleSave函数",
+          "passed": true,
+          "patterns": [
+            "handleSave",
+            "onSave"
+          ]
+        },
+        "editButton": {
+          "name": "编辑按钮绑定",
+          "passed": false,
+          "patterns": [
+            "onClick={() => handleEdit",
+            "onClick={handleEdit"
+          ]
+        },
+        "modalTitle": {
+          "name": "动态模态框标题",
+          "passed": true,
+          "patterns": [
+            "editingRecord ?",
+            "编辑.*:",
+            "\"编辑"
+          ]
+        },
+        "formReset": {
+          "name": "表单重置",
+          "passed": true,
+          "patterns": [
+            "setEditingRecord(null)",
+            "form.resetFields()"
+          ]
+        },
+        "dataUpdate": {
+          "name": "数据更新",
+          "passed": true,
+          "patterns": [
+            "setData\\(",
+            "setTableData\\(",
+            "\\.\\.\\.editingRecord"
+          ]
+        },
+        "validation": {
+          "name": "表单验证",
+          "passed": true,
+          "patterns": [
+            "form\\.validateFields\\(\\)",
+            "await.*validateFields"
+          ]
+        }
+      },
+      "score": 6,
+      "maxScore": 8,
+      "issues": [
+        "缺少handleEdit函数",
+        "缺少编辑按钮绑定"
+      ],
+      "hasEditFeature": true
+    }
+  ],
+  "needsFixing": [
+    {
+      "file": "PermissionManagement.js",
+      "path": "client\\src\\components\\settings\\PermissionManagement.js",
+      "issues": [
+        "缺少handleEdit函数",
+        "缺少编辑按钮绑定"
+      ],
+      "score": 6,
+      "maxScore": 8
+    }
+  ]
+}

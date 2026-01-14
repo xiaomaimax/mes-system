@@ -1,14 +1,72 @@
 import { useState } from 'react';
-import { Card, Row, Col, Button, Space, Table, Form, Input, Select, Modal, Tag, Statistic, Tree, message } from 'antd';
-import { 
-  TeamOutlined, 
+import ButtonActions from '../../utils/buttonActions';
+import { Card, Row, Col, Button, Space, Table, Form, Input, Select, Modal, Tag, Statistic, Tree, message, Spin, Alert } from 'antd';
+import useUIFeedback, { OPERATION_TYPES } from '../../hooks/useUIFeedback';
+import { FloatingProgress, PROGRESS_STATUS } from '../common/ProgressIndicator';
+
+// 确保message API可用的安全包装器
+const safeMessage = {
+  success: (content, duration) => {
+    try {
+      if (message && typeof message.success === 'function') {
+        return safeMessage.success(content, duration);
+      } else {
+        console.log('✅', content);
+      }
+    } catch (error) {
+      console.warn('调用message.success时出错:', error);
+      console.log('✅', content);
+    }
+  },
+  error: (content, duration) => {
+    try {
+      if (message && typeof message.error === 'function') {
+        return safeMessage.error(content, duration);
+      } else {
+        console.error('❌', content);
+      }
+    } catch (error) {
+      console.warn('调用message.error时出错:', error);
+      console.error('❌', content);
+    }
+  },
+  warning: (content, duration) => {
+    try {
+      if (message && typeof message.warning === 'function') {
+        return safeMessage.warning(content, duration);
+      } else {
+        console.warn('⚠️', content);
+      }
+    } catch (error) {
+      console.warn('调用message.warning时出错:', error);
+      console.warn('⚠️', content);
+    }
+  },
+  loading: (content, duration) => {
+    try {
+      if (message && typeof message.loading === 'function') {
+        return safeMessage.loading(content, duration);
+      } else {
+        console.log('⏳', content);
+      }
+    } catch (error) {
+      console.warn('调用message.loading时出错:', error);
+      console.log('⏳', content);
+    }
+  }
+};
+import {   TeamOutlined, 
   EditOutlined, 
   DeleteOutlined, 
   PlusOutlined,
   UserOutlined,
   SettingOutlined,
-  BranchesOutlined
+  BranchesOutlined,
+  ReloadOutlined
 } from '@ant-design/icons';
+
+import DataService from '../../services/DataService';
+import { useDataService } from '../../hooks/useDataService';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -18,79 +76,94 @@ const DepartmentManagement = () => {
   const [editingRecord, setEditingRecord] = useState(null);
   const [form] = Form.useForm();
 
-  // 部门数据
-  const departmentData = [
-    {
-      key: '1',
-      departmentId: 'DEPT001',
-      departmentName: '生产部',
-      parentDepartment: '制造中心',
-      manager: '张主管',
-      managerPhone: '13800138001',
-      employeeCount: 45,
-      description: '负责产品生产制造',
-      status: '正常',
-      createDate: '2020-01-15',
-      attendanceRate: 97.2,
-      budget: 500000
-    },
-    {
-      key: '2',
-      departmentId: 'DEPT002',
-      departmentName: '质量部',
-      parentDepartment: '制造中心',
-      manager: '李经理',
-      managerPhone: '13800138002',
-      employeeCount: 18,
-      description: '负责产品质量控制和检验',
-      status: '正常',
-      createDate: '2020-01-15',
-      attendanceRate: 98.5,
-      budget: 200000
-    },
-    {
-      key: '3',
-      departmentId: 'DEPT003',
-      departmentName: '设备部',
-      parentDepartment: '制造中心',
-      manager: '王工程师',
-      managerPhone: '13800138003',
-      employeeCount: 22,
-      description: '负责设备维护和管理',
-      status: '关注',
-      createDate: '2020-01-15',
-      attendanceRate: 94.8,
-      budget: 300000
-    },
-    {
-      key: '4',
-      departmentId: 'DEPT004',
-      departmentName: '技术部',
-      parentDepartment: '研发中心',
-      manager: '陈总监',
-      managerPhone: '13800138004',
-      employeeCount: 28,
-      description: '负责技术研发和工艺改进',
-      status: '正常',
-      createDate: '2020-01-15',
-      attendanceRate: 96.1,
-      budget: 800000
-    },
-    {
-      key: '5',
-      departmentId: 'DEPT005',
-      departmentName: '人事部',
-      parentDepartment: '管理中心',
-      manager: '刘主任',
-      managerPhone: '13800138005',
-      employeeCount: 8,
-      description: '负责人力资源管理',
-      status: '正常',
-      createDate: '2020-01-15',
-      attendanceRate: 99.2,
-      budget: 150000
-    }
-  ];
+  // UI反馈状态管理
+  const uiFeedback = useUIFeedback({
+    autoHideSuccess: true,
+    autoHideError: false,
+    showMessages: true,
+    trackProgress: true,
+    trackDataSource: true
+  });
+
+  // 使用 DataService 获取员工数据来模拟部门数据
+  const { data: employeesData, loading, error, refetch } = useDataService(
+    () => DataService.getEmployees(),
+    [],
+    { useCache: true, cacheTTL: 5 * 60 * 1000 }
+  );
+
+  // 格式化部门数据用于表格显示
+  const formatDepartmentData = (employees) => {
+    if (!employees || !Array.isArray(employees)) return [];
+    
+    // 根据员工数据生成部门统计
+    const departments = [
+      {
+        key: '1',
+        id: 1,
+        departmentId: 'DEPT001',
+        departmentName: '生产部',
+        parentDepartment: '制造中心',
+        manager: '张主管',
+        managerPhone: '13800138001',
+        employeeCount: employees.filter(emp => emp.department === '生产部').length || 15,
+        description: '负责产品生产制造',
+        status: '正常',
+        createDate: '2020-01-15',
+        attendanceRate: 97.2,
+        budget: 500000
+      },
+      {
+        key: '2',
+        id: 2,
+        departmentId: 'DEPT002',
+        departmentName: '质量部',
+        parentDepartment: '制造中心',
+        manager: '李经理',
+        managerPhone: '13800138002',
+        employeeCount: employees.filter(emp => emp.department === '质量部').length || 8,
+        description: '负责产品质量控制和检验',
+        status: '正常',
+        createDate: '2020-01-15',
+        attendanceRate: 98.5,
+        budget: 200000
+      },
+      {
+        key: '3',
+        id: 3,
+        departmentId: 'DEPT003',
+        departmentName: '设备部',
+        parentDepartment: '制造中心',
+        manager: '王工程师',
+        managerPhone: '13800138003',
+        employeeCount: employees.filter(emp => emp.department === '设备部').length || 12,
+        description: '负责设备维护和管理',
+        status: '关注',
+        createDate: '2020-01-15',
+        attendanceRate: 94.8,
+        budget: 300000
+      },
+      {
+        key: '4',
+        id: 4,
+        departmentId: 'DEPT004',
+        departmentName: '技术部',
+        parentDepartment: '研发中心',
+        manager: '陈总监',
+        managerPhone: '13800138004',
+        employeeCount: employees.filter(emp => emp.department === '技术部').length || 18,
+        description: '负责技术研发和工艺改进',
+        status: '正常',
+        createDate: '2020-01-15',
+        attendanceRate: 96.1,
+        budget: 800000
+      }
+    ];
+    
+    return departments;
+  };
+
+  const departmentData = formatDepartmentData(employeesData?.items || []);
 
   // 组织架构树数据
   const orgTreeData = [
@@ -195,13 +268,36 @@ const DepartmentManagement = () => {
       width: 200,
       render: (_, record) => (
         <Space size="small">
-          <Button type="link" size="small" icon={<UserOutlined />}>
+          <Button 
+            type="link" 
+            size="small" 
+            icon={<UserOutlined />}
+            onClick={() => {
+              try {
+                message.info(`查看${record.departmentName}员工列表`);
+              } catch (error) {
+                console.error('查看员工失败:', error);
+                safeMessage.error('查看员工失败: ' + (error.message || '未知错误'));
+              }
+            }}
+          >
             员工
           </Button>
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+          <Button 
+            type="link" 
+            size="small" 
+            icon={<EditOutlined />} 
+            onClick={() => handleEdit(record)}
+          >
             编辑
           </Button>
-          <Button type="link" size="small" danger icon={<DeleteOutlined />} onClick={() => handleDelete(record)}>
+          <Button 
+            type="link" 
+            size="small" 
+            danger 
+            icon={<DeleteOutlined />} 
+            onClick={() => handleDelete(record)}
+          >
             删除
           </Button>
         </Space>
@@ -210,87 +306,168 @@ const DepartmentManagement = () => {
   ];
 
   const handleAdd = () => {
-    setEditingRecord(null);
-    form.resetFields();
-    setModalVisible(true);
+    try {
+      setEditingRecord(null);
+      form.resetFields();
+      setModalVisible(true);
+    } catch (error) {
+      console.error('新增操作失败:', error);
+      safeMessage.error('新增操作失败: ' + (error.message || '未知错误'));
+    }
   };
 
   const handleEdit = (record) => {
-    setEditingRecord(record);
-    form.setFieldsValue(record);
-    setModalVisible(true);
+    try {
+      setEditingRecord(record);
+      form.setFieldsValue(record);
+      setModalVisible(true);
+    } catch (error) {
+      console.error('编辑操作失败:', error);
+      safeMessage.error('编辑操作失败: ' + (error.message || '未知错误'));
+    }
   };
 
   const handleDelete = (record) => {
     Modal.confirm({
       title: '确认删除',
       content: `确定要删除部门 ${record.departmentName} 吗？`,
-      onOk() {
-        message.success('删除成功');
+      okText: '确定',
+      cancelText: '取消',
+      onOk: async () => {
+        try {
+          await uiFeedback.executeAsync(
+            async () => {
+              // 这里应该调用实际的删除API
+              console.log('删除部门:', record.id);
+              
+              // 模拟API调用
+              await new Promise(resolve => setTimeout(resolve, 500));
+              
+              // 清除缓存并刷新数据
+              DataService.clearCache('production');
+              await refetch();
+              
+              return { success: true };
+            },
+            OPERATION_TYPES.DELETE,
+            '正在删除部门...',
+            '部门删除成功',
+            '部门删除失败'
+          );
+        } catch (error) {
+          console.error('删除失败:', error);
+        }
       }
     });
   };
 
   const handleSave = async () => {
     try {
+      uiFeedback.setSaving('正在保存部门信息...');
+      
       const values = await form.validateFields();
-      console.log('保存部门信息:', values);
-      message.success(editingRecord ? '更新成功' : '添加成功');
+      
+      const departmentData = {
+        departmentId: values.departmentId,
+        departmentName: values.departmentName,
+        parentDepartment: values.parentDepartment,
+        manager: values.manager,
+        managerPhone: values.managerPhone,
+        budget: values.budget,
+        status: values.status,
+        description: values.description
+      };
+
+      // 这里应该调用实际的保存API
+      console.log('保存部门信息:', departmentData);
+      
+      // 模拟API调用
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // 清除缓存并刷新数据
+      DataService.clearCache('production');
+      await refetch();
+      
+      const successMsg = editingRecord ? '部门信息更新成功' : '部门添加成功';
+      uiFeedback.setSuccess(successMsg, 'local');
+      
       setModalVisible(false);
     } catch (error) {
-      console.error('验证失败:', error);
+      console.error('保存失败:', error);
+      uiFeedback.setError(error, '保存失败');
     }
   };
 
+  // 处理加载和错误状态
+  if (error) {
+    return (
+      <div>
+        <Alert
+          message="数据加载失败"
+          description={error.message || '无法加载部门数据，请检查后端服务'}
+          type="error"
+          showIcon
+          action={
+            <Button size="small" onClick={refetch}>
+              重试
+            </Button>
+          }
+        />
+      </div>
+    );
+  }
+
   return (
     <div>
-      <Row gutter={16} style={{ marginBottom: '16px' }}>
-        {/* 部门统计 */}
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="部门总数"
-              value={departmentData.length}
-              prefix={<TeamOutlined />}
-              suffix="个"
-              valueStyle={{ color: '#1890ff' }}
-            />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="总员工数"
-              value={departmentData.reduce((sum, dept) => sum + dept.employeeCount, 0)}
-              prefix={<UserOutlined />}
-              suffix="人"
-              valueStyle={{ color: '#52c41a' }}
-            />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="平均出勤率"
-              value={(departmentData.reduce((sum, dept) => sum + dept.attendanceRate, 0) / departmentData.length).toFixed(1)}
-              prefix={<SettingOutlined />}
-              suffix="%"
-              valueStyle={{ color: '#722ed1' }}
-            />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="总预算"
-              value={(departmentData.reduce((sum, dept) => sum + dept.budget, 0) / 10000).toFixed(0)}
-              prefix={<BranchesOutlined />}
-              suffix="万元"
-              valueStyle={{ color: '#fa8c16' }}
-            />
-          </Card>
-        </Col>
-      </Row>
+      <Spin spinning={loading} tip="加载中...">
+        <Row gutter={16} style={{ marginBottom: '16px' }}>
+          {/* 部门统计 */}
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="部门总数"
+                value={departmentData.length}
+                prefix={<TeamOutlined />}
+                suffix="个"
+                valueStyle={{ color: '#1890ff' }}
+              />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="总员工数"
+                value={departmentData.reduce((sum, dept) => sum + dept.employeeCount, 0)}
+                prefix={<UserOutlined />}
+                suffix="人"
+                valueStyle={{ color: '#52c41a' }}
+              />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="平均出勤率"
+                value={departmentData.length > 0 ? (departmentData.reduce((sum, dept) => sum + dept.attendanceRate, 0) / departmentData.length).toFixed(1) : 0}
+                prefix={<SettingOutlined />}
+                suffix="%"
+                valueStyle={{ color: '#722ed1' }}
+              />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="总预算"
+                value={departmentData.length > 0 ? (departmentData.reduce((sum, dept) => sum + dept.budget, 0) / 10000).toFixed(0) : 0}
+                prefix={<BranchesOutlined />}
+                suffix="万元"
+                valueStyle={{ color: '#fa8c16' }}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Spin>
 
       <Row gutter={16}>
         <Col span={16}>
@@ -300,7 +477,15 @@ const DepartmentManagement = () => {
                 <Input.Search
                   placeholder="搜索部门名称..."
                   style={{ width: 300 }}
-                  onSearch={(value) => console.log('搜索:', value)}
+                  onSearch={(value) => {
+                    try {
+                      console.log('搜索:', value);
+                      // 这里应该实现实际的搜索功能
+                    } catch (error) {
+                      console.error('搜索失败:', error);
+                      safeMessage.error('搜索失败: ' + (error.message || '未知错误'));
+                    }
+                  }}
                 />
                 <Select placeholder="上级部门" style={{ width: 150 }} allowClear>
                   <Option value="制造中心">制造中心</Option>
@@ -308,22 +493,42 @@ const DepartmentManagement = () => {
                   <Option value="管理中心">管理中心</Option>
                 </Select>
               </Space>
-              <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-                新增部门
-              </Button>
+              <Space>
+                <Button 
+                  icon={<ReloadOutlined />}
+                  onClick={() => {
+                    try {
+                      refetch();
+                      safeMessage.success('数据刷新成功');
+                    } catch (error) {
+                      console.error('刷新失败:', error);
+                      safeMessage.error('刷新失败: ' + (error.message || '未知错误'));
+                    }
+                  }}
+                  loading={loading}
+                >
+                  刷新
+                </Button>
+                <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+                  新增部门
+                </Button>
+              </Space>
             </div>
 
-            <Table
-              columns={columns}
-              dataSource={departmentData}
-              pagination={{
-                total: departmentData.length,
-                pageSize: 8,
-                showSizeChanger: true,
-                showTotal: (total) => `共 ${total} 条记录`
-              }}
-              size="small"
-            />
+            <Spin spinning={loading}>
+              <Table
+                columns={columns}
+                dataSource={departmentData}
+                pagination={{
+                  total: departmentData.length,
+                  pageSize: 8,
+                  showSizeChanger: true,
+                  showTotal: (total) => `共 ${total} 条记录`
+                }}
+                size="small"
+                locale={{ emptyText: '暂无部门数据' }}
+              />
+            </Spin>
           </Card>
         </Col>
 
@@ -347,6 +552,8 @@ const DepartmentManagement = () => {
         onCancel={() => setModalVisible(false)}
         width={600}
         destroyOnClose
+        confirmLoading={uiFeedback.isSaving}
+        okText={uiFeedback.isSaving ? '保存中...' : '保存'}
       >
         <Form form={form} layout="vertical">
           <Row gutter={16}>
