@@ -9,7 +9,7 @@ Write-Host ""
 
 # 配置变量
 $GITHUB_USERNAME = "xiaomaimax"
-$REPO_NAME = "mes-system"
+$REPO_NAME = "maxmes"
 $GITHUB_URL = "https://github.com/$GITHUB_USERNAME/$REPO_NAME.git"
 
 Write-Host "📋 同步配置:" -ForegroundColor Cyan

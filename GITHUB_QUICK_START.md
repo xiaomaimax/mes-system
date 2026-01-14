@@ -4,7 +4,7 @@
 
 ### 步骤1: 创建GitHub仓库
 访问 https://github.com/new
-- 仓库名: `mes-system`
+- 仓库名: `maxmes`
 - 描述: `MES制造执行系统 - Manufacturing Execution System`
 - 选择: Public
 - 点击: Create repository
@@ -22,7 +22,7 @@ bash sync-to-github.sh
 ```
 
 ### 步骤3: 验证同步
-访问 https://github.com/xiaomaimax/mes-system
+访问 https://github.com/xiaomaimax/maxmes
 检查代码是否已上传 ✅
 
 ---
@@ -31,7 +31,7 @@ bash sync-to-github.sh
 
 ```bash
 # 配置远程仓库
-git remote add origin https://github.com/xiaomaimax/mes-system.git
+git remote add origin https://github.com/xiaomaimax/maxmes.git
 
 # 推送代码
 git push -u origin main
@@ -53,7 +53,7 @@ git push --tags
 ```bash
 ssh-keygen -t ed25519 -C "your_email@example.com"
 # 将公钥添加到 https://github.com/settings/keys
-git remote set-url origin git@github.com:xiaomaimax/mes-system.git
+git remote set-url origin git@github.com:xiaomaimax/maxmes.git
 ```
 
 ---
@@ -76,7 +76,7 @@ git remote set-url origin git@github.com:xiaomaimax/mes-system.git
 | 项目版本 | v1.1.0 |
 | 项目大小 | 140 MB |
 | GitHub账户 | https://github.com/xiaomaimax |
-| 仓库地址 | https://github.com/xiaomaimax/mes-system |
+| 仓库地址 | https://github.com/xiaomaimax/maxmes |
 
 ---
 
