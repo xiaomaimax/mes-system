@@ -31,6 +31,7 @@ router.post('/login',
     const isValidPassword = await user.validatePassword(password);
     if (!isValidPassword) {
       logger.warn('登录失败 - 密码错误', { username });
+      logger.security('LOGIN_FAILED', { username, ip: req.ip, reason: 'invalid_password' }); // P0-2 安全事件
       throw new AuthenticationError('用户名或密码错误');
     }
 
@@ -48,6 +49,7 @@ router.post('/login',
     );
 
     logger.info('用户登录成功', { userId: user.id, username: user.username });
+    logger.audit('USER_LOGIN', user.id, user.username, { ip: req.ip, userAgent: req.get('user-agent') }); // P0-5 审计日志
 
     res.json({
       success: true,

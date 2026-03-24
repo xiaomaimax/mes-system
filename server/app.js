@@ -8,6 +8,7 @@ const socketIo = require('socket.io');
 const logger = require('./utils/logger');
 const { sanitizeRequest, createValidationMiddleware } = require('./middleware/validation');
 const { errorHandler, notFoundHandler, asyncHandler } = require('./middleware/errorHandler');
+const { rateLimiter } = require('./middleware/rateLimiter');
 
 const { router: authRoutes } = require('./routes/auth');
 const productionRoutes = require('./routes/production');
@@ -51,6 +52,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // 中间件 - 输入清理
 app.use(sanitizeRequest);
+
+// 中间件 - API 限流（P0-3 安全优化）
+app.use('/api', rateLimiter());
 
 // 静态文件服务 (仅在生产环境)
 if (process.env.NODE_ENV === 'production') {
