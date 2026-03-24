@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, message, Typography } from 'antd';
+import { validateForm, validationRules } from '../utils/validation'; // P1-1 输入验证
 
 // 确保message API可用的安全包装器
 const safeMessage = {
@@ -61,7 +62,22 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
 
+  // P1-1: 登录表单验证规则
+  const loginRules = {
+    username: validationRules.username,
+    password: validationRules.password
+  };
+
   const onFinish = async (values) => {
+    // P1-1: 前端输入验证
+    const validation = validateForm(values, loginRules);
+    if (!validation.valid) {
+      Object.values(validation.errors).forEach(err => {
+        safeMessage.error(err);
+      });
+      return;
+    }
+
     setLoading(true);
     const result = await login(values.username, values.password);
     
