@@ -59,6 +59,40 @@ class Logger {
       this.writeLog(this.logFile, 'DEBUG', message, data);
     }
   }
+
+  // P0-5: 审计日志 - 记录所有敏感操作
+  audit(action, userId, username, data = {}) {
+    const auditEntry = {
+      timestamp: new Date().toISOString(),
+      level: 'AUDIT',
+      action,
+      userId,
+      username,
+      ip: data.ip || 'unknown',
+      userAgent: data.userAgent || 'unknown',
+      ...data
+    };
+    
+    const logEntry = JSON.stringify(auditEntry);
+    fs.appendFileSync(this.auditFile, logEntry + '\n');
+    
+    // 审计日志也输出到控制台
+    console.log(`[AUDIT] ${action} by ${username} (userId: ${userId})`, data);
+  }
+
+  // 安全事件日志
+  security(event, data = {}) {
+    const securityFile = path.join(auditLogsDir, `security-${new Date().toISOString().split('T')[0]}.log`);
+    const securityEntry = JSON.stringify({
+      timestamp: new Date().toISOString(),
+      level: 'SECURITY',
+      event,
+      ...data
+    });
+    
+    fs.appendFileSync(securityFile, securityEntry + '\n');
+    console.warn(`[SECURITY] ${event}`, data);
+  }
 }
 
 module.exports = new Logger();
