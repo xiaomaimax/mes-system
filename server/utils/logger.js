@@ -82,7 +82,7 @@ class Logger {
 
   // 安全事件日志
   security(event, data = {}) {
-    const securityFile = path.join(auditLogsDir, `security-${new Date().toISOString().split('T')[0]}.log`);
+    const securityFile = path.join(logsDir, `security-${new Date().toISOString().split('T')[0]}.log`);
     const securityEntry = JSON.stringify({
       timestamp: new Date().toISOString(),
       level: 'SECURITY',
