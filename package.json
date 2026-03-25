@@ -53,6 +53,7 @@
     "docker:down": "docker-compose down"
   },
   "dependencies": {
+    "redis": "^4.6.13",
     "axios": "^1.13.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
