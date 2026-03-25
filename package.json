@@ -53,7 +53,6 @@
     "docker:down": "docker-compose down"
   },
   "dependencies": {
-    "redis": "^4.6.13",
     "axios": "^1.13.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -64,6 +63,7 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.0",
     "node-fetch": "^3.3.2",
+    "redis": "^4.7.1",
     "sequelize": "^6.32.1",
     "socket.io": "^4.7.2"
   },

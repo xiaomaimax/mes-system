@@ -29,14 +29,14 @@ class CacheService {
 
   async init() {
     try {
-      // 生产环境尝试连接 Redis
-      if (process.env.NODE_ENV === 'production' && process.env.REDIS_URL) {
+      // 有 REDIS_URL 就尝试连接
+      if (process.env.REDIS_URL) {
         await this.connectRedis();
       } else {
-        logger.info('使用内存缓存模式（开发环境）');
+        logger.info('未配置 REDIS_URL，使用内存缓存模式');
       }
     } catch (error) {
-      logger.warn('缓存服务初始化失败，降级到内存缓存', { error: error.message });
+      logger.warn('Redis 连接失败，降级到内存缓存', { error: error.message });
     }
   }
 
