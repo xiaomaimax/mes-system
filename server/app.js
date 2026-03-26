@@ -22,6 +22,7 @@ const inventoryRoutes = require('./routes/inventory');
 const reportRoutes = require('./routes/reports');
 const schedulingRoutes = require('./routes/scheduling');
 const masterDataRoutes = require('./routes/masterData');
+const crudRoutes = require('./routes/crud');
 const modulesRoutes = require('./routes/modules');
 const equipmentArchivesRoutes = require('./routes/equipmentArchives');
 const searchRoutes = require('./routes/search');
@@ -31,7 +32,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN || "http://192.168.100.6",
+    origin: true,  // 允许所有来源（开发环境）
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
   }
@@ -53,7 +54,7 @@ app.use(monitorService.requestMonitor());
 
 // 3. CORS
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "http://192.168.100.6",
+  origin: true,  // 允许所有来源（开发环境）
   credentials: true
 }));
 
@@ -66,10 +67,17 @@ app.use(sanitizeRequest);
 
 // 6. API 限流（P0-3 安全优化）
 app.use('/api', rateLimiter());
-app.use(responseCache(300));
 
-// 7. 全局缓存中间件（P2-1）- 可选，按需启用
-// app.use('/api', cacheMiddleware({ ttl: 300, prefix: 'global' }));
+// 6.1 认证 API 不使用缓存（安全修复 - 防止未授权访问返回缓存数据）
+app.use('/api/auth', (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
+// 7. 全局响应缓存（P2-1）
+app.use(responseCache(300));
 
 // 静态文件服务 (仅在生产环境)
 if (process.env.NODE_ENV === 'production') {
@@ -82,30 +90,28 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    environment: process.env.NODE_ENV || 'development',
+    environment: process.env.NODE_ENV || 'production',
     version: '1.2.0-p2'
   });
 });
 
-// ========== 监控 API 路由（P2-2）==========
-app.use('/api/monitor', monitorRoutes);
-
-// ========== 业务 API 路由 ==========
-// 使用缓存的路由示例（P2-1）
+// ========== API 路由 ==========
 app.use('/api/auth', authRoutes);
 app.use('/api/production', productionRoutes);
 app.use('/api/equipment', equipmentRoutes);
-app.use('/api/devices', equipmentRoutes); // 兼容 /api/devices 端点
+app.use('/api/devices', equipmentRoutes);
 app.use('/api/quality', qualityRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/scheduling', schedulingRoutes);
 app.use('/api/master-data', masterDataRoutes);
+app.use('/api/crud', crudRoutes);
 app.use('/api/modules', modulesRoutes);
 app.use('/api/equipment-archives', equipmentArchivesRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/monitor', monitorRoutes);
 
-// ========== WebSocket 连接处理 ==========
+// WebSocket 连接处理
 io.on('connection', (socket) => {
   logger.info('用户连接', { socketId: socket.id });
   
@@ -123,24 +129,18 @@ io.on('connection', (socket) => {
   });
 });
 
-// ========== 404 处理 ==========
+// 404 处理
 app.use(notFoundHandler);
 
-// ========== 全局错误处理 ==========
+// 全局错误处理 (必须在最后)
 app.use(errorHandler);
 
-// ========== 启动服务器 ==========
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => {
-  logger.info(`MES 系统服务器启动成功`, { 
-    port: PORT, 
-    env: process.env.NODE_ENV,
-    version: '1.2.0-p2',
-    features: ['P2-1 缓存优化', 'P2-2 监控优化']
-  });
+  logger.info(`MES 系统服务器启动成功`, { port: PORT, env: process.env.NODE_ENV });
 });
 
-// ========== 优雅关闭 ==========
+// 优雅关闭
 process.on('SIGTERM', () => {
   logger.info('收到 SIGTERM 信号，开始优雅关闭');
   server.close(() => {
@@ -160,14 +160,12 @@ process.on('SIGINT', () => {
 // 未捕获的异常处理
 process.on('uncaughtException', (error) => {
   logger.error('未捕获的异常', { error: error.message, stack: error.stack });
-  monitorService.recordError(error, { type: 'uncaughtException' });
   process.exit(1);
 });
 
 // 未处理的 Promise 拒绝
 process.on('unhandledRejection', (reason, promise) => {
   logger.error('未处理的 Promise 拒绝', { reason, promise });
-  monitorService.recordError(new Error(String(reason)), { type: 'unhandledRejection' });
 });
 
 module.exports = { app, io };

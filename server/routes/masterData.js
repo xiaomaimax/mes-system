@@ -5,7 +5,8 @@
  */
 const express = require('express');
 const { Op } = require('sequelize');
-const { authenticateToken } = require('./auth');
+const { authenticateToken } = require('../routes/auth');
+const sequelize = require('../config/database');
 
 // 导入模型
 const {
@@ -1123,6 +1124,122 @@ router.delete('/molds/:id', authenticateToken, async (req, res) => {
       message: '服务器错误',
       error: error.message
     });
+  }
+});
+
+
+
+// ============================================
+// 物料管理 CRUD 路由
+// ============================================
+
+/**
+ * POST /api/master-data/materials
+ * 创建物料
+ */
+router.post('/materials', authenticateToken, async (req, res) => {
+  try {
+    const data = req.body;
+    const userId = req.user.userId;
+    
+    if (!data.material_code || !data.material_name) {
+      return res.status(400).json({ success: false, message: '物料编码和名称不能为空' });
+    }
+    
+    // 检查编码是否重复
+    const [existing] = await sequelize.query(
+      'SELECT id FROM materials WHERE material_code = ?',
+      { replacements: [data.material_code], type: sequelize.QueryTypes.SELECT }
+    );
+    
+    if (existing) {
+      return res.status(409).json({ success: false, message: '物料编码已存在' });
+    }
+    
+    // 插入数据库
+    const [result] = await sequelize.query(
+      'INSERT INTO materials (material_code, material_name, material_type, specifications, unit, status) VALUES (?, ?, ?, ?, ?, ?)',
+      {
+        replacements: [
+          data.material_code,
+          data.material_name,
+          data.material_type,
+          data.specifications || '',
+          data.unit || 'PCS',
+          data.status || 'active',
+          userId
+        ],
+        type: sequelize.QueryTypes.INSERT
+      }
+    );
+    
+    res.status(201).json({ success: true, message: '创建物料成功', data: { id: result, ...data } });
+  } catch (error) {
+    console.error('创建物料错误:', error);
+    res.status(500).json({ success: false, message: '创建物料失败：' + error.message });
+  }
+});
+
+/**
+ * PUT /api/master-data/materials/:id
+ * 更新物料
+ */
+router.put('/materials/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { material_name, material_type = 'raw_material', specifications, unit, status = 'active' } = req.body;
+    const userId = req.user.userId;
+    
+    const [existing] = await sequelize.query('SELECT id FROM materials WHERE id = ?', {
+      replacements: [id],
+      type: sequelize.QueryTypes.SELECT
+    });
+    
+    if (!existing) {
+      return res.status(404).json({ success: false, message: '物料不存在' });
+    }
+    
+    const [result] = await sequelize.query(
+      `UPDATE materials SET material_name = ?, material_type = ?, specifications = ?, unit = ?, status = ?, updated_at = NOW() WHERE id = ?`,
+      {
+        replacements: [material_name, material_type, specifications, unit, status, userId, id],
+        type: sequelize.QueryTypes.UPDATE
+      }
+    );
+    
+    res.json({ success: true, message: '更新物料成功', data: { id: parseInt(id) } });
+  } catch (error) {
+    console.error('更新物料错误:', error);
+    res.status(500).json({ success: false, message: '更新物料失败：' + error.message });
+  }
+});
+
+/**
+ * DELETE /api/master-data/materials/:id
+ * 删除物料
+ */
+router.delete('/materials/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const [existing] = await sequelize.query('SELECT id FROM materials WHERE id = ?', {
+      replacements: [id],
+      type: sequelize.QueryTypes.SELECT
+    });
+    
+    if (!existing) {
+      return res.status(404).json({ success: false, message: '物料不存在' });
+    }
+    
+    await sequelize.query('DELETE FROM materials WHERE id = ?', {
+      replacements: [id],
+      type: sequelize.QueryTypes.DELETE
+    });
+    
+    res.json({ success: true, message: '删除物料成功', data: { id: parseInt(id) } });
+  } catch (error) {
+    console.error('删除物料错误:', error);
+    res.status(500).json({ success: false, message: '删除物料失败：' + error.message });
   }
 });
 
