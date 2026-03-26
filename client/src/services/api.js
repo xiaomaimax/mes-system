@@ -4,7 +4,7 @@
 
 // 配置常量
 const CONFIG = {
-  API_BASE_URL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:5002/api',
+  API_BASE_URL: process.env.REACT_APP_API_BASE_URL || '/api',
   TOKEN_STORAGE_KEY: 'token',
   SESSION_TOKEN_KEY: 'token'
 };

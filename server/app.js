@@ -9,6 +9,7 @@ const logger = require('./utils/logger');
 const { sanitizeRequest, createValidationMiddleware } = require('./middleware/validation');
 const { errorHandler, notFoundHandler, asyncHandler } = require('./middleware/errorHandler');
 const { rateLimiter } = require('./middleware/rateLimiter');
+const { responseCache } = require('./middleware/responseCache');
 const { cacheMiddleware, invalidateCache } = require('./middleware/cache');
 const { monitorService } = require('./services/monitorService');
 const { cacheService } = require('./services/cacheService');
@@ -23,13 +24,14 @@ const schedulingRoutes = require('./routes/scheduling');
 const masterDataRoutes = require('./routes/masterData');
 const modulesRoutes = require('./routes/modules');
 const equipmentArchivesRoutes = require('./routes/equipmentArchives');
+const searchRoutes = require('./routes/search');
 const monitorRoutes = require('./routes/monitor');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    origin: process.env.CORS_ORIGIN || "http://192.168.100.6",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
   }
@@ -51,7 +53,7 @@ app.use(monitorService.requestMonitor());
 
 // 3. CORS
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+  origin: process.env.CORS_ORIGIN || "http://192.168.100.6",
   credentials: true
 }));
 
@@ -64,6 +66,7 @@ app.use(sanitizeRequest);
 
 // 6. API 限流（P0-3 安全优化）
 app.use('/api', rateLimiter());
+app.use(responseCache(300));
 
 // 7. 全局缓存中间件（P2-1）- 可选，按需启用
 // app.use('/api', cacheMiddleware({ ttl: 300, prefix: 'global' }));
@@ -100,6 +103,7 @@ app.use('/api/scheduling', schedulingRoutes);
 app.use('/api/master-data', masterDataRoutes);
 app.use('/api/modules', modulesRoutes);
 app.use('/api/equipment-archives', equipmentArchivesRoutes);
+app.use('/api/search', searchRoutes);
 
 // ========== WebSocket 连接处理 ==========
 io.on('connection', (socket) => {

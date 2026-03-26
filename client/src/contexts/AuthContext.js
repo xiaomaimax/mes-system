@@ -2,13 +2,12 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 import { flushSync } from 'react-dom';
 import axios from 'axios';
 
+// 配置axios基础URL
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '/api';
+axios.defaults.baseURL = API_BASE_URL;
+
 const AuthContext = createContext();
 
-/**
- * useAuth Hook
- * Provides access to authentication context
- * Requirement 1.5: Provide consistent authentication state across all components
- */
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -17,40 +16,22 @@ export const useAuth = () => {
   return context;
 };
 
-/**
- * AuthProvider Component
- * 
- * Enhanced authentication context with improved state management.
- * Provides explicit loading states, error handling, and recovery mechanisms.
- * 
- * Requirements: 1.4, 1.5, 4.3
- */
 export const AuthProvider = ({ children }) => {
-  // Authentication state
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [token, setToken] = useState(null);
 
-  // Refs for cleanup
   const mountedRef = useRef(true);
   const logoutTimeoutRef = useRef(null);
 
-  /**
-   * Clear error state
-   * Requirement 4.3: Reset to a known good state when authentication is inconsistent
-   */
   const clearError = useCallback(() => {
     if (mountedRef.current) {
       setError(null);
     }
   }, []);
 
-  /**
-   * Check authentication status
-   * Requirement 1.2: Establish user context before rendering authenticated components
-   */
   const checkAuthStatus = useCallback(async () => {
     if (!mountedRef.current) return;
 
@@ -69,7 +50,6 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
           setError(null);
         } catch (parseErr) {
-          // JSON 解析失败，清除无效数据
           localStorage.removeItem('token');
           localStorage.removeItem('userInfo');
           
@@ -104,14 +84,11 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  /**
-   * Fetch user information from API
-   */
   const fetchUser = useCallback(async () => {
     if (!mountedRef.current) return;
 
     try {
-      const response = await axios.get('/api/auth/me');
+      const response = await axios.get('/auth/me');
       
       if (!mountedRef.current) return;
 
@@ -132,72 +109,55 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  /**
-   * Login method
-   * Requirement 1.1: Clear all user data and reset component states on logout
-   * 暂时简化版本：不使用后端API，直接模拟登录成功
-   */
   const login = useCallback(async (username, password) => {
-    // 立即设置 loading 状态
     setIsLoading(true);
     setError(null);
 
-    // 使用 setTimeout 模拟异步操作，但立即完成
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        try {
-          // 模拟用户数据
-          const mockUser = {
-            id: 1,
-            username: username,
-            name: username === 'admin' ? '系统管理员' : username,
-            email: `${username}@mes-system.com`,
-            department: '管理部',
-            role: '超级管理员'
-          };
-          
-          const mockToken = 'mock-token-' + Date.now();
-          
-          // Store authentication data
-          localStorage.setItem('token', mockToken);
-          localStorage.setItem('userInfo', JSON.stringify(mockUser));
+    try {
+      const response = await axios.post('/auth/login', {
+        username,
+        password
+      });
 
-          // Update state - 确保 isLoading 被设置为 false
-          if (mountedRef.current) {
-            setToken(mockToken);
-            setUser(mockUser);
-            setIsAuthenticated(true);
-            setError(null);
-            setIsLoading(false);
-          }
+      if (!mountedRef.current) return { success: false };
 
-          resolve({ success: true });
-        } catch (err) {
-          console.error('[AuthContext] Login error:', err);
-          
-          if (mountedRef.current) {
-            setError('Login failed');
-            setIsAuthenticated(false);
-            setUser(null);
-            setToken(null);
-            setIsLoading(false);
-          }
+      const authToken = response.data.token;
+      const userData = response.data.user;
+      
+      localStorage.setItem('token', authToken);
+      localStorage.setItem('userInfo', JSON.stringify(userData));
+      
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + authToken;
 
-          resolve({
-            success: false,
-            message: 'Login failed'
-          });
-        }
-      }, 0);
-    });
+      setToken(authToken);
+      setUser(userData);
+      setIsAuthenticated(true);
+      setError(null);
+      setIsLoading(false);
+
+      return { success: true };
+    } catch (err) {
+      console.error('[AuthContext] Login error:', err);
+      
+      if (!mountedRef.current) {
+        return { success: false, message: '登录失败' };
+      }
+
+      const errorMessage = err.response?.data?.message || err.message || '登录失败，请检查后端服务是否正常';
+      
+      setError(errorMessage);
+      setIsAuthenticated(false);
+      setUser(null);
+      setToken(null);
+      setIsLoading(false);
+
+      return {
+        success: false,
+        message: errorMessage
+      };
+    }
   }, []);
 
-  /**
-   * Logout method
-   * Requirement 1.1: Clear all user data and reset component states on logout
-   * Requirement 2.4: Complete cleanup operations during logout
-   * 优化：移除不必要的 console.log，使用 flushSync 确保同步更新
-   */
   const logout = useCallback(() => {
     return new Promise((resolve) => {
       if (!mountedRef.current) {
@@ -206,12 +166,10 @@ export const AuthProvider = ({ children }) => {
       }
 
       try {
-        // 清除存储中的认证数据（立即执行）
         localStorage.removeItem('token');
         localStorage.removeItem('userInfo');
         delete axios.defaults.headers.common['Authorization'];
 
-        // 使用 flushSync 强制同步更新状态
         flushSync(() => {
           setToken(null);
           setUser(null);
@@ -219,10 +177,8 @@ export const AuthProvider = ({ children }) => {
           setError(null);
         });
 
-        // 分发存储事件用于跨标签页登出
         window.dispatchEvent(new Event('logout'));
         
-        // 立即 resolve，因为状态已经同步更新
         resolve();
       } catch (err) {
         console.error('[AuthContext] Logout error:', err);
@@ -238,20 +194,17 @@ export const AuthProvider = ({ children }) => {
     });
   }, []);
 
-  /**
-   * Refresh token
-   */
   const refreshToken = useCallback(async () => {
     if (!mountedRef.current) return { success: false };
 
     try {
-      const response = await axios.post('/api/auth/refresh');
+      const response = await axios.post('/auth/refresh');
       
       if (!mountedRef.current) return { success: false };
 
-      const { token: newToken } = response.data;
+      const newToken = response.data.token;
       localStorage.setItem('token', newToken);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + newToken;
       setToken(newToken);
 
       return { success: true };
@@ -260,7 +213,6 @@ export const AuthProvider = ({ children }) => {
       
       if (!mountedRef.current) return { success: false };
 
-      // 清除认证数据而不调用 logout 以避免循环依赖
       localStorage.removeItem('token');
       localStorage.removeItem('userInfo');
       delete axios.defaults.headers.common['Authorization'];
@@ -273,13 +225,9 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  /**
-   * Initialize authentication on mount
-   */
   useEffect(() => {
     checkAuthStatus();
 
-    // Listen for logout events from other tabs
     const handleLogout = () => {
       if (mountedRef.current) {
         setIsAuthenticated(false);
@@ -295,9 +243,6 @@ export const AuthProvider = ({ children }) => {
     };
   }, [checkAuthStatus]);
 
-  /**
-   * Cleanup on unmount
-   */
   useEffect(() => {
     return () => {
       mountedRef.current = false;
@@ -308,19 +253,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const value = {
-    // State
     user,
     isAuthenticated,
     isLoading,
     error,
     token,
-
-    // Actions
     login,
     logout,
     clearError,
-
-    // Utilities
     checkAuthStatus,
     fetchUser,
     refreshToken

@@ -1,125 +1,69 @@
-/**
- * 监控 API 路由（P2-2 监控优化）
- * 提供性能指标、健康检查、系统状态等端点
- */
-
 const express = require('express');
 const router = express.Router();
 const { monitorService } = require('../services/monitorService');
 const { cacheService } = require('../services/cacheService');
 const logger = require('../utils/logger');
-const sequelize = require('../config/database');
 
-/**
- * GET /api/monitor/health
- * 健康检查端点
- */
 router.get('/health', async (req, res) => {
   try {
     const health = await monitorService.healthCheck();
-    
-    // 添加数据库连接状态
     try {
+      const sequelize = require('../config/database');
       await sequelize.authenticate();
       health.checks.database = 'ok';
     } catch (error) {
       health.checks.database = 'error';
-      health.status = 'unhealthy';
+      health.status = 'warning';
     }
-
-    // 添加缓存状态
     health.checks.cache = cacheService.getStats();
-
-    const statusCode = health.status === 'healthy' ? 200 : 
-                       health.status === 'warning' ? 200 : 503;
-    
+    const statusCode = health.status === 'healthy' ? 200 : health.status === 'warning' ? 200 : 503;
     res.status(statusCode).json(health);
   } catch (error) {
     logger.error('健康检查失败', { error: error.message });
-    res.status(500).json({
-      status: 'error',
-      message: error.message
-    });
+    res.status(500).json({ status: 'error', message: error.message });
   }
 });
 
-/**
- * GET /api/monitor/metrics
- * 获取详细性能指标
- */
 router.get('/metrics', (req, res) => {
   try {
     const metrics = monitorService.getMetrics();
-    res.json({
-      timestamp: new Date().toISOString(),
-      ...metrics
-    });
+    res.json({ timestamp: new Date().toISOString(), ...metrics });
   } catch (error) {
-    logger.error('获取指标失败', { error: error.message });
     res.status(500).json({ error: error.message });
   }
 });
 
-/**
- * GET /api/monitor/report
- * 生成监控报告（含优化建议）
- */
 router.get('/report', (req, res) => {
   try {
     const report = monitorService.generateReport();
     res.json(report);
   } catch (error) {
-    logger.error('生成报告失败', { error: error.message });
     res.status(500).json({ error: error.message });
   }
 });
 
-/**
- * GET /api/monitor/cache/stats
- * 缓存统计信息
- */
 router.get('/cache/stats', (req, res) => {
   try {
     const stats = cacheService.getStats();
-    res.json({
-      timestamp: new Date().toISOString(),
-      ...stats
-    });
+    res.json({ timestamp: new Date().toISOString(), ...stats });
   } catch (error) {
-    logger.error('获取缓存统计失败', { error: error.message });
     res.status(500).json({ error: error.message });
   }
 });
 
-/**
- * POST /api/monitor/cache/clear
- * 清除缓存（需要管理员权限）
- */
 router.post('/cache/clear', async (req, res) => {
   try {
-    // TODO: 添加权限验证
     const pattern = req.query.pattern || '*';
     await cacheService.deletePattern(pattern);
-    
-    res.json({
-      success: true,
-      message: `缓存已清除：${pattern}`,
-      stats: cacheService.getStats()
-    });
+    res.json({ success: true, message: '缓存已清除：' + pattern, stats: cacheService.getStats() });
   } catch (error) {
-    logger.error('清除缓存失败', { error: error.message });
     res.status(500).json({ error: error.message });
   }
 });
 
-/**
- * GET /api/monitor/system
- * 系统资源使用情况
- */
 router.get('/system', (req, res) => {
   try {
     const os = require('os');
-    
     res.json({
       timestamp: new Date().toISOString(),
       platform: os.platform(),
@@ -130,53 +74,29 @@ router.get('/system', (req, res) => {
         free: Math.round(os.freemem() / 1024 / 1024),
         usage: ((os.totalmem() - os.freemem()) / os.totalmem() * 100).toFixed(2) + '%'
       },
-      uptime: {
-        system: os.uptime(),
-        process: process.uptime()
-      },
+      uptime: { system: os.uptime(), process: process.uptime() },
       loadavg: os.loadavg()
     });
   } catch (error) {
-    logger.error('获取系统信息失败', { error: error.message });
     res.status(500).json({ error: error.message });
   }
 });
 
-/**
- * GET /api/monitor/errors
- * 获取最近的错误列表
- */
 router.get('/errors', (req, res) => {
   try {
     const metrics = monitorService.getMetrics();
     const limit = parseInt(req.query.limit) || 10;
-    
-    res.json({
-      timestamp: new Date().toISOString(),
-      count: metrics.recentErrors.length,
-      errors: metrics.recentErrors.slice(-limit)
-    });
+    res.json({ timestamp: new Date().toISOString(), count: metrics.recentErrors.length, errors: metrics.recentErrors.slice(-limit) });
   } catch (error) {
-    logger.error('获取错误列表失败', { error: error.message });
     res.status(500).json({ error: error.message });
   }
 });
 
-/**
- * POST /api/monitor/errors/clear
- * 清除错误历史
- */
 router.post('/errors/clear', (req, res) => {
   try {
-    // TODO: 添加权限验证
     monitorService.metrics.errors = [];
-    
-    res.json({
-      success: true,
-      message: '错误历史已清除'
-    });
+    res.json({ success: true, message: '错误历史已清除' });
   } catch (error) {
-    logger.error('清除错误历史失败', { error: error.message });
     res.status(500).json({ error: error.message });
   }
 });

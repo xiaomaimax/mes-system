@@ -1,36 +1,21 @@
-import React, { useEffect, Suspense, lazy } from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { Layout, Spin } from 'antd';
+import { Layout } from 'antd';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import performanceMonitor from './utils/performance'; // P1-10 性能监控
-
-// P1-2: 路由懒加载 - 减少初始包大小
-const LoginPage = lazy(() => import('./components/LoginPage'));
-const Sidebar = lazy(() => import('./components/Sidebar'));
-const SimpleHeader = lazy(() => import('./components/SimpleHeader'));
-const HomePage = lazy(() => import('./components/HomePage'));
-const SimpleProduction = lazy(() => import('./components/SimpleProduction'));
-const SimpleScheduling = lazy(() => import('./components/SimpleScheduling'));
-const SimpleProcess = lazy(() => import('./components/SimpleProcess'));
-const SimpleEquipment = lazy(() => import('./components/SimpleEquipment'));
-const SimpleQuality = lazy(() => import('./components/SimpleQuality'));
-const SimpleInventory = lazy(() => import('./components/SimpleInventory'));
-const SimplePersonnel = lazy(() => import('./components/SimplePersonnel'));
-const SimpleIntegrationEnhanced = lazy(() => import('./components/SimpleIntegrationEnhanced'));
-const SimpleSettings = lazy(() => import('./components/SimpleSettings'));
-const SimpleReports = lazy(() => import('./components/SimpleReports'));
-
-// 懒加载占位组件
-const LoadingFallback = () => (
-  <div style={{ 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    height: '100vh' 
-  }}>
-    <Spin size="large" tip="加载中..." />
-  </div>
-);
+import LoginPage from './components/LoginPage';
+import Sidebar from './components/Sidebar';
+import SimpleHeader from './components/SimpleHeader';
+import HomePage from './components/HomePage';
+import SimpleProduction from './components/SimpleProduction';
+import SimpleScheduling from './components/SimpleScheduling';
+import SimpleProcess from './components/SimpleProcess';
+import SimpleEquipment from './components/SimpleEquipment';
+import SimpleQuality from './components/SimpleQuality';
+import SimpleInventory from './components/SimpleInventory';
+import SimplePersonnel from './components/SimplePersonnel';
+import SimpleIntegrationEnhanced from './components/SimpleIntegrationEnhanced';
+import SimpleSettings from './components/SimpleSettings';
+import SimpleReports from './components/SimpleReports';
 
 const { Content } = Layout;
 
@@ -43,12 +28,6 @@ const { Content } = Layout;
 function MainApp() {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth();
-
-  // P1-10: 初始化性能监控
-  useEffect(() => {
-    performanceMonitor.init();
-    console.log('✅ 性能监控已初始化');
-  }, []);
 
   // 监听认证状态变化，当登出时自动重定向到登录页面
   useEffect(() => {
@@ -94,21 +73,18 @@ function MainApp() {
   // 已登录或有有效 token 显示主应用
   return (
     <Layout style={{ minHeight: '100vh', display: 'flex', flexDirection: 'row' }}>
-      <Suspense fallback={<LoadingFallback />}>
-        <Sidebar />
-        <Layout style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <Suspense fallback={<LoadingFallback />}>
-            <SimpleHeader />
-          </Suspense>
-          <Content style={{ 
-            margin: '16px', 
-            background: '#fff',
-            flex: 1,
-            overflow: 'auto'
-          }}>
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<HomePage />} />
+      <Sidebar />
+      <Layout style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <SimpleHeader />
+        <Content style={{ 
+          margin: '16px', 
+          background: '#fff',
+          flex: 1,
+          overflow: 'auto'
+        }}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<HomePage />} />
             
             {/* 工艺管理 */}
             <Route path="/process" element={<SimpleProcess />} />
