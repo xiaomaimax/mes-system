@@ -1202,7 +1202,7 @@ router.put('/materials/:id', authenticateToken, async (req, res) => {
     const [result] = await sequelize.query(
       `UPDATE materials SET material_name = ?, material_type = ?, specifications = ?, unit = ?, status = ?, updated_at = NOW() WHERE id = ?`,
       {
-        replacements: [material_name, material_type, specifications, unit, status, userId, id],
+        replacements: [material_name, material_type, specifications || '', unit || 'PCS', status || 'active', id],
         type: sequelize.QueryTypes.UPDATE
       }
     );
