@@ -90,7 +90,7 @@ const RoleManagement = () => {
           {!record.is_system && (
             <>
               <Button type="link" icon={<Edit />} onClick={() => openModal(record)}>编辑</Button>
-              <Popconfirm title=确定删除这个角色吗？ onConfirm={() => handleDelete(record.id)}>
+              <Popconfirm title="确定删除这个角色吗？" onConfirm={() => handleDelete(record.id)}>
                 <Button type="link" danger icon={<Delete />}>删除</Button>
               </Popconfirm>
             </>
