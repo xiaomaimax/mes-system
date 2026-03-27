@@ -194,6 +194,24 @@ Permission.hasMany(RolePermission, {
   as: 'rolePermissions'
 });
 
+UserRole.belongsTo(User, {
+  foreignKey: 'user_id',
+  as: 'user'
+});
+User.hasMany(UserRole, {
+  foreignKey: 'user_id',
+  as: 'userRoles'
+});
+
+UserRole.belongsTo(Role, {
+  foreignKey: 'role_id',
+  as: 'role'
+});
+Role.hasMany(UserRole, {
+  foreignKey: 'role_id',
+  as: 'userRoles'
+});
+
 module.exports = {
   sequelize,
   Equipment,
