@@ -114,14 +114,14 @@ const RoleManagement = () => {
         onOk={() => form.submit()}
         onCancel={() => setModalVisible(false)}
       >
-        <Form form={form} layout=vertical onFinish={handleSubmit}>
-          <Form.Item name=role_name label=角色代码 rules={[{ required: true, message: '请输入角色代码' }]} extra=英文字母和下划线>
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
+          <Form.Item name="role_name" label="角色代码" rules={[{ required: true, message: '请输入角色代码' }]} extra="英文字母和下划线">
             <Input disabled={!!editingRole} />
           </Form.Item>
-          <Form.Item name=role_display_name label=角色名称 rules={[{ required: true, message: '请输入角色名称' }]}>
+          <Form.Item name="role_display_name" label="角色名称" rules={[{ required: true, message: '请输入角色名称' }]}>
             <Input placeholder=如：部门经理 />
           </Form.Item>
-          <Form.Item name=description label=描述>
+          <Form.Item name="description" label="描述">
             <TextArea rows={3} placeholder=角色描述 />
           </Form.Item>
         </Form>

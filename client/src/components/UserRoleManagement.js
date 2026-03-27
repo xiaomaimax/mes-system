@@ -132,7 +132,7 @@ const UserRoleManagement = () => {
       </Card>
 
       <Modal
-        title=分配角色 -  + (selectedUser?.full_name || '')
+        title={'分配角色 - ' + (selectedUser?.full_name || '')}
         open={modalVisible}
         onOk={handleSave}
         onCancel={() => setModalVisible(false)}
