@@ -96,7 +96,7 @@ const UserRoleManagement = () => {
     {
       title: '操作', key: 'action', width: 150,
       render: (_, record) => (
-        <Button type=primary icon={<UsergroupAdd />} onClick={() => openModal(record)}>
+        <Button type="primary" icon={<UsergroupAdd />} onClick={() => openModal(record)}>
           分配角色
         </Button>
       )

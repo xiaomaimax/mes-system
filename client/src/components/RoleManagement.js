@@ -86,12 +86,12 @@ const RoleManagement = () => {
       title: '操作', key: 'action', width: 200,
       render: (_, record) => (
         <Space>
-          <Button type=link icon={<User />} onClick={() => window.location.href = '/system/user-roles?roleId=' + record.id}>分配用户</Button>
+          <Button type="link" icon={<User />} onClick={() => window.location.href = '/system/user-roles?roleId=' + record.id}>分配用户</Button>
           {!record.is_system && (
             <>
-              <Button type=link icon={<Edit />} onClick={() => openModal(record)}>编辑</Button>
+              <Button type="link" icon={<Edit />} onClick={() => openModal(record)}>编辑</Button>
               <Popconfirm title=确定删除这个角色吗？ onConfirm={() => handleDelete(record.id)}>
-                <Button type=link danger icon={<Delete />}>删除</Button>
+                <Button type="link" danger icon={<Delete />}>删除</Button>
               </Popconfirm>
             </>
           )}
@@ -104,7 +104,7 @@ const RoleManagement = () => {
     <div style={{ padding: 24 }}>
       <Card
         title={<Space><Shield />角色管理</Space>}
-        extra={<Button type=primary icon={<Plus />} onClick={() => openModal()}>新建角色</Button>}
+        extra={<Button type="primary" icon={<Plus />} onClick={() => openModal()}>新建角色</Button>}
       >
         <Table columns={columns} dataSource={roles} loading={loading} rowKey=id pagination={{ pageSize: 20 }} />
       </Card>
