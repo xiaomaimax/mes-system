@@ -83,7 +83,7 @@ const LoginPage = () => {
    * Handle login with form submission
    * Requirement 1.2: Establish user context before rendering authenticated components
    */
-  const handleLogin = async (values) => {
+  const handleLogin = async (values) => { console.log("LOGIN!", values);
     setLoading(true);
     
     try {

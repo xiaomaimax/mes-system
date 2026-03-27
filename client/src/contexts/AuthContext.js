@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
       setToken(null);
     } finally {
       if (mountedRef.current) {
-        setIsLoading(false);
+        console.log("SET_LOADING_FALSE"); setIsLoading(false);
       }
     }
   }, []);
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
       await logout();
     } finally {
       if (mountedRef.current) {
-        setIsLoading(false);
+        console.log("SET_LOADING_FALSE"); setIsLoading(false);
       }
     }
   }, []);
@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       setIsAuthenticated(true);
       setError(null);
-      setIsLoading(false);
+      console.log("SET_LOADING_FALSE"); setIsLoading(false);
 
       return { success: true };
     } catch (err) {
@@ -149,7 +149,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(false);
       setUser(null);
       setToken(null);
-      setIsLoading(false);
+      console.log("SET_LOADING_FALSE"); setIsLoading(false);
 
       return {
         success: false,
