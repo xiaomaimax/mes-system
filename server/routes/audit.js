@@ -160,3 +160,34 @@ router.post('/cleanup',
 );
 
 module.exports = router;
+
+// 导出审计日志
+router.get('/export',
+  authenticateToken,
+  authorize(['system.audit.read']),
+  async (req, res) => {
+    try {
+      const { startDate, endDate, action, format = 'csv' } = req.query;
+      
+      const logs = await AuditService.exportLogs({
+        startDate,
+        endDate,
+        action
+      });
+      
+      if (format === 'csv') {
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', 'attachment; filename=audit_logs.csv');
+        res.send(logs);
+      } else {
+        res.json({ success: true, data: logs });
+      }
+    } catch (error) {
+      logger.error('导出审计日志失败', { error: error.message });
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    }
+  }
+);

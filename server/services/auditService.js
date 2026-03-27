@@ -51,10 +51,15 @@ class AuditService {
   static async exportLogs(options) {
     const { startDate, endDate, action } = options;
     
-    const logs = await AuditLog.export({
-      startDate,
-      endDate,
-      action
+    const where = {};
+    if (startDate) where.created_at = { [require('sequelize').Op.gte]: startDate };
+    if (endDate) where.created_at = { ...where.created_at, [require('sequelize').Op.lte]: endDate };
+    if (action) where.action = action;
+    
+    const logs = await AuditLog.findAll({
+      where,
+      order: [['created_at', 'DESC']],
+      limit: 10000
     });
     
     // 转换为 CSV 格式
