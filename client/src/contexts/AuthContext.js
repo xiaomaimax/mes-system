@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
 
           setToken(storedToken);
           setUser(userInfo);
-          setIsAuthenticated(true);
+          console.log("[AuthContext] Setting isAuthenticated=true"); setIsAuthenticated(true);
           setError(null);
         } catch (parseErr) {
           localStorage.removeItem('token');
@@ -93,7 +93,7 @@ export const AuthProvider = ({ children }) => {
       if (!mountedRef.current) return;
 
       setUser(response.data.user);
-      setIsAuthenticated(true);
+      console.log("[AuthContext] Setting isAuthenticated=true"); setIsAuthenticated(true);
       setError(null);
     } catch (err) {
       console.error('[AuthContext] Error fetching user:', err);
@@ -131,11 +131,11 @@ export const AuthProvider = ({ children }) => {
 
       setToken(authToken);
       setUser(userData);
-      setIsAuthenticated(true);
+      console.log("[AuthContext] Setting isAuthenticated=true"); setIsAuthenticated(true);
       setError(null);
       setIsLoading(false);
 
-      return { success: true };
+      console.log("[AuthContext] Login success:", { token: authToken ? "exists" : "none", user: userData }); return { success: true };
     } catch (err) {
       console.error('[AuthContext] Login error:', err);
       
@@ -207,7 +207,7 @@ export const AuthProvider = ({ children }) => {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + newToken;
       setToken(newToken);
 
-      return { success: true };
+      console.log("[AuthContext] Login success:", { token: authToken ? "exists" : "none", user: userData }); return { success: true };
     } catch (err) {
       console.error('[AuthContext] Token refresh error:', err);
       
