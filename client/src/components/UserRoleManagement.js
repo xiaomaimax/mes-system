@@ -120,7 +120,7 @@ const UserRoleManagement = () => {
     
     return (
       <Space wrap>
-        {userRoleList.map(r => <Tag key={r.id} color=blue>{r.role_display_name}</Tag>)}
+        {userRoleList.map(r => <Tag key={r.id} color="blue">{r.role_display_name}</Tag>)}
       </Space>
     );
   };
@@ -128,7 +128,7 @@ const UserRoleManagement = () => {
   return (
     <div style={{ padding: 24 }}>
       <Card title={<Space><User />用户角色分配</Space>}>
-        <Table columns={columns} dataSource={users} loading={loading} rowKey=id pagination={{ pageSize: 20 }} />
+        <Table columns={columns} dataSource={users} loading={loading} rowKey="id" pagination={{ pageSize: 20 }} />
       </Card>
 
       <Modal

@@ -106,7 +106,7 @@ const RoleManagement = () => {
         title={<Space><Shield />角色管理</Space>}
         extra={<Button type="primary" icon={<Plus />} onClick={() => openModal()}>新建角色</Button>}
       >
-        <Table columns={columns} dataSource={roles} loading={loading} rowKey=id pagination={{ pageSize: 20 }} />
+        <Table columns={columns} dataSource={roles} loading={loading} rowKey="id" pagination={{ pageSize: 20 }} />
       </Card>
       <Modal
         title={editingRole ? '编辑角色' : '新建角色'}
