@@ -16,6 +16,8 @@ import SimplePersonnel from './components/SimplePersonnel';
 import SimpleIntegrationEnhanced from './components/SimpleIntegrationEnhanced';
 import SimpleSettings from './components/SimpleSettings';
 import SimpleReports from './components/SimpleReports';
+import RoleManagement from './components/RoleManagement';
+import UserRoleManagement from './components/UserRoleManagement';
 
 const { Content } = Layout;
 
@@ -121,6 +123,10 @@ function MainApp() {
             {/* 系统设置 */}
             <Route path="/settings" element={<SimpleSettings />} />
             <Route path="/settings/*" element={<SimpleSettings />} />
+            {/* P3 权限管理 */}
+            <Route path="/system/roles" element={<RoleManagement />} />
+            <Route path="/system/user-roles" element={<UserRoleManagement />} />
+
             
             {/* 报表管理 */}
             <Route path="/reports" element={<SimpleReports />} />
