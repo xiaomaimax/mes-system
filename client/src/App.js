@@ -33,13 +33,13 @@ function MainApp() {
 
   // 监听认证状态变化，当登出时自动重定向到登录页面
   useEffect(() => {
-    if (!isLoading) { console.log("[App] Nav:", isAuthenticated, isLoading);
+    if (!isLoading) {
       navigate(isAuthenticated ? '/dashboard' : '/login', { replace: true });
     }
   }, [isAuthenticated, isLoading, navigate]);
   
   // 简化加载状态 - 只在初始化时显示，不要在登录后显示
-  if (isLoading && !isAuthenticated) {
+  if (isLoading && !isAuthenticated ) {
     return (
       <div style={{ 
         minHeight: '100vh', 
@@ -67,7 +67,7 @@ function MainApp() {
   }
   
   // 未登录显示登录页面
-  if (!isAuthenticated) {
+  if (!isAuthenticated ) {
     return <LoginPage />;
   }
   

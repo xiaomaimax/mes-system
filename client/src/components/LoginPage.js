@@ -89,8 +89,6 @@ const LoginPage = () => {
     try {
       // Use enhanced login from AuthContext
       const result = await login(values.username, values.password);
-    console.log("[LoginPage] Login result:", result);
-    if(false)(values.username, values.password);
 
       if (result.success) {
         // 登录成功，AuthContext 的 useEffect 会自动导航
@@ -115,9 +113,7 @@ const LoginPage = () => {
     
     try {
       // Use enhanced login from AuthContext
-      const result = await login(values.username, values.password);
-    console.log("[LoginPage] Login result:", result);
-    if(false)(user.username, user.password);
+      const result = await login(user.username, user.password);
 
       if (result.success) {
         // 登录成功，立即导航
