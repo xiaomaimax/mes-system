@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Card, message, Modal, Transfer, Space, Tag, Select } from 'antd';
-import { UsergroupAdd, User } from '@ant-design/icons';
+import { UsergroupAddOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const { Option } = Select;
@@ -96,7 +96,7 @@ const UserRoleManagement = () => {
     {
       title: '操作', key: 'action', width: 150,
       render: (_, record) => (
-        <Button type="primary" icon={<UsergroupAdd />} onClick={() => openModal(record)}>
+        <Button type="primary" icon={<UsergroupAddOutlined />} onClick={() => openModal(record)}>
           分配角色
         </Button>
       )
@@ -127,7 +127,7 @@ const UserRoleManagement = () => {
 
   return (
     <div style={{ padding: 24 }}>
-      <Card title={<Space><User />用户角色分配</Space>}>
+      <Card title={<Space><UserOutlined />用户角色分配</Space>}>
         <Table columns={columns} dataSource={users} loading={loading} rowKey="id" pagination={{ pageSize: 20 }} />
       </Card>
 

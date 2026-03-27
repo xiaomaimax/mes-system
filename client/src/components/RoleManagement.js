@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Card, message, Modal, Form, Input, Select, Space, Tag, Popconfirm } from 'antd';
-import { Plus, Edit, Delete, Shield, User } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, DeleteOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const { TextArea } = Input;
@@ -86,7 +86,7 @@ const RoleManagement = () => {
       title: '操作', key: 'action', width: 200,
       render: (_, record) => (
         <Space>
-          <Button type="link" icon={<User />} onClick={() => window.location.href = '/system/user-roles?roleId=' + record.id}>分配用户</Button>
+          <Button type="link" icon={<UserOutlined />} onClick={() => window.location.href = '/system/user-roles?roleId=' + record.id}>分配用户</Button>
           {!record.is_system && (
             <>
               <Button type="link" icon={<Edit />} onClick={() => openModal(record)}>编辑</Button>
@@ -119,10 +119,10 @@ const RoleManagement = () => {
             <Input disabled={!!editingRole} />
           </Form.Item>
           <Form.Item name="role_display_name" label="角色名称" rules={[{ required: true, message: '请输入角色名称' }]}>
-            <Input placeholder=如：部门经理 />
+            <Input placeholder="如：部门经理" />
           </Form.Item>
           <Form.Item name="description" label="描述">
-            <TextArea rows={3} placeholder=角色描述 />
+            <TextArea rows={3} placeholder="角色描述" />
           </Form.Item>
         </Form>
       </Modal>
