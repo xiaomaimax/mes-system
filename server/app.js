@@ -32,6 +32,7 @@ const roleRoutes = require('./routes/roles');
 const menuRoutes = require('./routes/menus');
 const auditRoutes = require('./routes/audit');
 const userRolesRoutes = require('./routes/userRoles');
+const dataPermissionsRoutes = require('./routes/dataPermissions');
 
 
 const app = express();
@@ -120,6 +121,7 @@ app.use('/api/permissions', permissionRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/menus', menuRoutes);
 app.use('/api/audit', auditRoutes);
+app.use('/api/data-permissions', dataPermissionsRoutes);
 app.use('/api/user-roles', userRolesRoutes);
 
 

@@ -249,3 +249,13 @@ module.exports = {
   MenuPermission,
   RoleMenu
 };
+
+// DataPermission <-> Role
+DataPermission.belongsTo(Role, {
+  foreignKey: 'role_id',
+  as: 'role'
+});
+Role.hasMany(DataPermission, {
+  foreignKey: 'role_id',
+  as: 'dataPermissions'
+});
