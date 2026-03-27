@@ -27,13 +27,13 @@ const { Content } = Layout;
  * Requirements: 2.1, 2.2, 2.3
  * 确保认证状态改变时立即重新渲染，显示正确的页面
  */
-function MainApp() {
+function MainApp() { console.log("[MainApp] RENDERED!");
   const navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth();
 
   // 监听认证状态变化，当登出时自动重定向到登录页面
-  useEffect(() => {
-    if (!isLoading) {
+  useEffect(() => { console.log("[MainApp] useEffect:", { isAuthenticated, isLoading });
+    if (!isLoading) { console.log("[MainApp] Nav:", isAuthenticated);
       navigate(isAuthenticated ? '/dashboard' : '/login', { replace: true });
     }
   }, [isAuthenticated, isLoading, navigate]);
