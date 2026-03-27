@@ -19,7 +19,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); console.log("[AuthContext] Initial isLoading=true");
   const [error, setError] = useState(null);
   const [token, setToken] = useState(null);
 
@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
       setToken(null);
     } finally {
       if (mountedRef.current) {
-        setIsLoading(false);
+        console.log("[AuthContext] setIsLoading(false)"); setIsLoading(false);
       }
     }
   }, []);
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
       await logout();
     } finally {
       if (mountedRef.current) {
-        setIsLoading(false);
+        console.log("[AuthContext] setIsLoading(false)"); setIsLoading(false);
       }
     }
   }, []);
@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       console.log("[AuthContext] setIsAuthenticated(true)"); setIsAuthenticated(true);
       setError(null);
-      setIsLoading(false);
+      console.log("[AuthContext] setIsLoading(false)"); setIsLoading(false);
 
       return { success: true };
     } catch (err) {
@@ -149,7 +149,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(false);
       setUser(null);
       setToken(null);
-      setIsLoading(false);
+      console.log("[AuthContext] setIsLoading(false)"); setIsLoading(false);
 
       return {
         success: false,
@@ -225,7 +225,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { console.log("[AuthContext] useEffect checkAuthStatus");
     checkAuthStatus();
 
     const handleLogout = () => {
@@ -243,7 +243,7 @@ export const AuthProvider = ({ children }) => {
     };
   }, [checkAuthStatus]);
 
-  useEffect(() => {
+  useEffect(() => { console.log("[AuthContext] useEffect checkAuthStatus");
     return () => {
       mountedRef.current = false;
       if (logoutTimeoutRef.current) {
