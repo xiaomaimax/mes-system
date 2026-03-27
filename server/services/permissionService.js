@@ -83,11 +83,6 @@ class PermissionService {
    */
   static async getAllRoles() {
     return await Role.findAll({
-      include: [{
-        model: Permission,
-        as: 'permissions',
-        through: { attributes: [] }
-      }],
       order: [['is_system', 'DESC'], ['role_name', 'ASC']]
     });
   }
@@ -96,13 +91,21 @@ class PermissionService {
    * 获取角色详情（含权限）
    */
   static async getRoleDetail(roleId) {
-    return await Role.findByPk(roleId, {
+    const role = await Role.findByPk(roleId);
+    if (!role) return null;
+    
+    // 获取角色权限
+    const RolePermission = require('../models/RolePermission');
+    const rolePerms = await RolePermission.findAll({
+      where: { role_id: roleId },
       include: [{
         model: Permission,
-        as: 'permissions',
-        through: { attributes: [] }
+        as: 'permission'
       }]
     });
+    
+    role.dataValues.permissions = rolePerms.map(rp => rp.permission);
+    return role;
   }
   
   /**

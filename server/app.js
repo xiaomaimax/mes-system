@@ -27,6 +27,11 @@ const modulesRoutes = require('./routes/modules');
 const equipmentArchivesRoutes = require('./routes/equipmentArchives');
 const searchRoutes = require('./routes/search');
 const monitorRoutes = require('./routes/monitor');
+const permissionRoutes = require('./routes/permissions');
+const roleRoutes = require('./routes/roles');
+const menuRoutes = require('./routes/menus');
+const auditRoutes = require('./routes/audit');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -91,7 +96,7 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     environment: process.env.NODE_ENV || 'production',
-    version: '1.2.0-p2'
+    version: '1.3.0-p3'
   });
 });
 
@@ -110,6 +115,11 @@ app.use('/api/modules', modulesRoutes);
 app.use('/api/equipment-archives', equipmentArchivesRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/monitor', monitorRoutes);
+app.use('/api/permissions', permissionRoutes);
+app.use('/api/roles', roleRoutes);
+app.use('/api/menus', menuRoutes);
+app.use('/api/audit', auditRoutes);
+
 
 // WebSocket 连接处理
 io.on('connection', (socket) => {

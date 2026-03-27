@@ -33,6 +33,17 @@ const DefectRecord = require('./DefectRecord');
 const EquipmentMaintenance = require('./EquipmentMaintenance');
 const ShiftSchedule = require('./ShiftSchedule');
 const DailyProductionReport = require('./DailyProductionReport');
+// RBAC 权限管理模型
+const Role = require('./Role');
+const Permission = require('./Permission');
+const UserRole = require('./UserRole');
+const RolePermission = require('./RolePermission');
+const Department = require('./Department');
+const DataPermission = require('./DataPermission');
+const AuditLog = require('./AuditLog');
+const MenuPermission = require('./MenuPermission');
+const RoleMenu = require('./RoleMenu');
+
 
 // 设置关联关系
 
@@ -114,6 +125,75 @@ MaterialSchedulingExt.belongsTo(Mold, {
   as: 'defaultMold'
 });
 
+
+// RBAC 关联关系
+Role.belongsToMany(Permission, {
+  through: RolePermission,
+  foreignKey: 'role_id',
+  otherKey: 'permission_id',
+  as: 'permissions'
+});
+Permission.belongsToMany(Role, {
+  through: RolePermission,
+  foreignKey: 'permission_id',
+  otherKey: 'role_id',
+  as: 'roles'
+});
+
+User.belongsToMany(Role, {
+  through: UserRole,
+  foreignKey: 'user_id',
+  otherKey: 'role_id',
+  as: 'roles'
+});
+Role.belongsToMany(User, {
+  through: UserRole,
+  foreignKey: 'role_id',
+  otherKey: 'user_id',
+  as: 'users'
+});
+
+Role.belongsToMany(MenuPermission, {
+  through: RoleMenu,
+  foreignKey: 'role_id',
+  otherKey: 'menu_id',
+  as: 'menus'
+});
+MenuPermission.belongsToMany(Role, {
+  through: RoleMenu,
+  foreignKey: 'menu_id',
+  otherKey: 'role_id',
+  as: 'roles'
+});
+
+Department.hasMany(User, {
+  foreignKey: 'department_id',
+  as: 'users'
+});
+User.belongsTo(Department, {
+  foreignKey: 'department_id',
+  as: 'dept'
+});
+
+
+User.hasMany(AuditLog, {
+  foreignKey: 'user_id',
+  as: 'auditLogs'
+});
+AuditLog.belongsTo(User, {
+  foreignKey: 'user_id',
+  as: 'user'
+});
+
+RolePermission.belongsTo(Permission, {
+  foreignKey: 'permission_id',
+  as: 'permission'
+});
+Permission.hasMany(RolePermission, {
+  foreignKey: 'permission_id',
+  as: 'rolePermissions'
+});
+
 module.exports = {
   sequelize,
   Equipment,
@@ -139,5 +219,15 @@ module.exports = {
   DefectRecord,
   EquipmentMaintenance,
   ShiftSchedule,
-  DailyProductionReport
+  DailyProductionReport,
+  // RBAC 模型
+  Role,
+  Permission,
+  UserRole,
+  RolePermission,
+  Department,
+  DataPermission,
+  AuditLog,
+  MenuPermission,
+  RoleMenu
 };

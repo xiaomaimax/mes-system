@@ -81,7 +81,7 @@ const AuditLog = sequelize.define('AuditLog', {
 AuditLog.associate = (models) => {
   AuditLog.belongsTo(models.User, {
     foreignKey: 'user_id',
-    as: "creator"
+    as: "user"
   });
 };
 
@@ -128,7 +128,7 @@ AuditLog.query = async function(options) {
     where,
     include: [{
       model: sequelize.models.User,
-      as: "creator",
+      as: "user",
       attributes: ['id', 'username', 'full_name', 'department']
     }],
     order: [['created_at', 'DESC']],
@@ -156,7 +156,7 @@ AuditLog.export = async function(options) {
     where,
     include: [{
       model: sequelize.models.User,
-      as: "creator",
+      as: "user",
       attributes: ['username', 'full_name', 'department']
     }],
     order: [['created_at', 'DESC']],
