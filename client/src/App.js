@@ -27,19 +27,19 @@ const { Content } = Layout;
  * Requirements: 2.1, 2.2, 2.3
  * 确保认证状态改变时立即重新渲染，显示正确的页面
  */
-function MainApp() { console.log("[MainApp] RENDERED!");
+function MainApp() {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth();
 
   // 监听认证状态变化，当登出时自动重定向到登录页面
-  useEffect(() => { console.log("[MainApp] useEffect:", { isAuthenticated, isLoading });
-    if (!isLoading) { console.log("[MainApp] Nav:", isAuthenticated);
+  useEffect(() => {
+    if (!isLoading) {
       navigate(isAuthenticated ? '/dashboard' : '/login', { replace: true });
     }
   }, [isAuthenticated, isLoading, navigate]);
   
   // 简化加载状态 - 只在初始化时显示，不要在登录后显示
-  if (isLoading && !isAuthenticated ) {
+  if (isLoading && !isAuthenticated && !localStorage.getItem('token')) {
     return (
       <div style={{ 
         minHeight: '100vh', 
@@ -67,7 +67,7 @@ function MainApp() { console.log("[MainApp] RENDERED!");
   }
   
   // 未登录显示登录页面
-  if (!isAuthenticated ) {
+  if (!isAuthenticated && !localStorage.getItem('token')) {
     return <LoginPage />;
   }
   

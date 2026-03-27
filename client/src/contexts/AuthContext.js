@@ -19,7 +19,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); console.log("[AuthContext] Initial isLoading=true");
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [token, setToken] = useState(null);
 
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
 
           setToken(storedToken);
           setUser(userInfo);
-          console.log("[AuthContext] setIsAuthenticated(true)"); setIsAuthenticated(true);
+          setIsAuthenticated(true);
           setError(null);
         } catch (parseErr) {
           localStorage.removeItem('token');
@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
       setToken(null);
     } finally {
       if (mountedRef.current) {
-        console.log("[AuthContext] setIsLoading(false)"); setIsLoading(false);
+        setIsLoading(false);
       }
     }
   }, []);
@@ -93,7 +93,7 @@ export const AuthProvider = ({ children }) => {
       if (!mountedRef.current) return;
 
       setUser(response.data.user);
-      console.log("[AuthContext] setIsAuthenticated(true)"); setIsAuthenticated(true);
+      setIsAuthenticated(true);
       setError(null);
     } catch (err) {
       console.error('[AuthContext] Error fetching user:', err);
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
       await logout();
     } finally {
       if (mountedRef.current) {
-        console.log("[AuthContext] setIsLoading(false)"); setIsLoading(false);
+        setIsLoading(false);
       }
     }
   }, []);
@@ -131,9 +131,9 @@ export const AuthProvider = ({ children }) => {
 
       setToken(authToken);
       setUser(userData);
-      console.log("[AuthContext] setIsAuthenticated(true)"); setIsAuthenticated(true);
+      setIsAuthenticated(true);
       setError(null);
-      console.log("[AuthContext] setIsLoading(false)"); setIsLoading(false);
+      setIsLoading(false);
 
       return { success: true };
     } catch (err) {
@@ -149,7 +149,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(false);
       setUser(null);
       setToken(null);
-      console.log("[AuthContext] setIsLoading(false)"); setIsLoading(false);
+      setIsLoading(false);
 
       return {
         success: false,
@@ -225,7 +225,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => { console.log("[AuthContext] useEffect checkAuthStatus");
+  useEffect(() => {
     checkAuthStatus();
 
     const handleLogout = () => {
@@ -243,7 +243,7 @@ export const AuthProvider = ({ children }) => {
     };
   }, [checkAuthStatus]);
 
-  useEffect(() => { console.log("[AuthContext] useEffect checkAuthStatus");
+  useEffect(() => {
     return () => {
       mountedRef.current = false;
       if (logoutTimeoutRef.current) {
