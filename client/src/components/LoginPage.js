@@ -91,9 +91,8 @@ const LoginPage = () => {
       const result = await login(values.username, values.password);
 
       if (result.success) {
-        // 登录成功，立即导航
+        // 登录成功，AuthContext 的 useEffect 会自动导航
         setLoading(false);
-        navigate('/dashboard', { replace: true });
       } else {
         safeMessage.error(result.message || '登录失败，请重试');
         setLoading(false);

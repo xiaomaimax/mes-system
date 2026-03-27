@@ -33,9 +33,8 @@ function MainApp() {
 
   // 监听认证状态变化，当登出时自动重定向到登录页面
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      // 确保导航到登录页面
-      navigate('/login', { replace: true });
+    if (!isLoading) {
+      navigate(isAuthenticated ? '/dashboard' : '/login', { replace: true });
     }
   }, [isAuthenticated, isLoading, navigate]);
   
