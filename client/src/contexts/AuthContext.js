@@ -110,16 +110,24 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = useCallback(async (username, password) => {
+    console.log('[AuthContext] login 开始, mountedRef:', mountedRef.current);
     setIsLoading(true);
     setError(null);
 
     try {
+      console.log('[AuthContext] 发送登录请求...');
       const response = await axios.post('/auth/login', {
         username,
         password
       });
 
-      if (!mountedRef.current) return { success: false };
+      console.log('[AuthContext] 登录响应:', response.data);
+      console.log('[AuthContext] mountedRef.current:', mountedRef.current);
+      
+      if (!mountedRef.current) {
+        console.log('[AuthContext] 组件已卸载，返回 false');
+        return { success: false };
+      }
 
       const authToken = response.data.token;
       const userData = response.data.user;
@@ -226,6 +234,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    // React 18 Strict Mode: 重置 mountedRef
+    mountedRef.current = true;
     checkAuthStatus();
 
     const handleLogout = () => {
