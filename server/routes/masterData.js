@@ -1158,7 +1158,7 @@ router.post('/materials', authenticateToken, async (req, res) => {
     
     // 插入数据库
     const [result] = await sequelize.query(
-      'INSERT INTO materials (material_code, material_name, material_type, specifications, unit, status) VALUES (?, ?, ?, ?, ?, ?)',
+      'INSERT INTO materials (material_code, material_name, material_type, specifications, unit, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())',
       {
         replacements: [
           data.material_code,
