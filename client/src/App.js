@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Layout } from 'antd';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -19,12 +19,13 @@ import SimpleReports from './components/SimpleReports';
 import RoleManagement from './components/RoleManagement';
 import UserRoleManagement from './components/UserRoleManagement';
 
+
+// 懒加载组件（P3-2 性能优化）
+const MonitoringDashboard = React.lazy(() => import('./components/MonitoringDashboard'));
 const { Content } = Layout;
 
 /**
  * 主应用组件 - 带完整功能
- * 
- * Requirements: 2.1, 2.2, 2.3
  * 确保认证状态改变时立即重新渲染，显示正确的页面
  */
 function MainApp() {
@@ -33,8 +34,17 @@ function MainApp() {
 
   // 监听认证状态变化，当登出时自动重定向到登录页面
   useEffect(() => {
+    // 只在初始化完成且认证状态改变时才导航
     if (!isLoading) {
-      navigate(isAuthenticated ? '/dashboard' : '/login', { replace: true });
+      const currentPath = window.location.pathname;
+      // 如果在登录页且已认证，导航到 dashboard
+      if (currentPath === '/login' && isAuthenticated) {
+        navigate('/dashboard', { replace: true });
+      }
+      // 如果在非登录页且未认证，导航到登录页
+      if (currentPath !== '/login' && !isAuthenticated && !localStorage.getItem('token')) {
+        navigate('/login', { replace: true });
+      }
     }
   }, [isAuthenticated, isLoading, navigate]);
   
@@ -83,9 +93,11 @@ function MainApp() {
           flex: 1,
           overflow: 'auto'
         }}>
-          <Routes>
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="text-gray-500">加载中...</div></div>}>
+      <Routes>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<HomePage />} />
+            <Route path="/monitoring" element={<MonitoringDashboard />} />
             
             {/* 工艺管理 */}
             <Route path="/process" element={<SimpleProcess />} />
@@ -133,6 +145,7 @@ function MainApp() {
             <Route path="/login" element={<Navigate to="/dashboard" replace />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
+    </Suspense>
         </Content>
       </Layout>
     </Layout>

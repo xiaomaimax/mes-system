@@ -265,6 +265,7 @@ class OnboardingGuide {
     this.overlay = document.createElement('div');
     this.overlay.className = 'onboarding-overlay';
     this.overlay.style.cssText = `
+      pointer-events: none; /* 允许点击穿透 */
       position: fixed;
       top: 0;
       left: 0;
@@ -541,9 +542,7 @@ class OnboardingGuide {
    * 跳过引导
    */
   skip() {
-    if (confirm('确定要跳过引导吗？')) {
-      this.complete();
-    }
+    this.complete();
   }
 
   /**

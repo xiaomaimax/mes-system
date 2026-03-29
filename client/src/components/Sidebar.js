@@ -43,7 +43,7 @@ const Sidebar = () => {
     'admin': {
       // 系统管理员可以访问所有模块
       allowedMenus: [
-        '/dashboard', '/process', '/production', '/scheduling', '/equipment', 
+        '/dashboard', '/monitoring', '/process', '/production', '/scheduling', '/equipment', 
         '/quality', '/inventory', '/personnel', '/integration', 
         '/reports', '/settings'
       ]
@@ -51,38 +51,38 @@ const Sidebar = () => {
     '超级管理员': {
       // 系统管理员可以访问所有模块
       allowedMenus: [
-        '/dashboard', '/process', '/production', '/scheduling', '/equipment', 
+        '/dashboard', '/monitoring', '/process', '/production', '/scheduling', '/equipment', 
         '/quality', '/inventory', '/personnel', '/integration', 
         '/reports', '/settings'
       ]
     },
     'manager': {
       // 部门管理员根据部门不同有不同权限
-      生产部: ['/dashboard', '/production', '/scheduling', '/equipment', '/inventory', '/reports'],
-      质量部: ['/dashboard', '/quality', '/process', '/reports'],
-      技术部: ['/dashboard', '/process', '/equipment', '/integration', '/reports'],
-      信息部: ['/dashboard', '/integration', '/settings', '/reports']
+      生产部: ['/dashboard', '/monitoring', '/production', '/scheduling', '/equipment', '/inventory', '/reports'],
+      质量部: ['/dashboard', '/monitoring', '/quality', '/process', '/reports'],
+      技术部: ['/dashboard', '/monitoring', '/monitoring', '/process', '/equipment', '/integration', '/reports'],
+      信息部: ['/dashboard', '/monitoring', '/integration', '/settings', '/reports']
     },
     '部门管理员': {
       // 部门管理员根据部门不同有不同权限
-      生产部: ['/dashboard', '/production', '/scheduling', '/equipment', '/inventory', '/reports'],
-      质量部: ['/dashboard', '/quality', '/process', '/reports'],
-      技术部: ['/dashboard', '/process', '/equipment', '/integration', '/reports'],
-      信息部: ['/dashboard', '/integration', '/settings', '/reports']
+      生产部: ['/dashboard', '/monitoring', '/production', '/scheduling', '/equipment', '/inventory', '/reports'],
+      质量部: ['/dashboard', '/monitoring', '/quality', '/process', '/reports'],
+      技术部: ['/dashboard', '/monitoring', '/monitoring', '/process', '/equipment', '/integration', '/reports'],
+      信息部: ['/dashboard', '/monitoring', '/integration', '/settings', '/reports']
     },
     'operator': {
       // 普通用户权限最小，只能访问本部门相关模块
-      生产部: ['/dashboard', '/production', '/scheduling', '/reports'],
-      质量部: ['/dashboard', '/quality', '/reports'],
-      技术部: ['/dashboard', '/process', '/reports'],
-      信息部: ['/dashboard', '/reports']
+      生产部: ['/dashboard', '/monitoring', '/production', '/scheduling', '/reports'],
+      质量部: ['/dashboard', '/monitoring', '/quality', '/reports'],
+      技术部: ['/dashboard', '/monitoring', '/monitoring', '/process', '/reports'],
+      信息部: ['/dashboard', '/monitoring', '/reports']
     },
     '普通用户': {
       // 普通用户权限最小，只能访问本部门相关模块
-      生产部: ['/dashboard', '/production', '/scheduling', '/reports'],
-      质量部: ['/dashboard', '/quality', '/reports'],
-      技术部: ['/dashboard', '/process', '/reports'],
-      信息部: ['/dashboard', '/reports']
+      生产部: ['/dashboard', '/monitoring', '/production', '/scheduling', '/reports'],
+      质量部: ['/dashboard', '/monitoring', '/quality', '/reports'],
+      技术部: ['/dashboard', '/monitoring', '/monitoring', '/process', '/reports'],
+      信息部: ['/dashboard', '/monitoring', '/reports']
     },
     'quality_inspector': {
       // 质量检验员有质量相关的权限
@@ -90,7 +90,7 @@ const Sidebar = () => {
     },
     '技术管理员': {
       // 技术管理员有技术相关的全部权限
-      allowedMenus: ['/dashboard', '/process', '/equipment', '/integration', '/reports']
+      allowedMenus: ['/dashboard', '/monitoring', '/process', '/equipment', '/integration', '/reports']
     }
   };
 
@@ -126,9 +126,13 @@ const Sidebar = () => {
   const allMenuItems = [
     {
       key: '/dashboard',
-      icon: <DashboardOutlined />,
-      label: '首页'
+
+
+
+
+
     },
+
     {
       key: '/process',
       icon: <NodeIndexOutlined />,
@@ -173,6 +177,11 @@ const Sidebar = () => {
       key: '/reports',
       icon: <BarChartOutlined />,
       label: '报表分析'
+    },
+    {
+      key: '/monitoring',
+      icon: <BarChartOutlined />,
+      label: '系统监控'
     },
     {
       key: '/settings',
