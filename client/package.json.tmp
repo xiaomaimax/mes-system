@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "build:optimized": "GENERATE_SOURCEMAP=false react-scripts build",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
+  }
+}

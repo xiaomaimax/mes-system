@@ -1,0 +1,10 @@
+7a6b87c test: CI/CD 流程测试
+f25c53e feat: 添加 CI/CD 自动化流程 (v1.3.0-p4)
+5b2a58d feat(P3): 系统监控与日志优化\n\n- 新增系统监控仪表板，支持实时性能监控\n- 新增日志管理 API，支持日志查询和轮转\n- 优化前端加载性能，提升 40-60%\n- 新增错误边界和骨架屏组件\n- 优化菜单布局，添加系统监控入口\n\n版本：v1.3.0-p3
+f65688e chore: 同步所有 CRUD 扩展相关更改
+d4a09c5 fix: 修复 masterData.js 中的 created_by 字段问题
+1df4971 feat: 部署增强版 CRUD 系统支持多模块动态字段过滤
+7101f1f fix: 更新路由引用指向增强版 CRUD 代码
+ed735a8 feat: 添加增强版 CRUD 路由支持多模块自动字段过滤
+0b065ab fix: 添加 preventDefault 阻止表单默认提交
+23336d6 fix: 添加简单日志

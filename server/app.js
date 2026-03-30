@@ -27,6 +27,8 @@ const modulesRoutes = require('./routes/modules');
 const equipmentArchivesRoutes = require('./routes/equipmentArchives');
 const searchRoutes = require('./routes/search');
 const monitorRoutes = require('./routes/monitor');
+const cacheMonitorRoutes = require(./routes/cache-monitor);
+const cacheMonitorRoutes = require('./routes/cache-monitor');
 const permissionRoutes = require('./routes/permissions');
 const dashboardRoutes = require('./routes/dashboard');
 const logsRoutes = require('./routes/logs');
@@ -61,6 +63,9 @@ app.use((req, res, next) => {
 
 // 2. 监控中间件 - 记录请求性能（P2-2）
 app.use(monitorService.requestMonitor());
+app.use(/api/cache-monitor, cacheMonitorRoutes);
+app.use('/api/cache-monitor', cacheMonitorRoutes);
+app.use(/api/cache-monitor, cacheMonitorRoutes);
 
 // 3. CORS
 app.use(cors({
@@ -120,6 +125,9 @@ app.use('/api/modules', modulesRoutes);
 app.use('/api/equipment-archives', equipmentArchivesRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/monitor', monitorRoutes);
+app.use(/api/cache-monitor, cacheMonitorRoutes);
+app.use('/api/cache-monitor', cacheMonitorRoutes);
+app.use(/api/cache-monitor, cacheMonitorRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/logs', logsRoutes);
 app.use('/api/log-analysis', logAnalysisRoutes);

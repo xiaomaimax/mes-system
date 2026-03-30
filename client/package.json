@@ -20,13 +20,16 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:optimized": "GENERATE_SOURCEMAP=false react-scripts build",
+    "analyze": "source-map-explorer build/static/js/*.js"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "source-map-explorer": "^2.5.3"
   },
   "browserslist": {
     "production": [

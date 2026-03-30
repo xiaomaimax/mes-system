@@ -1,0 +1,4 @@
+?? backups/pre-optimization-20260330_134514/
+?? scripts/backup-before-fix.sh
+?? scripts/performance-baseline.sh
+?? scripts/security-scan.sh
