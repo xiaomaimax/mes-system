@@ -30,6 +30,7 @@ const monitorRoutes = require('./routes/monitor');
 const permissionRoutes = require('./routes/permissions');
 const dashboardRoutes = require('./routes/dashboard');
 const logsRoutes = require('./routes/logs');
+const logAnalysisRoutes = require('./routes/logAnalysis');
 const roleRoutes = require('./routes/roles');
 const menuRoutes = require('./routes/menus');
 const auditRoutes = require('./routes/audit');
@@ -121,6 +122,7 @@ app.use('/api/search', searchRoutes);
 app.use('/api/monitor', monitorRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/logs', logsRoutes);
+app.use('/api/log-analysis', logAnalysisRoutes);
 app.use('/api/permissions', permissionRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/menus', menuRoutes);
@@ -187,3 +189,4 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 module.exports = { app, io };
+// CI/CD 自动化测试 - 20260330_115139
