@@ -126,11 +126,8 @@ const Sidebar = () => {
   const allMenuItems = [
     {
       key: '/dashboard',
-
-
-
-
-
+      icon: <DashboardOutlined />,
+      label: '首页'
     },
 
     {
