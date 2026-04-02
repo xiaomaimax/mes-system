@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Layout, Menu } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
+  HomeOutlined,
   DashboardOutlined,
   LineChartOutlined,
   ToolOutlined,
@@ -13,7 +14,8 @@ import {
   UserOutlined,
   LinkOutlined,
   SettingOutlined,
-  CalendarOutlined
+  CalendarOutlined,
+  AreaChartOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -126,7 +128,7 @@ const Sidebar = () => {
   const allMenuItems = [
     {
       key: '/dashboard',
-      icon: <DashboardOutlined />,
+      icon: <HomeOutlined />,
       label: '首页'
     },
 
@@ -172,7 +174,7 @@ const Sidebar = () => {
     },
     {
       key: '/reports',
-      icon: <BarChartOutlined />,
+      icon: <AreaChartOutlined />,
       label: '报表分析'
     },
     {
