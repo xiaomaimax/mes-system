@@ -246,7 +246,7 @@ const SimplePersonnel = () => {
       {/* 核心统计指标 */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="员工总数"
               value={personnelStats.totalEmployees}
@@ -263,7 +263,7 @@ const SimplePersonnel = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="在职员工"
               value={personnelStats.activeEmployees}
@@ -280,7 +280,7 @@ const SimplePersonnel = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="请假人数"
               value={personnelStats.onLeaveEmployees}
@@ -297,7 +297,7 @@ const SimplePersonnel = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="出勤率"
               value={personnelStats.attendanceRate}
@@ -318,11 +318,11 @@ const SimplePersonnel = () => {
       {/* 部门状态和最近活动 */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={16}>
-          <Card title="部门状态" extra={<Button type="link">查看全部</Button>}>
+          <Card style={{ height: "100%" }} title="部门状态" extra={<Button type="link">查看全部</Button>}>
             <Row gutter={16}>
               {departmentData.map(dept => (
                 <Col span={12} key={dept.id} style={{ marginBottom: '16px' }}>
-                  <Card size="small" style={{ 
+                  <Card style={{ height: "100%" }} size="small" style={{ 
                     background: dept.status === '正常' ? '#f6ffed' : '#fff7e6',
                     border: `1px solid ${dept.status === '正常' ? '#b7eb8f' : '#ffd591'}`
                   }}>
@@ -343,7 +343,7 @@ const SimplePersonnel = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="最近活动" extra={<Button type="link">查看更多</Button>}>
+          <Card style={{ height: "100%" }} title="最近活动" extra={<Button type="link">查看更多</Button>}>
             <Timeline size="small">
               {recentActivities.map(activity => (
                 <Timeline.Item
@@ -373,7 +373,7 @@ const SimplePersonnel = () => {
       </Row>
 
       {/* 员工状态 */}
-      <Card title="员工状态" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="员工状态" style={{ marginBottom: '24px' }}>
         <Table 
           columns={[
             {
@@ -453,7 +453,7 @@ const SimplePersonnel = () => {
       </Card>
 
       {/* 功能模块快速入口 */}
-      <Card title="功能模块" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="功能模块" style={{ marginBottom: '24px' }}>
         <Row gutter={[16, 16]}>
           <Col span={6}>
             <Card 

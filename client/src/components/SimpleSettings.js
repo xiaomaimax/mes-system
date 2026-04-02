@@ -244,7 +244,7 @@ const SimpleSettings = () => {
       {/* 核心统计指标 */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="用户总数"
               value={systemStats.totalUsers}
@@ -261,7 +261,7 @@ const SimpleSettings = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="活跃用户"
               value={systemStats.activeUsers}
@@ -278,7 +278,7 @@ const SimpleSettings = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="在线用户"
               value={systemStats.onlineUsers}
@@ -295,7 +295,7 @@ const SimpleSettings = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="角色数量"
               value={systemStats.totalRoles}
@@ -316,11 +316,11 @@ const SimpleSettings = () => {
       {/* 部门权限配置和最近活动 */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={16}>
-          <Card title="部门权限配置" extra={<Button type="link">查看全部</Button>}>
+          <Card style={{ height: "100%" }} title="部门权限配置" extra={<Button type="link">查看全部</Button>}>
             <Row gutter={16}>
               {departmentAccess.map((dept, index) => (
                 <Col span={12} key={index} style={{ marginBottom: '16px' }}>
-                  <Card size="small" style={{ 
+                  <Card style={{ height: "100%" }} size="small" style={{ 
                     background: dept.accessLevel === '系统级' ? '#f6ffed' : '#f0f5ff',
                     border: `1px solid ${dept.accessLevel === '系统级' ? '#b7eb8f' : '#adc6ff'}`
                   }}>
@@ -341,7 +341,7 @@ const SimpleSettings = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="最近活动" extra={<Button type="link">查看更多</Button>}>
+          <Card style={{ height: "100%" }} title="最近活动" extra={<Button type="link">查看更多</Button>}>
             <Timeline size="small">
               {recentActivities.map(activity => (
                 <Timeline.Item
@@ -371,7 +371,7 @@ const SimpleSettings = () => {
       </Row>
 
       {/* 用户状态 */}
-      <Card title="用户状态" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="用户状态" style={{ marginBottom: '24px' }}>
         <Table 
           columns={[
             {
@@ -436,7 +436,7 @@ const SimpleSettings = () => {
       </Card>
 
       {/* 功能模块快速入口 */}
-      <Card title="功能模块" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="功能模块" style={{ marginBottom: '24px' }}>
         <Row gutter={[16, 16]}>
           <Col span={6}>
             <Card 

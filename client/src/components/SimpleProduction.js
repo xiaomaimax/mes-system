@@ -305,7 +305,7 @@ const SimpleProductionFixed = () => {
       {/* 生产计划列表 */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={16}>
-          <Card title="今日生产计划" extra={<Button type="link">查看全部</Button>}>
+          <Card style={{ height: "100%" }} title="今日生产计划" extra={<Button type="link">查看全部</Button>}>
             <Table
               dataSource={productionData.plans}
               columns={[
@@ -360,7 +360,7 @@ const SimpleProductionFixed = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="设备状态" extra={<Button type="link">设备管理</Button>}>
+          <Card style={{ height: "100%" }} title="设备状态" extra={<Button type="link">设备管理</Button>}>
             <List
               dataSource={productionData.equipment.slice(0, 5)}
               renderItem={item => (
@@ -392,7 +392,7 @@ const SimpleProductionFixed = () => {
       {/* 生产状态和快速入口 */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={12}>
-          <Card title="实时生产状态" extra={<Button type="link" onClick={() => setActiveTab('production-execution')}>查看详情</Button>}>
+          <Card style={{ height: "100%" }} title="实时生产状态" extra={<Button type="link" onClick={() => setActiveTab('production-execution')}>查看详情</Button>}>
             <List
               size="small"
               dataSource={[
@@ -444,7 +444,7 @@ const SimpleProductionFixed = () => {
 
         {/* 今日任务概览 */}
         <Col span={12}>
-          <Card title="今日任务概览" extra={<Button type="link" onClick={() => setActiveTab('production-tasks')}>查看详情</Button>}>
+          <Card style={{ height: "100%" }} title="今日任务概览" extra={<Button type="link" onClick={() => setActiveTab('production-tasks')}>查看详情</Button>}>
             <Row gutter={16}>
               <Col span={8} style={{ textAlign: 'center' }}>
                 <Statistic
@@ -485,7 +485,7 @@ const SimpleProductionFixed = () => {
       </Row>
       
       {/* 功能模块快速入口 */}
-      <Card title="功能模块" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="功能模块" style={{ marginBottom: '24px' }}>
         {/* 核心功能 */}
         <div style={{ marginBottom: '16px' }}>
           <h4 style={{ color: '#1890ff', marginBottom: '12px' }}>

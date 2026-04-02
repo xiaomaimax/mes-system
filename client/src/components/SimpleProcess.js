@@ -199,7 +199,7 @@ const SimpleProcess = () => {
       {/* 核心统计指标 */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="工艺路线总数"
               value={processStats.totalRoutes}
@@ -216,7 +216,7 @@ const SimpleProcess = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="生效中路线"
               value={processStats.activeRoutes}
@@ -233,7 +233,7 @@ const SimpleProcess = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="待验证路线"
               value={processStats.pendingValidation}
@@ -250,7 +250,7 @@ const SimpleProcess = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="变更申请"
               value={processStats.changeRequests}
@@ -271,7 +271,7 @@ const SimpleProcess = () => {
       {/* 工艺路线状态和最近活动 */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={16}>
-          <Card title="工艺路线状态" extra={<Button type="link">查看全部</Button>}>
+          <Card style={{ height: "100%" }} title="工艺路线状态" extra={<Button type="link">查看全部</Button>}>
             <Table 
               columns={routeColumns} 
               dataSource={processRoutes} 
@@ -281,7 +281,7 @@ const SimpleProcess = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="最近活动" extra={<Button type="link">查看更多</Button>}>
+          <Card style={{ height: "100%" }} title="最近活动" extra={<Button type="link">查看更多</Button>}>
             <Timeline size="small">
               {recentActivities.map(activity => (
                 <Timeline.Item
@@ -308,10 +308,10 @@ const SimpleProcess = () => {
       </Row>
 
       {/* 工艺管理工作站状态 */}
-      <Card title="工艺管理工作站" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="工艺管理工作站" style={{ marginBottom: '24px' }}>
         <Row gutter={16}>
           <Col span={6}>
-            <Card size="small" style={{ textAlign: 'center', background: '#f6ffed' }}>
+            <Card style={{ height: "100%" }} size="small" style={{ textAlign: 'center', background: '#f6ffed' }}>
               <div style={{ marginBottom: '8px' }}>
                 <BranchesOutlined style={{ fontSize: '24px', color: '#52c41a' }} />
               </div>
@@ -326,7 +326,7 @@ const SimpleProcess = () => {
             </Card>
           </Col>
           <Col span={6}>
-            <Card size="small" style={{ textAlign: 'center', background: '#e6f7ff' }}>
+            <Card style={{ height: "100%" }} size="small" style={{ textAlign: 'center', background: '#e6f7ff' }}>
               <div style={{ marginBottom: '8px' }}>
                 <CheckCircleOutlined style={{ fontSize: '24px', color: '#1890ff' }} />
               </div>
@@ -341,7 +341,7 @@ const SimpleProcess = () => {
             </Card>
           </Col>
           <Col span={6}>
-            <Card size="small" style={{ textAlign: 'center', background: '#fff7e6' }}>
+            <Card style={{ height: "100%" }} size="small" style={{ textAlign: 'center', background: '#fff7e6' }}>
               <div style={{ marginBottom: '8px' }}>
                 <EditOutlined style={{ fontSize: '24px', color: '#fa8c16' }} />
               </div>
@@ -356,7 +356,7 @@ const SimpleProcess = () => {
             </Card>
           </Col>
           <Col span={6}>
-            <Card size="small" style={{ textAlign: 'center', background: '#f9f0ff' }}>
+            <Card style={{ height: "100%" }} size="small" style={{ textAlign: 'center', background: '#f9f0ff' }}>
               <div style={{ marginBottom: '8px' }}>
                 <ExperimentOutlined style={{ fontSize: '24px', color: '#722ed1' }} />
               </div>
@@ -374,7 +374,7 @@ const SimpleProcess = () => {
       </Card>
 
       {/* 功能模块快速入口 */}
-      <Card title="功能模块" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="功能模块" style={{ marginBottom: '24px' }}>
         <Row gutter={[16, 16]}>
           <Col span={6}>
             <Card 

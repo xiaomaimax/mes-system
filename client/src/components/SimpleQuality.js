@@ -259,7 +259,7 @@ const SimpleQuality = () => {
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         {/* 检验工作站状态 */}
         <Col span={12}>
-          <Card title="检验工作站状态" extra={<Button type="link" onClick={() => setActiveTab('iqc')}>查看详情</Button>}>
+          <Card style={{ height: "100%" }} title="检验工作站状态" extra={<Button type="link" onClick={() => setActiveTab('iqc')}>查看详情</Button>}>
             <List
               size="small"
               dataSource={[
@@ -311,7 +311,7 @@ const SimpleQuality = () => {
 
         {/* 质量趋势分析 */}
         <Col span={12}>
-          <Card title="质量趋势分析" extra={<Button type="link" onClick={() => setActiveTab('defect-records')}>查看详情</Button>}>
+          <Card style={{ height: "100%" }} title="质量趋势分析" extra={<Button type="link" onClick={() => setActiveTab('defect-records')}>查看详情</Button>}>
             <div style={{ marginBottom: '16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                 <span>本周合格率</span>
@@ -351,7 +351,7 @@ const SimpleQuality = () => {
       {/* 最近质量事件 */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={24}>
-          <Card title="最近质量事件" extra={<Button type="link" onClick={() => setActiveTab('batch-tracing')}>批次追溯</Button>}>
+          <Card style={{ height: "100%" }} title="最近质量事件" extra={<Button type="link" onClick={() => setActiveTab('batch-tracing')}>批次追溯</Button>}>
             <Timeline>
               <Timeline.Item color="red" dot={<ExclamationCircleOutlined />}>
                 <div>
@@ -391,7 +391,7 @@ const SimpleQuality = () => {
       </Row>
       
       {/* 功能模块快速入口 */}
-      <Card title="功能模块" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="功能模块" style={{ marginBottom: '24px' }}>
         {/* 质量检验模块 */}
         <div style={{ marginBottom: '16px' }}>
           <h4 style={{ color: '#1890ff', marginBottom: '12px' }}>

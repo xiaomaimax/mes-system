@@ -176,7 +176,7 @@ const SimpleEquipment = () => {
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         {/* 设备运行状态 */}
         <Col span={12}>
-          <Card title="设备运行状态" extra={<Button type="link" onClick={() => setActiveTab('inspection')}>查看详情</Button>}>
+          <Card style={{ height: "100%" }} title="设备运行状态" extra={<Button type="link" onClick={() => setActiveTab('inspection')}>查看详情</Button>}>
             <List
               size="small"
               dataSource={[
@@ -228,7 +228,7 @@ const SimpleEquipment = () => {
 
         {/* 维护计划 */}
         <Col span={12}>
-          <Card title="维护计划" extra={<Button type="link" onClick={() => setActiveTab('maintenance')}>查看详情</Button>}>
+          <Card style={{ height: "100%" }} title="维护计划" extra={<Button type="link" onClick={() => setActiveTab('maintenance')}>查看详情</Button>}>
             <div style={{ marginBottom: '12px', padding: '12px', background: '#fff2f0', border: '1px solid #ffccc7', borderRadius: '6px' }}>
               <div style={{ fontWeight: 'bold', color: '#cf1322', marginBottom: '4px' }}>🚨 紧急维修</div>
               <div>注塑机A3 - 液压系统故障</div>
@@ -249,7 +249,7 @@ const SimpleEquipment = () => {
       </Row>
       
       {/* 功能模块快速入口 */}
-      <Card title="功能模块" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="功能模块" style={{ marginBottom: '24px' }}>
         {/* 核心功能 */}
         <div style={{ marginBottom: '16px' }}>
           <h4 style={{ color: '#1890ff', marginBottom: '12px' }}>

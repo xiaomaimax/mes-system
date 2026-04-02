@@ -235,7 +235,7 @@ const SimpleIntegrationEnhanced = () => {
       {/* 核心统计指标 */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="接口总数"
               value={integrationStats.totalInterfaces}
@@ -252,7 +252,7 @@ const SimpleIntegrationEnhanced = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="运行中接口"
               value={integrationStats.activeInterfaces}
@@ -269,7 +269,7 @@ const SimpleIntegrationEnhanced = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="异常接口"
               value={integrationStats.errorInterfaces}
@@ -286,7 +286,7 @@ const SimpleIntegrationEnhanced = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card>
+          <Card style={{ height: "100%" }}>
             <Statistic
               title="同步成功率"
               value={integrationStats.syncSuccess}
@@ -307,11 +307,11 @@ const SimpleIntegrationEnhanced = () => {
       {/* 系统连接状态和最近同步活动 */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={16}>
-          <Card title="系统连接状态" extra={<Button type="link">查看全部</Button>}>
+          <Card style={{ height: "100%" }} title="系统连接状态" extra={<Button type="link">查看全部</Button>}>
             <Row gutter={16}>
               {systemConnections.map(system => (
                 <Col span={12} key={system.id} style={{ marginBottom: '16px' }}>
-                  <Card size="small" style={{ 
+                  <Card style={{ height: "100%" }} size="small" style={{ 
                     background: system.status === '正常' ? '#f6ffed' : '#fff2e8',
                     border: `1px solid ${system.status === '正常' ? '#b7eb8f' : '#ffbb96'}`
                   }}>
@@ -333,7 +333,7 @@ const SimpleIntegrationEnhanced = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="最近同步活动" extra={<Button type="link">查看更多</Button>}>
+          <Card style={{ height: "100%" }} title="最近同步活动" extra={<Button type="link">查看更多</Button>}>
             <Timeline size="small">
               {recentSyncActivities.map(activity => (
                 <Timeline.Item
@@ -363,7 +363,7 @@ const SimpleIntegrationEnhanced = () => {
       </Row>
 
       {/* 接口运行状态 */}
-      <Card title="接口运行状态" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="接口运行状态" style={{ marginBottom: '24px' }}>
         <Table 
           columns={[
             {
@@ -429,7 +429,7 @@ const SimpleIntegrationEnhanced = () => {
       </Card>
 
       {/* 功能模块快速入口 */}
-      <Card title="功能模块" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="功能模块" style={{ marginBottom: '24px' }}>
         <Row gutter={[16, 16]}>
           <Col span={6}>
             <Card 

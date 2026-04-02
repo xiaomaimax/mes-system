@@ -204,7 +204,7 @@ const SimpleInventory = () => {
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         {/* 库存状态监控 */}
         <Col span={12}>
-          <Card title="库存状态监控" extra={<Button type="link" onClick={() => setActiveTab('master-data')}>查看详情</Button>}>
+          <Card style={{ height: "100%" }} title="库存状态监控" extra={<Button type="link" onClick={() => setActiveTab('master-data')}>查看详情</Button>}>
             <List
               size="small"
               dataSource={[
@@ -258,7 +258,7 @@ const SimpleInventory = () => {
 
         {/* 出入库动态 */}
         <Col span={12}>
-          <Card title="今日出入库动态" extra={<Button type="link" onClick={() => setActiveTab('in-out')}>查看详情</Button>}>
+          <Card style={{ height: "100%" }} title="今日出入库动态" extra={<Button type="link" onClick={() => setActiveTab('in-out')}>查看详情</Button>}>
             <div style={{ marginBottom: '16px' }}>
               <Row gutter={16}>
                 <Col span={8} style={{ textAlign: 'center' }}>
@@ -330,7 +330,7 @@ const SimpleInventory = () => {
       </Row>
       
       {/* 功能模块快速入口 */}
-      <Card title="功能模块" style={{ marginBottom: '24px' }}>
+      <Card style={{ height: "100%" }} title="功能模块" style={{ marginBottom: '24px' }}>
         {/* 核心库存管理 */}
         <div style={{ marginBottom: '16px' }}>
           <h4 style={{ color: '#1890ff', marginBottom: '12px' }}>
