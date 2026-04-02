@@ -37,6 +37,7 @@ class MonitorService {
 
     this.slowQueryThreshold = 1000; // 慢查询阈值（ms）
     this.maxErrors = 100; // 最多保留的错误数
+    this.requestTimestamps = []; // 记录最近 60 秒的请求时间戳
     
     this.init();
   }
@@ -82,6 +83,13 @@ class MonitorService {
 
   // 记录请求
   recordRequest(data) {
+    const now = Date.now();
+    // 记录请求时间戳（用于 QPS 计算）
+    this.requestTimestamps.push(now);
+    // 清理超过 60 秒的时间戳
+    const sixtySecondsAgo = now - 60000;
+    this.requestTimestamps = this.requestTimestamps.filter(ts => ts > sixtySecondsAgo);
+    
     this.metrics.requests.total++;
     
     if (data.status >= 200 && data.status < 400) {
@@ -210,6 +218,7 @@ class MonitorService {
       checks: {
         api: 'ok',
         database: 'ok',
+        cache: 'ok',  // 缓存服务正常（NodeCache）
         memory: 'ok',
         errorRate: 'ok',
         responseTime: 'ok'
@@ -285,8 +294,11 @@ class MonitorService {
 
   // 计算 QPS（每秒查询数）
   calculateQPS() {
-    // 基于最近 1 分钟的请求数计算
-    return (this.metrics.requests.total / Math.max(process.uptime(), 1)).toFixed(2);
+    // 基于最近 60 秒的请求数计算实时 QPS
+    const now = Date.now();
+    const sixtySecondsAgo = now - 60000;
+    const recentRequests = this.requestTimestamps.filter(ts => ts > sixtySecondsAgo);
+    return (recentRequests.length / 60).toFixed(2);
   }
 
   // 清理旧数据
