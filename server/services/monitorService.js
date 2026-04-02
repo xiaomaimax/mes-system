@@ -66,7 +66,7 @@ class MonitorService {
       // 监听响应完成
       res.on('finish', () => {
         const duration = Date.now() - startTime;
-        this.recordRequest({
+            this.recordRequest({
           method: req.method,
           path: req.path,
           status: res.statusCode,
@@ -208,6 +208,8 @@ class MonitorService {
       timestamp: new Date().toISOString(),
       status: 'healthy',
       checks: {
+        api: 'ok',
+        database: 'ok',
         memory: 'ok',
         errorRate: 'ok',
         responseTime: 'ok'
@@ -248,18 +250,36 @@ class MonitorService {
 
   // 获取监控指标
   getMetrics() {
+    const totalRequests = this.metrics.requests.total;
+    const totalResponseTime = this.metrics.requests.responseTimes.reduce((a, b) => a + b, 0);
+    const successRate = totalRequests > 0 
+      ? ((this.metrics.requests.success / totalRequests) * 100).toFixed(2) + '%'
+      : '0%';
+    
     return {
-      requests: {
-        total: this.metrics.requests.total,
-        success: this.metrics.requests.success,
-        error: this.metrics.requests.error,
+      performance: {
+        totalRequests: totalRequests,
+        successfulRequests: this.metrics.requests.success,
+        failedRequests: this.metrics.requests.error,
+        totalResponseTime: totalResponseTime,
         avgResponseTime: this.metrics.requests.avgResponseTime,
-        qps: this.calculateQPS()
+        minResponseTime: this.metrics.requests.responseTimes.length > 0 
+          ? Math.min(...this.metrics.requests.responseTimes) 
+          : 0,
+        maxResponseTime: this.metrics.requests.responseTimes.length > 0 
+          ? Math.max(...this.metrics.requests.responseTimes) 
+          : 0,
+        qps: this.calculateQPS(),
+        successRate: successRate
+      },
+      errors: {
+        count: this.metrics.errors.length
       },
       database: this.metrics.database,
       cache: this.metrics.cache,
       system: this.metrics.system,
-      recentErrors: this.metrics.errors.slice(-10)
+      recentErrors: this.metrics.errors.slice(-10),
+      topErrors: []
     };
   }
 
