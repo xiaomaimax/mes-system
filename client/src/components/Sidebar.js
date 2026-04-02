@@ -180,7 +180,7 @@ const Sidebar = () => {
     },
     {
       key: '/monitoring',
-      icon: <BarChartOutlined />,
+      icon: <DashboardOutlined />,
       label: '系统监控'
     },
     {
