@@ -562,7 +562,9 @@ const HomePage = () => {
               style={{ 
                 height: '100%',
                 background: module.color,
-                border: '1px solid #f0f0f0'
+                border: '1px solid #f0f0f0',
+                display: 'flex',
+                flexDirection: 'column'
               }}
             >
               <div style={{ display: 'flex', marginBottom: '12px', alignItems: 'flex-start' }}>
@@ -579,7 +581,7 @@ const HomePage = () => {
                 </div>
               </div>
               
-              <div style={{ marginBottom: '12px' }}>
+              <div style={{ marginBottom: '12px', flex: 1 }}>
                 <Text strong style={{ fontSize: '13px' }}>核心功能：</Text>
                 <div style={{ marginTop: '6px' }}>
                   {module.features.map((feature, index) => (
@@ -602,7 +604,7 @@ const HomePage = () => {
                 size="small"
                 icon={<RightOutlined />}
                 onClick={() => navigate(module.path)}
-                style={{ width: '100%' }}
+                style={{ width: '100%', marginTop: 'auto' }}
               >
                 进入{module.title}
               </Button>

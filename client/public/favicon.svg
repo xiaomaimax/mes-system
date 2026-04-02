@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <defs>
+    <!-- 蓝色渐变 -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- 圆角背景 -->
+  <rect x="3" y="3" width="42" height="42" rx="10" fill="url(#bg)"/>
+  
+  <!-- 放大居中的 M 字母 -->
+  <g fill="white" transform="translate(10, 10) scale(1.15)">
+    <path d="M4 24V8L12 18L20 8V24H24V4H18L12 12L6 4H0V24Z"/>
+  </g>
+</svg>

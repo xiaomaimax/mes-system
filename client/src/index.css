@@ -53,3 +53,24 @@ code {
 .ant-input, .ant-select-selector {
   border-radius: 6px;
 }
+/* 卡片对齐优化 - 确保卡片高度一致 */
+.ant-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.ant-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 卡片内按钮底部对齐 */
+.ant-card .ant-btn:last-child {
+  margin-top: auto;
+}
+
+/* Row 内的 Card 高度一致 */
+.ant-row .ant-col .ant-card {
+  height: 100%;
+}
