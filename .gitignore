@@ -137,4 +137,6 @@ coverage/
 *.sublime-workspace
 
 # Kiro specific
-.kiro/
+.kiro/backups/
+node_modules/
+*.log
