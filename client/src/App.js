@@ -15,6 +15,7 @@ import SimpleInventory from './components/SimpleInventory';
 import SimplePersonnel from './components/SimplePersonnel';
 import SimpleIntegrationEnhanced from './components/SimpleIntegrationEnhanced';
 import SimpleSettings from './components/SimpleSettings';
+import SystemDocs from './components/SystemDocs';
 import SimpleReports from './components/SimpleReports';
 import RoleManagement from './components/RoleManagement';
 import UserRoleManagement from './components/UserRoleManagement';
@@ -133,6 +134,7 @@ function MainApp() {
             
             {/* 系统设置 */}
             <Route path="/settings" element={<SimpleSettings />} />
+            <Route path="/docs" element={<SystemDocs />} />
             <Route path="/settings/*" element={<SimpleSettings />} />
             {/* P3 权限管理 */}
             <Route path="/system/roles" element={<RoleManagement />} />
