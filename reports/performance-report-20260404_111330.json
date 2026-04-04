@@ -1,0 +1,23 @@
+{
+  "timestamp": "20260404_111330",
+  "url": "http://192.168.100.6",
+  "metrics": {
+    "firstLoad": 0.000949,
+    "htmlLoad": 0.000682,
+    "dnsLookup": 0.000032,
+    "tcpConnect": 0.000241,
+    "buildSize": 4,
+    "jsSize": "0.00MB",
+    "cssSize": "0.00MB"
+  },
+  "budgets": {
+    "buildSize": "4MB",
+    "jsSize": "0.00MB",
+    "responseTime": "0.000949s"
+  },
+  "checks": {
+    "manifest": true,
+    "serviceWorker": true,
+    "gzip": false
+  }
+}
