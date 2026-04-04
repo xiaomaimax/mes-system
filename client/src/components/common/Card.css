@@ -1,0 +1,308 @@
+/**
+ * MaxMES 卡片组件样式
+ * 基于 UI/UX Pro Max 设计系统
+ */
+
+/* ============================================
+ * 基础卡片
+ * ============================================ */
+.card {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+ * 卡片头部
+ * ============================================ */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--gray-200);
+  background: var(--gray-50);
+}
+
+.card-title {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--gray-900);
+  line-height: var(--leading-tight);
+}
+
+.card-subtitle {
+  margin: var(--space-1) 0 0 0;
+  font-size: var(--text-sm);
+  font-weight: var(--font-normal);
+  color: var(--gray-500);
+}
+
+.card-extra {
+  flex-shrink: 0;
+  margin-left: var(--space-4);
+}
+
+/* ============================================
+ * 卡片内容区
+ * ============================================ */
+.card-body {
+  padding: var(--space-6);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body > :first-child {
+  margin-top: 0;
+}
+
+.card-body > :last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================
+ * 卡片底部
+ * ============================================ */
+.card-footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--gray-200);
+  background: var(--gray-50);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ============================================
+ * 统计卡片 - Metric Card
+ * ============================================ */
+.metric-card {
+  padding: var(--space-6);
+}
+
+.metric-card .metric-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--gray-600);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-card .metric-value {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  color: var(--gray-900);
+  line-height: 1;
+  margin-bottom: var(--space-3);
+}
+
+.metric-card .metric-change {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+}
+
+.metric-change.positive {
+  color: var(--success-600);
+}
+
+.metric-change.negative {
+  color: var(--danger-600);
+}
+
+/* ============================================
+ * 可点击卡片
+ * ============================================ */
+.card-clickable {
+  cursor: pointer;
+}
+
+.card-clickable:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
+}
+
+.card-clickable .card-link-indicator {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--primary-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-500);
+  opacity: 0;
+  transition: var(--transition-base);
+}
+
+.card-clickable:hover .card-link-indicator {
+  opacity: 1;
+}
+
+/* ============================================
+ * 带图标的卡片
+ * ============================================ */
+.card-with-icon {
+  position: relative;
+}
+
+.card-icon {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.card-icon.primary {
+  background: var(--primary-100);
+  color: var(--primary-600);
+}
+
+.card-icon.success {
+  background: var(--success-100);
+  color: var(--success-600);
+}
+
+.card-icon.warning {
+  background: var(--warning-100);
+  color: var(--warning-600);
+}
+
+.card-icon.danger {
+  background: var(--danger-100);
+  color: var(--danger-600);
+}
+
+/* ============================================
+ * 骨架屏 - Skeleton
+ * ============================================ */
+.card-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.skeleton-line {
+  height: 16px;
+  background: var(--gray-200);
+  border-radius: var(--radius-sm);
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+.skeleton-line.short {
+  width: 60%;
+}
+
+.skeleton-line.medium {
+  width: 80%;
+}
+
+.skeleton-line.long {
+  width: 100%;
+}
+
+.skeleton-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: var(--gray-200);
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* ============================================
+ * Ant Design 卡片增强
+ * ============================================ */
+.ant-card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-base);
+}
+
+.ant-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.ant-card-body {
+  padding: var(--space-6);
+}
+
+.ant-card-head {
+  border-bottom: 1px solid var(--gray-200);
+  background: var(--gray-50);
+  padding: var(--space-4) var(--space-6);
+  min-height: auto;
+}
+
+.ant-card-head-title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  color: var(--gray-900);
+}
+
+/* ============================================
+ * 卡片网格布局
+ * ============================================ */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-6);
+  padding: var(--space-6);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+    padding: var(--space-4);
+  }
+}
+
+/* ============================================
+ * 工具类
+ * ============================================ */
+.card-container {
+  margin: var(--space-6) 0;
+}
+
+.card-demo {
+  margin: var(--space-4) 0;
+}
+
+.card-demo h4 {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
