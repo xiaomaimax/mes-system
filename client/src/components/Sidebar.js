@@ -183,12 +183,12 @@ const Sidebar = () => {
       label: '系统监控'
     },
     {
-    {
       key: '/docs',
       icon: <BookOutlined />,
       label: '系统文档'
     },
 
+    {
       key: '/settings',
       icon: <SettingOutlined />,
       label: '系统设置'
