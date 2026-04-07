@@ -15,7 +15,8 @@ import {
   LinkOutlined,
   SettingOutlined,
   CalendarOutlined,
-  AreaChartOutlined
+  AreaChartOutlined,
+  BookOutlined
 } from '@ant-design/icons';
 
 const { Sider } = Layout;

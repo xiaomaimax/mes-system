@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Table, Button, Space, Tag, Select, Input, Modal, Form, InputNumber, Row, Col, Tabs, message, Spin, Alert } from 'antd';
+import ImportExportButton from '../ImportExportButton';
 
 // 确保message API可用的安全包装器
 const safeMessage = {
@@ -52,7 +53,7 @@ const safeMessage = {
     }
   }
 };
-import { PlusOutlined, SearchOutlined, DatabaseOutlined, EditOutlined, DeleteOutlined, ImportOutlined, ExportOutlined, AppstoreOutlined, EnvironmentOutlined, ReloadOutlined } from '@ant-design/icons';
+import { PlusOutlined, SearchOutlined, DatabaseOutlined, EditOutlined, DeleteOutlined, AppstoreOutlined, EnvironmentOutlined, ReloadOutlined } from '@ant-design/icons';
 
 import ButtonActions from '../../utils/buttonActions';
 import DataService from '../../services/DataService';
@@ -473,12 +474,17 @@ const InventoryMasterData = () => {
             >
               刷新数据
             </Button>
-            <Button icon={<ImportOutlined />}>
-              导入数据
-            </Button>
-            <Button icon={<ExportOutlined />}>
-              导出数据
-            </Button>
+            <ImportExportButton
+              module={activeTab === 'materials' ? 'materials' : 'locations'}
+              moduleName={activeTab === 'materials' ? '物料' : '库位'}
+              onRefresh={() => {
+                if (activeTab === 'materials') {
+                  refetchInventory();
+                } else {
+                  refetchLocation();
+                }
+              }}
+            />
             <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
               新建{activeTab === 'materials' ? '物料' : '库位'}
             </Button>

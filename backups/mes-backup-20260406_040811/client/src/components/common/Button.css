@@ -1,0 +1,302 @@
+/**
+ * MaxMES 按钮组件样式
+ * 基于 UI/UX Pro Max 设计系统
+ */
+
+/* ============================================
+ * 基础按钮样式
+ * ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 10px 20px;
+  min-height: 44px;  /* 触摸目标 ≥44px */
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  line-height: 1;
+  cursor: pointer;
+  transition: var(--transition-base);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn:focus {
+  outline: 3px solid var(--primary-200);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============================================
+ * 主按钮 - Primary
+ * ============================================ */
+.btn-primary {
+  background: var(--primary-500);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-600);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-primary);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================
+ * 次按钮 - Secondary
+ * ============================================ */
+.btn-secondary {
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border: 1px solid var(--gray-300);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--gray-200);
+  border-color: var(--gray-400);
+  color: var(--gray-900);
+}
+
+.btn-secondary:active:not(:disabled) {
+  background: var(--gray-300);
+}
+
+/* ============================================
+ * 危险按钮 - Danger
+ * ============================================ */
+.btn-danger {
+  background: var(--danger-500);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--danger-600);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-danger);
+}
+
+.btn-danger:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* ============================================
+ * 成功按钮 - Success
+ * ============================================ */
+.btn-success {
+  background: var(--success-500);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-success:hover:not(:disabled) {
+  background: var(--success-600);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-success);
+}
+
+/* ============================================
+ * 幽灵按钮 - Ghost
+ * ============================================ */
+.btn-ghost {
+  background: transparent;
+  color: var(--primary-500);
+  border: 1px solid transparent;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--primary-50);
+  border-color: var(--primary-200);
+}
+
+/* ============================================
+ * 轮廓按钮 - Outline
+ * ============================================ */
+.btn-outline {
+  background: transparent;
+  color: var(--primary-500);
+  border: 1px solid var(--primary-500);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: var(--primary-50);
+}
+
+/* ============================================
+ * 尺寸变体
+ * ============================================ */
+
+/* 小按钮 - 用于紧凑布局 */
+.btn-sm {
+  padding: 6px 12px;
+  min-height: 36px;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
+}
+
+/* 大按钮 - 用于重要操作 */
+.btn-lg {
+  padding: 12px 24px;
+  min-height: 52px;
+  font-size: var(--text-lg);
+  border-radius: var(--radius-lg);
+}
+
+/* ============================================
+ * 图标按钮
+ * ============================================ */
+.btn-icon {
+  padding: 10px;
+  min-width: 44px;
+}
+
+.btn-icon .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-sm.btn-icon {
+  padding: 6px;
+  min-width: 36px;
+}
+
+/* ============================================
+ * 加载状态
+ * ============================================ */
+.btn-loading {
+  position: relative;
+  color: transparent !important;
+  pointer-events: none;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+.btn-loading.btn-secondary::after,
+.btn-loading.btn-ghost::after,
+.btn-loading.btn-outline::after {
+  border-color: rgba(0, 0, 0, 0.1);
+  border-top-color: var(--gray-700);
+}
+
+@keyframes btn-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+ * 按钮组
+ * ============================================ */
+.btn-group {
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.btn-group .btn {
+  border-radius: var(--radius-md);
+}
+
+/* ============================================
+ * 全宽按钮
+ * ============================================ */
+.btn-block {
+  width: 100%;
+}
+
+/* ============================================
+ * Ant Design 按钮增强
+ * ============================================ */
+.ant-btn {
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-medium);
+  transition: var(--transition-base);
+}
+
+.ant-btn-primary {
+  background: var(--primary-500);
+  border-color: var(--primary-500);
+  box-shadow: var(--shadow-sm);
+}
+
+.ant-btn-primary:hover {
+  background: var(--primary-600);
+  border-color: var(--primary-600);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-primary);
+}
+
+.ant-btn-primary:active {
+  transform: translateY(0);
+}
+
+.ant-btn-default {
+  background: var(--gray-100);
+  border-color: var(--gray-300);
+  color: var(--gray-700);
+}
+
+.ant-btn-default:hover {
+  background: var(--gray-200);
+  border-color: var(--gray-400);
+  color: var(--gray-900);
+}
+
+.ant-btn-danger {
+  background: var(--danger-500);
+  border-color: var(--danger-500);
+  color: white;
+}
+
+.ant-btn-danger:hover {
+  background: var(--danger-600);
+  border-color: var(--danger-600);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-danger);
+}
+
+/* ============================================
+ * 工具类
+ * ============================================ */
+.button-container {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.button-demo {
+  margin: var(--space-4) 0;
+  padding: var(--space-4);
+  background: var(--gray-50);
+  border-radius: var(--radius-lg);
+}
+
+.button-demo h4 {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

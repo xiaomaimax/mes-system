@@ -1,0 +1,337 @@
+/**
+ * MaxMES Phase 5 - 性能优化
+ * 
+ * 1. CSS 性能优化
+ * 2. 关键 CSS 内联
+ * 3. 懒加载优化
+ * 4. 图片优化
+ * 5. 缓存策略
+ */
+
+/* ============================================
+ * 1. CSS 性能优化 - 减少重绘重排
+ * ============================================ */
+
+/* 使用 transform 替代 position 动画 */
+.performance-optimized {
+  transform: translateZ(0); /* GPU 加速 */
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* 避免使用 table 布局 */
+.flex-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 使用 will-change 提示浏览器优化 */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* 避免通配符选择器性能问题 */
+/* ❌ 慢：* { margin: 0; } */
+/* ✅ 快：.container { margin: 0; } */
+
+/* 使用 CSS  containment 隔离布局 */
+.contain-layout {
+  contain: layout style paint;
+}
+
+/* ============================================
+ * 2. 关键 CSS 内联 - 首屏加载优化
+ * ============================================ */
+
+/* 以下样式应内联到 HTML <head> 中 */
+.critical-css {
+  /* 首屏必需的最小样式集 */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 骨架屏样式（首屏加载时显示） */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================
+ * 3. 懒加载优化 - 延迟非关键资源
+ * ============================================ */
+
+/* 图片懒加载占位符 */
+.lazy-image {
+  background: #f5f5f5;
+  min-height: 200px;
+}
+
+.lazy-image.loaded {
+  background: transparent;
+}
+
+/* 内容可见性优化 - 视口外内容不渲染 */
+.lazy-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px; /* 预估高度 */
+}
+
+/* 虚拟滚动容器 */
+.virtual-scroll-container {
+  overflow: auto;
+  contain: strict;
+}
+
+.virtual-scroll-content {
+  position: relative;
+  width: 100%;
+  height: 0; /* 由 JS 动态设置 */
+}
+
+/* ============================================
+ * 4. 图片优化
+ * ============================================ */
+
+/* 响应式图片 */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 现代图片格式支持 */
+picture {
+  display: block;
+}
+
+/* 图片淡入效果 */
+img.fade-in {
+  animation: imageFadeIn 0.3s ease-out;
+}
+
+@keyframes imageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* SVG 优化 */
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 图标字体替代方案 - 使用 SVG sprites */
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+/* ============================================
+ * 5. 缓存策略 - Service Worker 友好
+ * ============================================ */
+
+/* 静态资源版本化（通过文件名哈希实现） */
+/* 示例：static/css/main.12345.css */
+
+/* 字体预加载 - 注释掉，使用系统字体 */
+/* @font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/inter.woff2') format('woff2');
+} */
+
+/* 关键资源预加载 */
+/* 在 HTML 中添加：<link rel="preload" href="..." as="style"> */
+
+/* DNS 预解析 */
+/* 在 HTML 中添加：<link rel="dns-prefetch" href="//cdn.example.com"> */
+
+/* ============================================
+ * 6. 渲染性能优化
+ * ============================================ */
+
+/* 避免布局抖动 - 批量 DOM 操作 */
+.batch-update {
+  /* 在 JS 中使用 requestAnimationFrame */
+}
+
+/* 使用 CSS Grid 替代复杂 Flexbox 嵌套 */
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+/* 避免使用 @import - 使用多个 <link> 标签 */
+/* ❌ 慢：@import url('other.css'); */
+/* ✅ 快：<link rel="stylesheet" href="other.css"> */
+
+/* 简化选择器 - 避免深层嵌套 */
+/* ❌ 慢：.container .wrapper .content .text { } */
+/* ✅ 快：.text { } */
+
+/* ============================================
+ * 7. 移动端性能优化
+ * ============================================ */
+
+/* 触摸优化 */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  touch-action: manipulation; /* 禁用双击缩放 */
+}
+
+/* 禁用不必要的触摸高亮 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 减少移动端动画 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* 移动端图片优化 */
+@media (max-width: 768px) {
+  img {
+    /* 使用 srcset 提供不同尺寸 */
+  }
+}
+
+/* ============================================
+ * 8. 性能监控
+ * ============================================ */
+
+/* 长任务标记 */
+.long-task-marker {
+  /* 在 JS 中使用 PerformanceObserver 监控 */
+}
+
+/* 首次内容绘制 (FCP) 优化 */
+.fcp-optimized {
+  /* 优先加载首屏内容 */
+}
+
+/* 最大内容绘制 (LCP) 优化 */
+.lcp-element {
+  /* 通常是 hero image 或主要标题 */
+  /* 预加载： <link rel="preload" as="image"> */
+}
+
+/* 累积布局偏移 (CLS) 优化 */
+.cls-safe {
+  /* 为图片/视频预留空间 */
+  aspect-ratio: 16 / 9;
+}
+
+/* 首次输入延迟 (FID) 优化 */
+.fid-optimized {
+  /* 减少主线程阻塞 */
+}
+
+/* ============================================
+ * 9. 代码分割友好样式
+ * ============================================ */
+
+/* 路由级代码分割的加载状态 */
+.route-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+/* 组件级代码分割的占位符 */
+.component-placeholder {
+  min-height: 100px;
+  background: #fafafa;
+}
+
+/* ============================================
+ * 10. 生产环境优化
+ * ============================================ */
+
+/* 移除开发环境样式 */
+@media (min-width: 0) {
+  /* 生产环境特定样式 */
+}
+
+/* CSS 压缩友好 - 避免不必要的空格 */
+.compact-style{margin:0;padding:0}
+
+/* 使用 CSS 变量替代重复值 */
+:root {
+  --spacing-unit: 8px;
+}
+
+.spacing-multiple {
+  margin: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 3);
+}
+
+/* ============================================
+ * 11. 可访问性与性能兼顾
+ * ============================================ */
+
+/* 减少动画但不完全禁用 */
+@media (prefers-reduced-motion: reduce) {
+  .animated-element {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+  }
+}
+
+/* 高对比度模式优化 */
+@media (prefers-contrast: high) {
+  .contrast-enhanced {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ============================================
+ * 12. 性能预算
+ * ============================================ */
+
+/*
+ * 目标性能指标：
+ * - FCP (First Contentful Paint): < 1.5s
+ * - LCP (Largest Contentful Paint): < 2.5s
+ * - CLS (Cumulative Layout Shift): < 0.1
+ * - FID (First Input Delay): < 100ms
+ * - TTI (Time to Interactive): < 3.5s
+ * 
+ * CSS 体积预算：
+ * - 关键 CSS: < 14KB (内联)
+ * - 非关键 CSS: < 50KB (延迟加载)
+ * - 总计：< 64KB (gzip 后)
+ */

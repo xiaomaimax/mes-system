@@ -35,6 +35,7 @@ const menuRoutes = require('./routes/menus');
 const auditRoutes = require('./routes/audit');
 const userRolesRoutes = require('./routes/userRoles');
 const dataPermissionsRoutes = require('./routes/dataPermissions');
+const importExportRoutes = require('./routes/import-export');
 
 
 const app = express();
@@ -127,6 +128,7 @@ app.use('/api/menus', menuRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/data-permissions', dataPermissionsRoutes);
 app.use('/api/user-roles', userRolesRoutes);
+app.use('/api/import-export', importExportRoutes);
 
 
 // WebSocket 连接处理

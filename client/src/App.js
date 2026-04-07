@@ -19,6 +19,7 @@ import SystemDocs from './components/SystemDocs';
 import SimpleReports from './components/SimpleReports';
 import RoleManagement from './components/RoleManagement';
 import UserRoleManagement from './components/UserRoleManagement';
+import Dashboard from './components/Dashboard';
 
 
 // 懒加载组件（P3-2 性能优化）
@@ -143,7 +144,10 @@ function MainApp() {
             
             {/* 报表管理 */}
             <Route path="/reports" element={<SimpleReports />} />
-            
+
+            {/* 数据仪表盘 */}
+            <Route path="/dashboard-new" element={<Dashboard />} />
+
             <Route path="/login" element={<Navigate to="/dashboard" replace />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>

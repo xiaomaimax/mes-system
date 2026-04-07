@@ -1,0 +1,572 @@
+/**
+ * MaxMES Phase 4 - 细节打磨
+ * 动画微调、Dark Mode 完整适配、可访问性增强
+ */
+
+/* ============================================
+ * 1. 动画微调 - 细腻交互反馈
+ * ============================================ */
+
+/* 按钮点击涟漪效果 */
+.ant-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.ant-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ant-btn:active::after {
+  width: 200px;
+  height: 200px;
+  opacity: 0;
+}
+
+/* 卡片悬浮增强 */
+.ant-card {
+  transition: transform var(--duration-normal) var(--ease-out),
+              box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.ant-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 表格行悬浮动画 */
+.ant-table-tbody > tr:hover {
+  background-color: var(--primary-50);
+  transform: scale(1.001);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+/* 输入框聚焦动画 */
+.ant-input:focus,
+.ant-input-focused {
+  box-shadow: 0 0 0 2px var(--primary-100), var(--shadow-primary);
+  border-color: var(--primary-400);
+  transform: translateY(-1px);
+}
+
+/* 菜单项滑动入场 */
+.ant-menu-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.ant-menu-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.1),
+    transparent
+  );
+  transition: left var(--duration-slower) var(--ease-out);
+}
+
+.ant-menu-item:hover::before {
+  left: 100%;
+}
+
+/* 加载骨架屏动画 */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.skeleton-loading {
+  background: linear-gradient(
+    90deg,
+    var(--gray-100) 0%,
+    var(--gray-200) 50%,
+    var(--gray-100) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* 页面切换淡入 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-container {
+  animation: fadeIn var(--duration-slower) var(--ease-out);
+}
+
+/* 数字滚动效果 */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-number {
+  animation: countUp var(--duration-slower) var(--ease-out);
+}
+
+/* ============================================
+ * 2. Dark Mode 完整适配
+ * ============================================ */
+
+[data-theme='dark'] body {
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+[data-theme='dark'] .ant-layout {
+  background: var(--bg-primary);
+}
+
+[data-theme='dark'] .ant-layout-sider {
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .ant-card {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .ant-card-meta-title {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-card-meta-description {
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .ant-table {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-table-thead > tr > th {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-table-tbody > tr {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .ant-table-tbody > tr:hover {
+  background: var(--bg-tertiary);
+}
+
+[data-theme='dark'] .ant-input {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-input:focus {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+[data-theme='dark'] .ant-input::placeholder {
+  color: var(--gray-500);
+}
+
+[data-theme='dark'] .ant-select {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-select-selector {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-select-dropdown {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .ant-select-item {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-select-item:hover {
+  background: var(--bg-tertiary);
+}
+
+[data-theme='dark'] .ant-menu {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-menu-item {
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .ant-menu-item:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-menu-item-selected {
+  background: var(--primary-900);
+  color: var(--primary-300);
+}
+
+[data-theme='dark'] .ant-btn {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-btn:hover {
+  background: var(--bg-secondary);
+  border-color: var(--primary-500);
+  color: var(--primary-300);
+}
+
+[data-theme='dark'] .ant-btn-primary {
+  background: var(--primary-600);
+  border-color: var(--primary-600);
+  color: white;
+}
+
+[data-theme='dark'] .ant-btn-primary:hover {
+  background: var(--primary-500);
+  border-color: var(--primary-500);
+}
+
+[data-theme='dark'] .ant-modal-content {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .ant-modal-header {
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .ant-modal-title {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-modal-close {
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .ant-modal-close:hover {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-message {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-notification {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .ant-notification-notice {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Dark Mode 下的统计卡片 */
+[data-theme='dark'] .stat-card {
+  background: linear-gradient(
+    135deg,
+    var(--bg-secondary) 0%,
+    var(--bg-tertiary) 100%
+  );
+  border: 1px solid var(--border-color);
+}
+
+/* Dark Mode 下的图表容器 */
+[data-theme='dark'] .chart-container {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+}
+
+/* ============================================
+ * 3. 可访问性增强 - 焦点状态和键盘导航
+ * ============================================ */
+
+/* 全局焦点样式 */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+/* 按钮焦点 */
+.ant-btn:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--primary-100);
+}
+
+[data-theme='dark'] .ant-btn:focus-visible {
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+}
+
+/* 输入框焦点增强 */
+.ant-input:focus-visible,
+.ant-input-focused {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 0;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+[data-theme='dark'] .ant-input:focus-visible {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* 表格键盘导航 */
+.ant-table-tbody > tr:focus-within {
+  background: var(--primary-50);
+  box-shadow: inset 0 0 0 2px var(--primary-300);
+}
+
+[data-theme='dark'] .ant-table-tbody > tr:focus-within {
+  background: var(--primary-900);
+  box-shadow: inset 0 0 0 2px var(--primary-500);
+}
+
+/* 菜单项键盘导航 */
+.ant-menu-item:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: -2px;
+  background: var(--primary-50);
+}
+
+[data-theme='dark'] .ant-menu-item:focus-visible {
+  background: var(--primary-900);
+}
+
+/* 跳过导航链接（无障碍访问） */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--primary-600);
+  color: white;
+  padding: var(--space-3) var(--space-4);
+  z-index: 9999;
+  transition: top var(--duration-fast);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .ant-btn {
+    border-width: 2px;
+  }
+  
+  .ant-input {
+    border-width: 2px;
+  }
+  
+  *:focus-visible {
+    outline-width: 3px;
+  }
+}
+
+/* ============================================
+ * 4. 微交互细节
+ * ============================================ */
+
+/* 徽章脉冲动画（用于未读标记） */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.badge-pulse {
+  animation: pulse 2s var(--ease-in-out) infinite;
+}
+
+/* 成功状态对勾动画 */
+@keyframes checkmark {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.checkmark-circle {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: checkmark var(--duration-slower) var(--ease-out) forwards;
+}
+
+/* 错误状态抖动 */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+.input-error {
+  animation: shake var(--duration-normal) var(--ease-in-out);
+}
+
+/* 工具提示淡入 */
+.ant-tooltip-inner {
+  animation: fadeIn var(--duration-fast) var(--ease-out);
+}
+
+/* 进度条平滑过渡 */
+.ant-progress-bg {
+  transition: width var(--duration-slow) var(--ease-out);
+}
+
+/* 标签页切换滑动 */
+.ant-tabs-ink-bar {
+  transition: left var(--duration-normal) var(--ease-out),
+              width var(--duration-normal) var(--ease-out);
+}
+
+/* 折叠面板展开动画 */
+.ant-collapse-content-box {
+  animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+/* ============================================
+ * 5. 响应式增强
+ * ============================================ */
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  .ant-table {
+    font-size: var(--text-sm);
+  }
+  
+  .ant-btn {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+  }
+  
+  .ant-card-body {
+    padding: var(--space-4);
+  }
+  
+  /* 触摸目标增大 */
+  .ant-btn,
+  .ant-input,
+  .ant-select,
+  .ant-menu-item {
+    min-height: 44px;
+  }
+}
+
+/* 平板优化 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .ant-layout-content {
+    padding: var(--space-4);
+  }
+}
+
+/* ============================================
+ * 6. 打印样式
+ * ============================================ */
+
+@media print {
+  .ant-layout-sider,
+  .ant-layout-header,
+  .ant-menu,
+  .ant-btn,
+  .no-print {
+    display: none !important;
+  }
+  
+  .ant-layout-content {
+    padding: 0;
+    overflow: visible;
+  }
+  
+  .ant-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+}
+
+/* ============================================
+ * 7. 性能优化提示
+ * ============================================ */
+
+/* GPU 加速动画 */
+.will-animate {
+  will-change: transform, opacity;
+}
+
+/* 避免布局抖动 */
+.layout-stable {
+  contain: layout style;
+}
+
+/* 图片优化 */
+img {
+  content-visibility: auto;
+}

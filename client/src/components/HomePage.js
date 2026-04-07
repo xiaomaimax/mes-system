@@ -1,4 +1,4 @@
-import { Card, Row, Col, Button, Typography, Statistic, Progress } from 'antd';
+import { Card, Row, Col, Button, Typography, Statistic, Progress, Space } from 'antd';
 import { 
   LineChartOutlined, 
   ToolOutlined, 
@@ -436,19 +436,28 @@ const HomePage = () => {
       </Row>
 
       {/* 管理层关键指标看板 */}
-      <Card 
+      <Card
         title={
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <DashboardOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
             <span>管理层关键指标看板</span>
-            <Button 
-              type="link" 
-              size="small" 
-              onClick={() => navigate('/reports')}
-              style={{ marginLeft: 'auto' }}
-            >
-              查看详细报表 <RightOutlined />
-            </Button>
+            <Space style={{ marginLeft: 'auto' }}>
+              <Button
+                type="link"
+                size="small"
+                onClick={() => navigate('/dashboard-new')}
+                icon={<BarChartOutlined />}
+              >
+                数据仪表盘
+              </Button>
+              <Button
+                type="link"
+                size="small"
+                onClick={() => navigate('/reports')}
+              >
+                查看详细报表 <RightOutlined />
+              </Button>
+            </Space>
           </div>
         }
         style={{ marginBottom: '16px' }}

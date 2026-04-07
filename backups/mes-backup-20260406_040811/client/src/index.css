@@ -1,0 +1,240 @@
+/**
+ * MaxMES 全局样式
+ * 基于 UI/UX Pro Max 设计系统
+ * Phase 4 - 细节打磨
+ */
+
+/* ============================================
+ * 导入设计系统、组件和页面
+ * ============================================ */
+@import './design-system.css';
+@import './components/common/Button.css';
+@import './components/common/Card.css';
+@import './components/common/Table.css';
+@import './components/common/Form.css';
+@import './pages/Dashboard.css';
+@import './pages/LoginPage.css';
+@import './pages/HomePage.css';
+@import './Phase4.css';
+@import './Phase5-Performance.css';
+
+/* ============================================
+ * 基础样式
+ * ============================================ */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--gray-900);
+  background-color: var(--gray-50);
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+/* ============================================
+ * 布局
+ * ============================================ */
+.ant-layout {
+  min-height: 100vh;
+  display: flex;
+  background: var(--gray-50);
+}
+
+.ant-layout-sider {
+  position: relative;
+  z-index: 100;
+  flex-shrink: 0;
+  background: var(--gray-900);
+}
+
+.ant-layout-content {
+  flex: 1;
+  overflow: auto;
+  padding: var(--space-6);
+}
+
+/* ============================================
+ * 通用组件样式增强
+ * ============================================ */
+
+/* 卡片对齐优化 */
+.ant-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ant-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 卡片内按钮底部对齐 */
+.ant-card .ant-btn:last-child {
+  margin-top: auto;
+}
+
+/* Row 内的 Card 高度一致 */
+.ant-row .ant-col .ant-card {
+  height: 100%;
+}
+
+/* ============================================
+ * 工具类
+ * ============================================ */
+
+/* 文本 */
+.text-xs { font-size: var(--text-xs); }
+.text-sm { font-size: var(--text-sm); }
+.text-base { font-size: var(--text-base); }
+.text-lg { font-size: var(--text-lg); }
+.text-xl { font-size: var(--text-xl); }
+.text-2xl { font-size: var(--text-2xl); }
+.text-3xl { font-size: var(--text-3xl); }
+.text-4xl { font-size: var(--text-4xl); }
+
+.font-normal { font-weight: var(--font-normal); }
+.font-medium { font-weight: var(--font-medium); }
+.font-semibold { font-weight: var(--font-semibold); }
+.font-bold { font-weight: var(--font-bold); }
+
+/* 颜色 */
+.text-primary { color: var(--primary-500); }
+.text-success { color: var(--success-500); }
+.text-warning { color: var(--warning-500); }
+.text-danger { color: var(--danger-500); }
+.text-gray { color: var(--gray-500); }
+
+.bg-primary { background-color: var(--primary-500); }
+.bg-success { background-color: var(--success-500); }
+.bg-warning { background-color: var(--warning-500); }
+.bg-danger { background-color: var(--danger-500); }
+
+/* 间距 */
+.m-0 { margin: 0; }
+.m-2 { margin: var(--space-2); }
+.m-4 { margin: var(--space-4); }
+.m-6 { margin: var(--space-6); }
+.m-8 { margin: var(--space-8); }
+
+.mt-0 { margin-top: 0; }
+.mt-2 { margin-top: var(--space-2); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+
+.mb-0 { margin-bottom: 0; }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-6 { margin-bottom: var(--space-6); }
+
+.p-0 { padding: 0; }
+.p-2 { padding: var(--space-2); }
+.p-4 { padding: var(--space-4); }
+.p-6 { padding: var(--space-6); }
+.p-8 { padding: var(--space-8); }
+
+/* Flexbox */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.gap-6 { gap: var(--space-6); }
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .ant-layout-content {
+    padding: var(--space-4);
+  }
+  
+  .hide-mobile {
+    display: none;
+  }
+}
+
+/* ============================================
+ * 动画
+ * ============================================ */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes skeleton-loading {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* ============================================
+ * 页面过渡动画
+ * ============================================ */
+.page-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.page-exit {
+  opacity: 1;
+}
+
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 0.2s;
+}

@@ -1,0 +1,9 @@
+MaxMES 系统备份
+备份时间：2026-04-06 04:09:05
+备份内容：
+- client/ (前端源代码)
+- server/ (后端源代码)
+- .env (配置文件)
+- package.json
+- docker-compose.yml
+数据库备份：/opt/mes-system/backups/database/mes_system_20260406_040811.sql.gz

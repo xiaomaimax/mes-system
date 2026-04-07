@@ -1,0 +1,277 @@
+/**
+ * MaxMES 输入框和表单组件样式
+ * 基于 UI/UX Pro Max 设计系统
+ */
+
+/* ============================================
+ * 表单组
+ * ============================================ */
+.form-group {
+  margin-bottom: var(--space-6);
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================
+ * 标签
+ * ============================================ */
+.form-label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--gray-700);
+}
+
+.form-label.required::after {
+  content: ' *';
+  color: var(--danger-500);
+}
+
+.form-label.optional {
+  font-weight: var(--font-normal);
+  color: var(--gray-500);
+}
+
+/* ============================================
+ * 输入框基础样式
+ * ============================================ */
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: 10px 14px;
+  min-height: 44px;  /* 触摸目标 */
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--gray-900);
+  background: white;
+  transition: var(--transition-fast);
+}
+
+.form-input:hover,
+.form-textarea:hover,
+.form-select:hover:not(:disabled) {
+  border-color: var(--gray-400);
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+.form-input:disabled,
+.form-textarea:disabled,
+.form-select:disabled {
+  background: var(--gray-100);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ============================================
+ * 文本域
+ * ============================================ */
+.form-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* ============================================
+ * 选择框
+ * ============================================ */
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+}
+
+/* ============================================
+ * 验证状态
+ * ============================================ */
+
+/* 成功状态 */
+.form-input.success,
+.form-textarea.success,
+.form-select.success {
+  border-color: var(--success-500);
+}
+
+.form-input.success:focus,
+.form-textarea.success:focus,
+.form-select.success:focus {
+  box-shadow: 0 0 0 3px var(--success-100);
+}
+
+/* 错误状态 */
+.form-input.error,
+.form-textarea.error,
+.form-select.error {
+  border-color: var(--danger-500);
+}
+
+.form-input.error:focus,
+.form-textarea.error:focus,
+.form-select.error:focus {
+  box-shadow: 0 0 0 3px var(--danger-100);
+}
+
+/* ============================================
+ * 错误提示
+ * ============================================ */
+.form-error {
+  margin-top: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--danger-600);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.form-error::before {
+  content: '⚠';
+  font-size: 12px;
+}
+
+/* ============================================
+ * 帮助文本
+ * ============================================ */
+.form-help {
+  margin-top: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--gray-500);
+}
+
+/* ============================================
+ * 复选框和单选
+ * ============================================ */
+.form-checkbox,
+.form-radio {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--primary-500);
+}
+
+.form-checkbox-label,
+.form-radio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  font-size: var(--text-base);
+  color: var(--gray-700);
+}
+
+/* ============================================
+ * 开关 - Switch
+ * ============================================ */
+.form-switch {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  background: var(--gray-300);
+  border-radius: var(--radius-full);
+  transition: var(--transition-base);
+  cursor: pointer;
+}
+
+.form-switch.active {
+  background: var(--primary-500);
+}
+
+.form-switch::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: var(--radius-full);
+  transition: var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-switch.active::after {
+  left: 24px;
+}
+
+/* ============================================
+ * Ant Design 表单增强
+ * ============================================ */
+.ant-input,
+.ant-select-selector,
+.ant-input-textarea {
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  transition: var(--transition-fast);
+}
+
+.ant-input:hover,
+.ant-select-selector:hover {
+  border-color: var(--gray-400);
+}
+
+.ant-input:focus,
+.ant-select-focused .ant-select-selector {
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+.ant-input-status-error,
+.ant-select-status-error .ant-select-selector {
+  border-color: var(--danger-500);
+}
+
+.ant-input-status-error:focus,
+.ant-select-status-error.ant-select-focused .ant-select-selector {
+  box-shadow: 0 0 0 3px var(--danger-100);
+}
+
+.ant-form-item-label > label {
+  font-weight: var(--font-medium);
+  color: var(--gray-700);
+}
+
+.ant-form-item-explain-error {
+  color: var(--danger-600);
+  font-size: var(--text-sm);
+}
+
+/* ============================================
+ * 工具类
+ * ============================================ */
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-inline {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.form-inline .form-group {
+  margin-bottom: 0;
+}
+
+.form-actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--gray-200);
+}

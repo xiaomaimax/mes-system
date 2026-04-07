@@ -28,7 +28,7 @@ const MonitoringDashboard = () => {
         headers: { Authorization: `Bearer ${token}` }
       };
       
-      const response = await axios.get('http://192.168.100.6:5001/dashboard/overview', config);
+      const response = await axios.get('http://192.168.100.6:5001/api/dashboard/overview', config);
       setData(response.data);
       setLastUpdate(new Date());
       setLoading(false);
