@@ -48,7 +48,7 @@ const Sidebar = () => {
       allowedMenus: [
         '/dashboard', '/monitoring', '/process', '/production', '/scheduling', '/equipment', 
         '/quality', '/inventory', '/personnel', '/integration', 
-        '/reports', '/settings'
+        '/reports', '/settings', '/docs'
       ]
     },
     '超级管理员': {
@@ -56,7 +56,7 @@ const Sidebar = () => {
       allowedMenus: [
         '/dashboard', '/monitoring', '/process', '/production', '/scheduling', '/equipment', 
         '/quality', '/inventory', '/personnel', '/integration', 
-        '/reports', '/settings'
+        '/reports', '/settings', '/docs'
       ]
     },
     'manager': {
