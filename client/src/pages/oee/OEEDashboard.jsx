@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, Row, Col, DatePicker, Select, Table, Progress, Tag, Statistic, Spin, Alert, Space, Typography } from 'antd';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { Card, Row, Col, DatePicker, Select, Table, Progress, Tag, Statistic, Spin, Alert, Space, Typography, Button } from 'antd';
+import { ReloadOutlined, LoginOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import './OEEDashboard.css';
 
@@ -34,7 +34,11 @@ const OEEDashboard = () => {
         setError(response.data.message || '获取 OEE 数据失败');
       }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || '网络错误');
+      if (err.response?.status === 401) {
+        setError('请先登录后再访问 OEE 看板');
+      } else {
+        setError(err.response?.data?.message || err.message || '网络错误');
+      }
     } finally {
       setLoading(false);
     }
@@ -133,6 +137,38 @@ const OEEDashboard = () => {
     );
   }
 
+  // 未登录提示
+  if (error && error.includes('请先登录')) {
+    return (
+      <div className="oee-dashboard">
+        <div className="oee-header">
+          <div>
+            <h1>📊 OEE 监控看板</h1>
+            <Text type="secondary">
+              Overall Equipment Effectiveness - 设备综合效率
+            </Text>
+          </div>
+        </div>
+        <Alert
+          message="需要登录"
+          description="请先登录系统，然后访问 OEE 监控看板"
+          type="warning"
+          showIcon
+          style={{ marginTop: 24 }}
+          action={
+            <Button 
+              type="primary" 
+              icon={<LoginOutlined />}
+              onClick={() => window.location.href = '/login'}
+            >
+              去登录
+            </Button>
+          }
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="oee-dashboard">
       <div className="oee-header">
@@ -157,6 +193,9 @@ const OEEDashboard = () => {
               { value: 'month', label: '按月' },
             ]}
           />
+          <Button icon={<ReloadOutlined />} onClick={onRefreshClick}>
+            刷新
+          </Button>
         </Space>
       </div>
 
@@ -266,12 +305,7 @@ const OEEDashboard = () => {
             </Row>
           </Card>
 
-          <Card 
-            title="🏭 设备 OEE 明细" 
-            extra={
-              <a onClick={onRefreshClick}>刷新</a>
-            }
-          >
+          <Card title="🏭 设备 OEE 明细">
             <Table
               columns={equipmentColumns}
               dataSource={oeeData.equipment}
