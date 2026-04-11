@@ -17,6 +17,7 @@ import SimpleIntegrationEnhanced from './components/SimpleIntegrationEnhanced';
 import SimpleSettings from './components/SimpleSettings';
 import SystemDocs from './components/SystemDocs';
 import SimpleReports from './components/SimpleReports';
+import OEEDashboard from './pages/oee/OEEDashboard';
 import RoleManagement from './components/RoleManagement';
 import UserRoleManagement from './components/UserRoleManagement';
 import Dashboard from './components/Dashboard';
@@ -144,6 +145,7 @@ function MainApp() {
             
             {/* 报表管理 */}
             <Route path="/reports" element={<SimpleReports />} />
+            <Route path="/oee" element={<OEEDashboard />} />
 
             {/* 数据仪表盘 */}
             <Route path="/dashboard-new" element={<Dashboard />} />

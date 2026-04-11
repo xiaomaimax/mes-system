@@ -48,7 +48,7 @@ const Sidebar = () => {
       allowedMenus: [
         '/dashboard', '/monitoring', '/process', '/production', '/scheduling', '/equipment', 
         '/quality', '/inventory', '/personnel', '/integration', 
-        '/reports', '/settings', '/docs'
+        '/reports', '/oee', '/settings', '/docs'
       ]
     },
     '超级管理员': {
@@ -56,7 +56,7 @@ const Sidebar = () => {
       allowedMenus: [
         '/dashboard', '/monitoring', '/process', '/production', '/scheduling', '/equipment', 
         '/quality', '/inventory', '/personnel', '/integration', 
-        '/reports', '/settings', '/docs'
+        '/reports', '/oee', '/settings', '/docs'
       ]
     },
     'manager': {
@@ -177,6 +177,11 @@ const Sidebar = () => {
       key: '/reports',
       icon: <AreaChartOutlined />,
       label: '报表分析'
+    },
+    {
+      key: '/oee',
+      icon: <AreaChartOutlined />,
+      label: 'OEE监控'
     },
     {
       key: '/monitoring',
