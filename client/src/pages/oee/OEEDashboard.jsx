@@ -26,7 +26,7 @@ const OEEDashboard = () => {
         endDate: dateRange[1].format('YYYY-MM-DD')
       };
       
-      const response = await axios.get('/api/oee/overview', { params });
+      const response = await axios.get('/oee/overview', { params });
       
       if (response.data.success) {
         setOeeData(response.data);
