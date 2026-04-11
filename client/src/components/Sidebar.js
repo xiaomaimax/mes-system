@@ -184,6 +184,11 @@ const Sidebar = () => {
       label: 'Andon呼叫'
     },
     {
+      key: '/traceability',
+      icon: <SearchOutlined />,
+      label: '生产追溯'
+    },
+    {
       key: '/oee',
       icon: <AreaChartOutlined />,
       label: 'OEE监控'

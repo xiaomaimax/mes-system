@@ -1,0 +1,28 @@
+.traceability-dashboard {
+  padding: 24px;
+  background: #f0f2f5;
+  min-height: 100vh;
+}
+
+.traceability-header {
+  margin-bottom: 24px;
+  background: #fff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+.traceability-header h1 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+}
+
+.traceability-dashboard .ant-card {
+  border-radius: 8px;
+}
+
+.traceability-dashboard .ant-tabs-nav {
+  background: #fff;
+  padding: 0 24px;
+  border-radius: 8px 8px 0 0;
+}

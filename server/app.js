@@ -38,6 +38,7 @@ const dataPermissionsRoutes = require('./routes/dataPermissions');
 const importExportRoutes = require('./routes/import-export');
 const oeeRoutes = require('./routes/oee');
 const andonRoutes = require('./routes/andon');
+const traceabilityRoutes = require('./routes/traceability');
 
 
 const app = express();
@@ -133,6 +134,7 @@ app.use('/api/user-roles', userRolesRoutes);
 app.use('/api/import-export', importExportRoutes);
 app.use('/api/oee', oeeRoutes);
 app.use('/api/andon', andonRoutes);
+app.use('/api/traceability', traceabilityRoutes);
 
 
 // WebSocket 连接处理
