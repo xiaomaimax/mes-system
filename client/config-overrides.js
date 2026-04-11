@@ -2,7 +2,6 @@ const path = require('path');
 
 module.exports = {
   webpack: (config, env) => {
-    // 代码分割优化
     config.optimization = {
       ...config.optimization,
       splitChunks: {
@@ -23,7 +22,6 @@ module.exports = {
         },
       },
     };
-
     return config;
   },
 };
