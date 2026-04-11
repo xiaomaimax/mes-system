@@ -1,0 +1,47 @@
+.andon-dashboard {
+  padding: 24px;
+  background: #f0f2f5;
+  min-height: 100vh;
+}
+
+.andon-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background: #fff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+.andon-header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.andon-board .ant-card {
+  border-radius: 8px;
+}
+
+/* 优先级行颜色 */
+.priority-critical {
+  background-color: #fff1f0;
+}
+
+.priority-urgent {
+  background-color: #fff7e6;
+}
+
+/* Andon 看板紧急状态 */
+.andon-dashboard .ant-alert {
+  padding: 16px 24px;
+}
+
+.andon-dashboard .ant-statistic-title {
+  font-size: 14px;
+}
+
+.andon-dashboard .ant-badge-status-text {
+  font-size: 14px;
+}

@@ -37,6 +37,7 @@ const userRolesRoutes = require('./routes/userRoles');
 const dataPermissionsRoutes = require('./routes/dataPermissions');
 const importExportRoutes = require('./routes/import-export');
 const oeeRoutes = require('./routes/oee');
+const andonRoutes = require('./routes/andon');
 
 
 const app = express();
@@ -131,6 +132,7 @@ app.use('/api/data-permissions', dataPermissionsRoutes);
 app.use('/api/user-roles', userRolesRoutes);
 app.use('/api/import-export', importExportRoutes);
 app.use('/api/oee', oeeRoutes);
+app.use('/api/andon', andonRoutes);
 
 
 // WebSocket 连接处理
@@ -139,6 +141,11 @@ io.on('connection', (socket) => {
   
   socket.on('join_production_line', (lineId) => {
     socket.join(`line_${lineId}`);
+
+  socket.on('join_andon', () => {
+    socket.join('andon');
+    logger.info('用户加入 Andon 监控', { socketId: socket.id });
+  });
     logger.info(`用户加入生产线`, { socketId: socket.id, lineId });
   });
   

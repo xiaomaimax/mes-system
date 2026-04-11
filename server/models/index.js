@@ -15,6 +15,7 @@ const ProductionOrder = require('./ProductionOrder');
 const ProductionPlan = require('./ProductionPlan');
 const ProductionTask = require('./ProductionTask');
 const User = require('./User');
+const AndonCall = require('./AndonCall');
 
 // 导入排程扩展模型
 const EquipmentSchedulingExt = require('./EquipmentSchedulingExt');
@@ -213,6 +214,7 @@ Role.hasMany(UserRole, {
 });
 
 module.exports = {
+  AndonCall,
   sequelize,
   Equipment,
   Mold,

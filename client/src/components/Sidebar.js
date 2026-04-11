@@ -179,6 +179,11 @@ const Sidebar = () => {
       label: '报表分析'
     },
     {
+      key: '/andon',
+      icon: <AlertOutlined />,
+      label: 'Andon呼叫'
+    },
+    {
       key: '/oee',
       icon: <AreaChartOutlined />,
       label: 'OEE监控'
