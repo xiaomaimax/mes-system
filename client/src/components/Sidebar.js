@@ -16,6 +16,8 @@ import {
   SettingOutlined,
   CalendarOutlined,
   AreaChartOutlined,
+  AlertOutlined,
+  SearchOutlined,
   BookOutlined
 } from '@ant-design/icons';
 

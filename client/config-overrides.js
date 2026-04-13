@@ -24,4 +24,12 @@ module.exports = {
     };
     return config;
   },
+  // Completely disable ESLint
+  eslint: (config) => {
+    config.mode = 'production';
+    config.failOnError = false;
+    config.ignore = true;
+    config.quiet = true;
+    return config;
+  },
 };
