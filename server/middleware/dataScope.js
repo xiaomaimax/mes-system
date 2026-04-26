@@ -16,8 +16,9 @@ const logger = require('../utils/logger');
  */
 function applyDataScope(resourceType) {
   return async (req, res, next) => {
+    let userId;
     try {
-      const userId = req.user.userId;
+      userId = req.user.userId;
       const userRole = req.user.role;
       
       // 超级管理员不限制数据范围
