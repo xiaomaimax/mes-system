@@ -17,6 +17,7 @@ module.exports = {
   // 忽略不需要检查的目录
   ignorePatterns: [
     'node_modules/',
+    'client/',         // 整个 client 目录由其自己的 .eslintrc.json 管理
     'client/build/',
     'client/src/setupProxy.js',
     'coverage/',
@@ -25,6 +26,6 @@ module.exports = {
     'backups/',
     'reports/',
     'test-results/',
-    '*.test.js',  // 测试文件已内置 jest:true
+    '*.test.js',
   ],
 };
