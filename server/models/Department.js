@@ -51,14 +51,13 @@ Department.associate = (models) => {};
 // 静态方法：获取部门树
 Department.getTree = async function() {
   const departments = await this.findAll({
-    where: { is_active: true },
+    where: { is_active: true, parent_id: null },
     include: [{
       model: Department,
       as: 'children',
       where: { is_active: true },
       required: false
-    }],
-    where: { parent_id: null }
+    }]
   });
   
   return departments;
