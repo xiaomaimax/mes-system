@@ -12,6 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
 
       - uses: actions/setup-node@v4
         with:
@@ -26,6 +29,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
 
       - uses: actions/setup-node@v4
         with:
@@ -41,6 +47,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
 
       - uses: actions/setup-node@v4
         with:
@@ -57,7 +66,6 @@ jobs:
           path: client/build/
           retention-days: 3
 
-  # 通知服务器可以部署了（写一个标记文件，服务器 poller 会检测到）
   trigger-deploy:
     name: Trigger Deploy
     needs: [build]
@@ -65,6 +73,9 @@ jobs:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
 
       - name: Create deploy trigger
         run: |
