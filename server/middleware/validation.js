@@ -167,7 +167,7 @@ function sanitizeInput(input) {
   if (typeof input === 'string') {
     // 移除危险字符
     return input
-      .replace(/[<>\"']/g, '')
+      .replace(/[<>"']/g, '')
       .trim();
   }
   return input;
