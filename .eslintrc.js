@@ -10,7 +10,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     'no-console': 'off',
     'no-process-exit': 'off',
   },
@@ -27,5 +27,12 @@ module.exports = {
     'reports/',
     'test-results/',
     '*.test.js',
+  ],
+  // scripts/ 目录下的文件免检（演示/工具脚本不需要严格 lint）
+  overrides: [
+    {
+      files: ['scripts/**/*.js'],
+      rules: { 'no-unused-vars': 'off' },
+    },
   ],
 };
