@@ -15,7 +15,5 @@ backups/
 reports/
 *.log
 
-# 脚本目录（演示用，不需要严格 lint）
-scripts/demo-*
-scripts/test-*
-scripts/*-backup.*
+# 脚本目录（Node.js 脚本不需要 ESLint）
+scripts/
