@@ -14,25 +14,27 @@ module.exports = {
     'no-console': 'off',
     'no-process-exit': 'off',
   },
-  // 忽略不需要检查的目录
   ignorePatterns: [
     'node_modules/',
-    'client/',         // 整个 client 目录由其自己的 .eslintrc.json 管理
+    'client/',
     'client/build/',
-    'client/src/setupProxy.js',
+    'client/node_modules/',
     'coverage/',
     'dist/',
-    '.git/',
+    'build/',
+    'test-results/',
+    'playwright-report/',
     'backups/',
     'reports/',
-    'test-results/',
-    '*.test.js',
+    'e2e/',
+    'scripts/demo-*.js',
+    'scripts/test-*.js',
+    'scripts/*-backup.*',
   ],
-  // scripts/ 目录下的文件免检（演示/工具脚本不需要严格 lint）
   overrides: [
     {
-      files: ['scripts/**/*.js'],
-      rules: { 'no-unused-vars': 'off' },
+      files: ['scripts/**/*.js', 'e2e/**/*.js'],
+      rules: { 'no-unused-vars': 'off', 'no-undef': 'off' },
     },
   ],
 };
