@@ -206,7 +206,7 @@ async function main() {
   console.log('   • 学会使用MES系统进行生产管理');
   console.log('   • 培养数据分析和问题解决能力\n');
   
-  while (true) {
+  for (;;) {
     showMainMenu();
     
     const choice = await askQuestion('请输入您的选择 (0-5): ');
