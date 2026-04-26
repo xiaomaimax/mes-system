@@ -1,1 +1,117 @@
-const%20DataPermission%20%3D%20require%28%27..%2Fmodels%2FDataPermission%27%29%3B%0Aconst%20Department%20%3D%20require%28%27..%2Fmodels%2FDepartment%27%29%3B%0Aconst%20logger%20%3D%20require%28%27..%2Futils%2Flogger%27%29%3B%0A%0A%2F%2A%2A%0A%20%2A%20%E6%95%B0%E6%8D%AE%E8%8C%83%E5%9B%B4%E8%BF%87%E6%BB%A4%E4%B8%AD%E9%97%B4%E4%BB%B6%0A%20%2A%20%E8%87%AA%E5%8A%A8%E6%A0%B9%E6%8D%AE%E7%94%A8%E6%88%B7%E7%9A%84%E6%95%B0%E6%8D%AE%E6%9D%83%E9%99%90%E8%BF%87%E6%BB%A4%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%0A%20%2A%20%0A%20%2A%20%E7%94%A8%E6%B3%95%EF%BC%9A%0A%20%2A%20router.get%28%27%2Fapi%2Forders%27%2C%0A%20%2A%20%20%20authenticateToken%2C%0A%20%2A%20%20%20authorize%28%5B%27production.order.read%27%5D%29%2C%0A%20%2A%20%20%20applyDataScope%28%27production_order%27%29%2C%0A%20%2A%20%20%20orderController.list%0A%20%2A%20%29%3B%0A%20%2A%2F%0Afunction%20applyDataScope%28resourceType%29%20%7B%0A%20%20return%20async%20%28req%2C%20res%2C%20next%29%20%3D%3E%20%7B%0A%20%20%20%20let%20userId%3B%0A%20%20%20%20try%20%7B%0A%20%20%20%20%20%20userId%20%3D%20req.user.userId%3B%0A%20%20%20%20%20%20const%20userRole%20%3D%20req.user.role%3B%0A%20%20%20%20%20%20%0A%20%20%20%20%20%20%2F%2F%20%E8%B6%85%E7%BA%A7%E7%AE%A1%E7%90%86%E5%91%98%E4%B8%8D%E9%99%90%E5%88%B6%E6%95%B0%E6%8D%AE%E8%8C%83%E5%9B%B4%0A%20%20%20%20%20%20if%20%28userRole%20%3D%3D%3D%20%27admin%27%29%20%7B%0A%20%20%20%20%20%20%20%20req.dataScope%20%3D%20%7B%20scope_type%3A%20%27ALL%27%20%7D%3B%0A%20%20%20%20%20%20%20%20return%20next%28%29%3B%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%0A%20%20%20%20%20%20%2F%2F%20%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E6%9D%83%E9%99%90%0A%20%20%20%20%20%20const%20dataScope%20%3D%20await%20DataPermission.getUserDataScope%28userId%2C%20resourceType%29%3B%0A%20%20%20%20%20%20req.dataScope%20%3D%20dataScope%3B%0A%20%20%20%20%20%20%0A%20%20%20%20%20%20%2F%2F%20%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E8%8C%83%E5%9B%B4%E8%BF%87%E6%BB%A4%E5%87%BD%E6%95%B0%0A%20%20%20%20%20%20req.applyDataScopeToQuery%20%3D%20%28queryBuilder%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20return%20DataPermission.applyScope%28queryBuilder%2C%20dataScope%2C%20userId%29%3B%0A%20%20%20%20%20%20%7D%3B%0A%20%20%20%20%20%20%0A%20%20%20%20%20%20logger.debug%28%27%E6%95%B0%E6%8D%AE%E8%8C%83%E5%9B%B4%E5%B7%B2%E5%BA%94%E7%94%A8%27%2C%20%7B%0A%20%20%20%20%20%20%20%20userId%2C%0A%20%20%20%20%20%20%20%20resourceType%2C%0A%20%20%20%20%20%20%20%20scope%3A%20dataScope.scope_type%0A%20%20%20%20%20%20%7D%29%3B%0A%20%20%20%20%20%20%0A%20%20%20%20%20%20next%28%29%3B%0A%20%20%20%20%7D%20catch%20%28error%29%20%7B%0A%20%20%20%20%20%20logger.error%28%27%E6%95%B0%E6%8D%AE%E8%8C%83%E5%9B%B4%E8%BF%87%E6%BB%A4%E5%BC%82%E5%B8%B8%27%2C%20%7B%20error%3A%20error.message%2C%20resourceType%20%7D%29%3B%0A%20%20%20%20%20%20%2F%2F%20%E5%87%BA%E9%94%99%E6%97%B6%E9%99%8D%E7%BA%A7%E4%B8%BA%E4%BB%85%E6%9F%A5%E7%9C%8B%E8%87%AA%E5%B7%B1%E7%9A%84%E6%95%B0%E6%8D%AE%0A%20%20%20%20%20%20req.dataScope%20%3D%20%7B%20scope_type%3A%20%27SELF%27%20%7D%3B%0A%20%20%20%20%20%20req.applyDataScopeToQuery%20%3D%20%28queryBuilder%29%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20return%20queryBuilder.where%28%7B%20created_by%3A%20userId%20%7D%29%3B%0A%20%20%20%20%20%20%7D%3B%0A%20%20%20%20%20%20next%28%29%3B%0A%20%20%20%20%7D%0A%20%20%7D%3B%0A%7D%0A%0A%2F%2A%2A%0A%20%2A%20%E6%89%8B%E5%8A%A8%E5%BA%94%E7%94%A8%E6%95%B0%E6%8D%AE%E8%8C%83%E5%9B%B4%E8%BF%87%E6%BB%A4%E5%88%B0%20Sequelize%20%E6%9F%A5%E8%AF%A2%0A%20%2A%20%0A%20%2A%20%E7%94%A8%E6%B3%95%EF%BC%9A%0A%20%2A%20const%20orders%20%3D%20await%20Order.findAll%28%7B%0A%20%2A%20%20%20where%3A%20%7B%20status%3A%20%27pending%27%20%7D%0A%20%2A%20%7D%29%3B%0A%20%2A%20const%20filteredOrders%20%3D%20applyDataScopeFilter%28orders%2C%20req.dataScope%2C%20req.user.userId%29%3B%0A%20%2A%2F%0Afunction%20applyDataScopeFilter%28records%2C%20dataScope%2C%20userId%29%20%7B%0A%20%20if%20%28%21dataScope%20%7C%7C%20dataScope.scope_type%20%3D%3D%3D%20%27ALL%27%29%20%7B%0A%20%20%20%20return%20records%3B%0A%20%20%7D%0A%20%20%0A%20%20switch%20%28dataScope.scope_type%29%20%7B%0A%20%20%20%20case%20%27DEPARTMENT%27%3A%0A%20%20%20%20%20%20%2F%2F%20%E8%BF%87%E6%BB%A4%E6%9C%AC%E9%83%A8%E9%97%A8%E6%95%B0%E6%8D%AE%0A%20%20%20%20%20%20return%20records.filter%28r%20%3D%3E%20r.department_id%20%3D%3D%3D%20dataScope.department_id%29%3B%0A%20%20%20%20%20%20%0A%20%20%20%20case%20%27SELF%27%3A%0A%20%20%20%20%20%20%2F%2F%20%E8%BF%87%E6%BB%A4%E8%87%AA%E5%B7%B1%E7%9A%84%E6%95%B0%E6%8D%AE%0A%20%20%20%20%20%20return%20records.filter%28r%20%3D%3E%20r.created_by%20%3D%3D%3D%20userId%29%3B%0A%20%20%20%20%20%20%0A%20%20%20%20case%20%27CUSTOM%27%3A%0A%20%20%20%20%20%20%2F%2F%20%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%87%E6%BB%A4%E9%80%BB%E8%BE%91%0A%20%20%20%20%20%20if%20%28dataScope.scope_value%29%20%7B%0A%20%20%20%20%20%20%20%20%2F%2F%20%E6%A0%B9%E6%8D%AE%E8%87%AA%E5%AE%9A%E4%B9%89%E6%9D%A1%E4%BB%B6%E8%BF%87%E6%BB%A4%0A%20%20%20%20%20%20%20%20return%20records.filter%28r%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%2F%2F%20%E8%BF%99%E9%87%8C%E9%9C%80%E8%A6%81%E6%A0%B9%E6%8D%AE%E5%85%B7%E4%BD%93%E7%9A%84%20scope_value%20%E5%AE%9E%E7%8E%B0%E8%BF%87%E6%BB%A4%E9%80%BB%E8%BE%91%0A%20%20%20%20%20%20%20%20%20%20return%20true%3B%0A%20%20%20%20%20%20%20%20%7D%29%3B%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20return%20records.filter%28r%20%3D%3E%20r.created_by%20%3D%3D%3D%20userId%29%3B%0A%20%20%20%20%20%20%0A%20%20%20%20default%3A%0A%20%20%20%20%20%20return%20records.filter%28r%20%3D%3E%20r.created_by%20%3D%3D%3D%20userId%29%3B%0A%20%20%7D%0A%7D%0A%0A%2F%2A%2A%0A%20%2A%20%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%8F%AF%E8%AE%BF%E9%97%AE%E7%9A%84%E9%83%A8%E9%97%A8%20ID%20%E5%88%97%E8%A1%A8%0A%20%2A%2F%0Aasync%20function%20getUserDepartmentIds%28userId%29%20%7B%0A%20%20const%20user%20%3D%20await%20require%28%27..%2Fmodels%2FUser%27%29.findByPk%28userId%2C%20%7B%0A%20%20%20%20attributes%3A%20%5B%27department_id%27%5D%0A%20%20%7D%29%3B%0A%20%20%0A%20%20if%20%28%21user%20%7C%7C%20%21user.department_id%29%20%7B%0A%20%20%20%20return%20%5BuserId%5D%3B%20%2F%2F%20%E6%B2%A1%E6%9C%89%E9%83%A8%E9%97%A8%EF%BC%8C%E5%8F%AA%E8%BF%94%E5%9B%9E%E8%87%AA%E5%B7%B1%0A%20%20%7D%0A%20%20%0A%20%20%2F%2F%20%E8%8E%B7%E5%8F%96%E9%83%A8%E9%97%A8%E5%8F%8A%E6%89%80%E6%9C%89%E5%AD%90%E9%83%A8%E9%97%A8%20ID%0A%20%20const%20deptIds%20%3D%20await%20Department.getSubDepartmentIds%28user.department_id%29%3B%0A%20%20return%20deptIds%3B%0A%7D%0A%0Amodule.exports%20%3D%20%7B%0A%20%20applyDataScope%2C%0A%20%20applyDataScopeFilter%2C%0A%20%20getUserDepartmentIds%0A%7D%3B%0A
+const DataPermission = require('../models/DataPermission');
+const Department = require('../models/Department');
+const logger = require('../utils/logger');
+
+/**
+ * 数据范围过滤中间件
+ * 自动根据用户的数据权限过滤查询结果
+ * 
+ * 用法：
+ * router.get('/api/orders',
+ *   authenticateToken,
+ *   authorize(['production.order.read']),
+ *   applyDataScope('production_order'),
+ *   orderController.list
+ * );
+ */
+function applyDataScope(resourceType) {
+  return async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const userRole = req.user.role;
+      
+      // 超级管理员不限制数据范围
+      if (userRole === 'admin') {
+        req.dataScope = { scope_type: 'ALL' };
+        return next();
+      }
+      
+      // 获取用户数据权限
+      const dataScope = await DataPermission.getUserDataScope(userId, resourceType);
+      req.dataScope = dataScope;
+      
+      // 创建数据范围过滤函数
+      req.applyDataScopeToQuery = (queryBuilder) => {
+        return DataPermission.applyScope(queryBuilder, dataScope, userId);
+      };
+      
+      logger.debug('数据范围已应用', {
+        userId,
+        resourceType,
+        scope: dataScope.scope_type
+      });
+      
+      next();
+    } catch (error) {
+      logger.error('数据范围过滤异常', { error: error.message, resourceType });
+      // 出错时降级为仅查看自己的数据
+      req.dataScope = { scope_type: 'SELF' };
+      req.applyDataScopeToQuery = (queryBuilder) => {
+        return queryBuilder.where({ created_by: userId });
+      };
+      next();
+    }
+  };
+}
+
+/**
+ * 手动应用数据范围过滤到 Sequelize 查询
+ * 
+ * 用法：
+ * const orders = await Order.findAll({
+ *   where: { status: 'pending' }
+ * });
+ * const filteredOrders = applyDataScopeFilter(orders, req.dataScope, req.user.userId);
+ */
+function applyDataScopeFilter(records, dataScope, userId) {
+  if (!dataScope || dataScope.scope_type === 'ALL') {
+    return records;
+  }
+  
+  switch (dataScope.scope_type) {
+    case 'DEPARTMENT':
+      // 过滤本部门数据
+      return records.filter(r => r.department_id === dataScope.department_id);
+      
+    case 'SELF':
+      // 过滤自己的数据
+      return records.filter(r => r.created_by === userId);
+      
+    case 'CUSTOM':
+      // 自定义过滤逻辑
+      if (dataScope.scope_value) {
+        // 根据自定义条件过滤
+        return records.filter(r => {
+          // 这里需要根据具体的 scope_value 实现过滤逻辑
+          return true;
+        });
+      }
+      return records.filter(r => r.created_by === userId);
+      
+    default:
+      return records.filter(r => r.created_by === userId);
+  }
+}
+
+/**
+ * 获取用户可访问的部门 ID 列表
+ */
+async function getUserDepartmentIds(userId) {
+  const user = await require('../models/User').findByPk(userId, {
+    attributes: ['department_id']
+  });
+  
+  if (!user || !user.department_id) {
+    return [userId]; // 没有部门，只返回自己
+  }
+  
+  // 获取部门及所有子部门 ID
+  const deptIds = await Department.getSubDepartmentIds(user.department_id);
+  return deptIds;
+}
+
+module.exports = {
+  applyDataScope,
+  applyDataScopeFilter,
+  getUserDepartmentIds
+};
