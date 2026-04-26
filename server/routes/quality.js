@@ -554,7 +554,7 @@ router.post('/defect-records',
     res.status(201).json({
       code: 201,
       message: 'Created successfully',
-      data: { id: result.insertId, defect_record_id }
+      data: { id: result.insertId, defect_record_id: result.insertId }
     });
   })
 );
