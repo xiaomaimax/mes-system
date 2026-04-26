@@ -18,7 +18,7 @@ jobs:
           node-version: '22'
 
       - run: npm ci
-      - run: cd client && npm install --legacy-peer-deps
+      - run: rm -f client/package-lock.json && cd client && npm install --legacy-peer-deps
       - run: npx playwright install --with-deps chromium
 
       - name: Build client
