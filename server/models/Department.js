@@ -1,1 +1,91 @@
-const%20%7B%20DataTypes%20%7D%20%3D%20require%28%27sequelize%27%29%3B%0Aconst%20sequelize%20%3D%20require%28%27..%2Fconfig%2Fdatabase%27%29%3B%0A%0Aconst%20Department%20%3D%20sequelize.define%28%27Department%27%2C%20%7B%0A%20%20id%3A%20%7B%0A%20%20%20%20type%3A%20DataTypes.INTEGER%2C%0A%20%20%20%20primaryKey%3A%20true%2C%0A%20%20%20%20autoIncrement%3A%20true%0A%20%20%7D%2C%0A%20%20dept_code%3A%20%7B%0A%20%20%20%20type%3A%20DataTypes.STRING%2850%29%2C%0A%20%20%20%20allowNull%3A%20false%2C%0A%20%20%20%20unique%3A%20true%2C%0A%20%20%20%20field%3A%20%27dept_code%27%0A%20%20%7D%2C%0A%20%20dept_name%3A%20%7B%0A%20%20%20%20type%3A%20DataTypes.STRING%28100%29%2C%0A%20%20%20%20allowNull%3A%20false%2C%0A%20%20%20%20field%3A%20%27dept_name%27%0A%20%20%7D%2C%0A%20%20parent_id%3A%20%7B%0A%20%20%20%20type%3A%20DataTypes.INTEGER%2C%0A%20%20%20%20allowNull%3A%20true%2C%0A%20%20%20%20field%3A%20%27parent_id%27%0A%20%20%7D%2C%0A%20%20manager_id%3A%20%7B%0A%20%20%20%20type%3A%20DataTypes.INTEGER%2C%0A%20%20%20%20allowNull%3A%20true%2C%0A%20%20%20%20field%3A%20%27manager_id%27%0A%20%20%7D%2C%0A%20%20is_active%3A%20%7B%0A%20%20%20%20type%3A%20DataTypes.BOOLEAN%2C%0A%20%20%20%20defaultValue%3A%20true%2C%0A%20%20%20%20field%3A%20%27is_active%27%0A%20%20%7D%2C%0A%20%20sort_order%3A%20%7B%0A%20%20%20%20type%3A%20DataTypes.INTEGER%2C%0A%20%20%20%20defaultValue%3A%200%2C%0A%20%20%20%20field%3A%20%27sort_order%27%0A%20%20%7D%0A%7D%2C%20%7B%0A%20%20tableName%3A%20%27departments%27%2C%0A%20%20timestamps%3A%20true%2C%0A%20%20createdAt%3A%20%27created_at%27%2C%0A%20%20updatedAt%3A%20%27updated_at%27%0A%7D%29%3B%0A%0A%2F%2F%20%E5%85%B3%E8%81%94%E5%B7%B2%E5%9C%A8%20index.js%20%E4%B8%AD%E5%AE%9A%E4%B9%89%0ADepartment.associate%20%3D%20%28models%29%20%3D%3E%20%7B%7D%3B%0A%0A%2F%2F%20%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%EF%BC%9A%E8%8E%B7%E5%8F%96%E9%83%A8%E9%97%A8%E6%A0%91%0ADepartment.getTree%20%3D%20async%20function%28%29%20%7B%0A%20%20const%20departments%20%3D%20await%20this.findAll%28%7B%0A%20%20%20%20where%3A%20%7B%20is_active%3A%20true%2C%20parent_id%3A%20null%20%7D%2C%0A%20%20%20%20include%3A%20%5B%7B%0A%20%20%20%20%20%20model%3A%20Department%2C%0A%20%20%20%20%20%20as%3A%20%27children%27%2C%0A%20%20%20%20%20%20where%3A%20%7B%20is_active%3A%20true%20%7D%2C%0A%20%20%20%20%20%20required%3A%20false%0A%20%20%20%20%7D%5D%0A%20%20%7D%29%3B%0A%20%20%0A%20%20return%20departments%3B%0A%7D%3B%0A%0A%2F%2F%20%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95%EF%BC%9A%E8%8E%B7%E5%8F%96%E9%83%A8%E9%97%A8%E5%8F%8A%E6%89%80%E6%9C%89%E5%AD%90%E9%83%A8%E9%97%A8%20ID%0ADepartment.getSubDepartmentIds%20%3D%20async%20function%28deptId%29%20%7B%0A%20%20const%20dept%20%3D%20await%20this.findByPk%28deptId%2C%20%7B%0A%20%20%20%20include%3A%20%5B%7B%0A%20%20%20%20%20%20model%3A%20Department%2C%0A%20%20%20%20%20%20as%3A%20%27children%27%2C%0A%20%20%20%20%20%20where%3A%20%7B%20is_active%3A%20true%20%7D%2C%0A%20%20%20%20%20%20required%3A%20false%0A%20%20%20%20%7D%5D%0A%20%20%7D%29%3B%0A%20%20%0A%20%20if%20%28%21dept%29%20return%20%5BdeptId%5D%3B%0A%20%20%0A%20%20const%20ids%20%3D%20%5BdeptId%5D%3B%0A%20%20const%20children%20%3D%20dept.children%20%7C%7C%20%5B%5D%3B%0A%20%20%0A%20%20for%20%28const%20child%20of%20children%29%20%7B%0A%20%20%20%20const%20subIds%20%3D%20await%20this.getSubDepartmentIds%28child.id%29%3B%0A%20%20%20%20ids.push%28...subIds%29%3B%0A%20%20%7D%0A%20%20%0A%20%20return%20ids%3B%0A%7D%3B%0A%0Amodule.exports%20%3D%20Department%3B%0A
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+
+const Department = sequelize.define('Department', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  dept_code: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    unique: true,
+    field: 'dept_code'
+  },
+  dept_name: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
+    field: 'dept_name'
+  },
+  parent_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    field: 'parent_id'
+  },
+  manager_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    field: 'manager_id'
+  },
+  is_active: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+    field: 'is_active'
+  },
+  sort_order: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    field: 'sort_order'
+  }
+}, {
+  tableName: 'departments',
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at'
+});
+
+// 关联已在 index.js 中定义
+Department.associate = (models) => {};
+
+// 静态方法：获取部门树
+Department.getTree = async function() {
+  const departments = await this.findAll({
+    where: { is_active: true },
+    include: [{
+      model: Department,
+      as: 'children',
+      where: { is_active: true },
+      required: false
+    }],
+    where: { parent_id: null }
+  });
+  
+  return departments;
+};
+
+// 静态方法：获取部门及所有子部门 ID
+Department.getSubDepartmentIds = async function(deptId) {
+  const dept = await this.findByPk(deptId, {
+    include: [{
+      model: Department,
+      as: 'children',
+      where: { is_active: true },
+      required: false
+    }]
+  });
+  
+  if (!dept) return [deptId];
+  
+  const ids = [deptId];
+  const children = dept.children || [];
+  
+  for (const child of children) {
+    const subIds = await this.getSubDepartmentIds(child.id);
+    ids.push(...subIds);
+  }
+  
+  return ids;
+};
+
+module.exports = Department;
