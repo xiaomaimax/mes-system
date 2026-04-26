@@ -18,6 +18,7 @@ jobs:
           node-version: '22'
 
       - run: npm ci
+      - run: cd client && npm ci
       - run: npx playwright install --with-deps chromium
 
       - name: Build client
