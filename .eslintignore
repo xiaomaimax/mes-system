@@ -1,0 +1,21 @@
+# 忽略前端目录（由各自目录的 .eslintrc.json 管理）
+client/
+client/build/
+client/node_modules/
+
+# 测试和构建产物
+coverage/
+dist/
+build/
+test-results/
+playwright-report/
+
+# 数据和备份
+backups/
+reports/
+*.log
+
+# 脚本目录（演示用，不需要严格 lint）
+scripts/demo-*
+scripts/test-*
+scripts/*-backup.*
