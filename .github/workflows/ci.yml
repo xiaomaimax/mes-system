@@ -1,20 +1,80 @@
 name: CI
+
 on:
   push:
     branches: [main, develop]
   pull_request:
-    branches: [main, develop]
+    branches: [main]
 
 jobs:
-  node-ci:
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
+
       - run: npm ci
       - run: npm run lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
       - run: npm test
+
+  build:
+    name: Build
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
       - run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-build
+          path: client/build/
+          retention-days: 3
+
+  # 通知服务器可以部署了（写一个标记文件，服务器 poller 会检测到）
+  trigger-deploy:
+    name: Trigger Deploy
+    needs: [build]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create deploy trigger
+        run: |
+          echo "{\"branch\":\"${{ github.ref_name }}\",\"commit\":\"${{ github.sha }}\",\"actor\":\"${{ github.actor }}\",\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" \
+            | tee /tmp/deploy_trigger.json \
+            | sha256sum | awk '{print $1}' > /tmp/deploy_trigger.sha
+
+      - name: Upload trigger (for debugging)
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-trigger-${{ github.ref_name }}
+          path: /tmp/deploy_trigger.json
+          retention-days: 1
