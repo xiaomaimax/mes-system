@@ -29,6 +29,12 @@ jobs:
       - name: Build client
         run: npm run build
         working-directory: ./client
+        env:
+          # Skip CRA preflight check: root node_modules has babel-jest@29
+          # (pulled by jest@29.7.0 devDep), but react-scripts@4.0.3 needs
+          # babel-jest@^26.6.0. Real fix = unjest root or pin babel-jest@26
+          # to client (out of scope here). SKIP is the documented escape.
+          SKIP_PREFLIGHT_CHECK: "true"
 
       - name: Run E2E tests
         run: npx playwright test --reporter=list
