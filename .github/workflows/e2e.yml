@@ -21,7 +21,7 @@ jobs:
       - run: |
           cd client
           rm -f package-lock.json
-          npm install --legacy-peer-deps react-scripts@4.0.3 babel-jest@27.5.1 @babel/core@7.17.9 @babel/preset-env@7.16.11 @babel/preset-react@7.16.7
+          npm install --legacy-peer-deps react-scripts@4.0.3 babel-jest@^26.6.0  # was 27.5.1; 27 fails CRA preflight, must match react-scripts@4.0.3 (^26.6.0) @babel/core@7.17.9 @babel/preset-env@7.16.11 @babel/preset-react@7.16.7
         # react-scripts needs babel-jest and babel presets as peer deps
 
       - run: npx playwright install --with-deps chromium
