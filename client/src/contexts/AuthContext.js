@@ -26,6 +26,15 @@ export const AuthProvider = ({ children }) => {
   const mountedRef = useRef(true);
   const logoutTimeoutRef = useRef(null);
 
+  // 同步初始化 token: useEffect 是异步跑（子先父后），而 AndonDashboard 会在
+  // AuthProvider useEffect 之前发 axios 请求。所以必须在组件函数体里同步设
+  // axios header, 让子组件 useEffect 发请求时 header 已就位。
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const _initialToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  if (_initialToken) {
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + _initialToken;
+  }
+
   const clearError = useCallback(() => {
     if (mountedRef.current) {
       setError(null);

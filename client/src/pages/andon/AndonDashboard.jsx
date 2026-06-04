@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Card, Row, Col, Table, Tag, Button, Space, Modal, Form, Select, Input, message, Alert, Statistic, Badge, Tabs, Timeline } from 'antd';
 import { AlertOutlined, CheckCircleOutlined, ClockCircleOutlined, ExclamationCircleOutlined, SoundOutlined } from '@ant-design/icons';
-import socket from 'socket.io-client';
+import { io } from 'socket.io-client';
 import moment from 'moment';
 import './AndonDashboard.css';
 
@@ -46,7 +46,7 @@ const AndonDashboard = () => {
 
   // 连接 Socket.IO
   useEffect(() => {
-    const socket = socket.io('http://192.168.100.6:5001');
+    const socket = io({ path: '/socket.io' });
     socketRef.current = socket;
 
     socket.on('connect', () => {
