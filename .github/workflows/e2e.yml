@@ -35,6 +35,11 @@ jobs:
           # babel-jest@^26.6.0. Real fix = unjest root or pin babel-jest@26
           # to client (out of scope here). SKIP is the documented escape.
           SKIP_PREFLIGHT_CHECK: "true"
+          # webpack 4 (bundled with react-scripts@4.0.3) uses MD4 for hashes.
+          # Node 17+ ships OpenSSL 3 which disables MD4 by default.
+          # --openssl-legacy-provider re-enables it. Standard fix for
+          # "ERR_OSSL_EVP_UNSUPPORTED" on Node 17+ with legacy webpack.
+          NODE_OPTIONS: "--openssl-legacy-provider"
 
       - name: Run E2E tests
         run: npx playwright test --reporter=list
