@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Card, Table, Button, Space, Modal, Form, Input, Select, message, Tag, Popconfirm } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, ReloadOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import { TokenManager } from '../utils/auth';
 
 const { Option } = Select;
 
@@ -12,7 +11,9 @@ const Materials = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [editingMaterial, setEditingMaterial] = useState(null);
   const [form] = Form.useForm();
-  const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://192.168.100.6:5001/api';
+  // 走 nginx 同源 /api 反代到 :5002 后端; Authorization header 由 AuthContext 设的
+  // axios.defaults.headers.common 自动带上
+  const API_BASE = process.env.REACT_APP_API_BASE_URL || '/api';
 
   // 物料类型映射
   const materialTypes = {
@@ -27,10 +28,8 @@ const Materials = () => {
   const loadMaterials = async () => {
     setLoading(true);
     try {
-      const token = TokenManager.getToken();
-      const response = await axios.get(`${API_BASE}/master-data/materials?page=1&limit=100`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      // Authorization header 由 AuthContext 设的 axios.defaults.headers.common 自动带上
+      const response = await axios.get(`${API_BASE}/master-data/materials?page=1&limit=100`);
 
       if (response.data.success) {
         setMaterials(response.data.data || []);
@@ -71,15 +70,13 @@ const Materials = () => {
   const handleSave = async () => {
     try {
       const values = await form.validateFields();
-      const token = TokenManager.getToken();
       const url = editingMaterial
         ? `${API_BASE}/master-data/materials/${editingMaterial.id}`
         : `${API_BASE}/master-data/materials`;
 
       const method = editingMaterial ? 'put' : 'post';
-      const response = await axios[method](url, values, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      // Authorization header 由 axios.defaults.headers.common 自动带上
+      const response = await axios[method](url, values);
 
       if (response.data.success) {
         message.success(editingMaterial ? '更新成功' : '创建成功');
@@ -100,10 +97,8 @@ const Materials = () => {
   // 删除物料
   const handleDelete = async (id) => {
     try {
-      const token = TokenManager.getToken();
-      const response = await axios.delete(`${API_BASE}/master-data/materials/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      // Authorization header 由 axios.defaults.headers.common 自动带上
+      const response = await axios.delete(`${API_BASE}/master-data/materials/${id}`);
 
       if (response.data.success) {
         message.success('删除成功');
